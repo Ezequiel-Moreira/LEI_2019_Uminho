@@ -88,33 +88,80 @@
 \begin{frame}{Fork e Join}
     \begin{itemize}
         \item
-            $(\triangle)$ :: Cartesian k $\Rightarrow$ (a 'k' c) $\to$ (a 'k' d) $\to$ (a 'k' (c $\times$ d))
+            $(\bigtriangleup)$ :: Cartesian k $\Rightarrow$ (a 'k' c) $\to$ (a 'k' d) $\to$ (a 'k' (c $\times$ d))
         \item
             $(\bigtriangledown)$ :: Cartesian k $\Rightarrow$ (c 'k' a) $\to$ (d 'k' a) $\to$ ((c $\times$ d) 'k' a)
-            \pause
-        \item
-            \textbf{instance} Cocartesian ($\to^+$) \textbf{where}\\
-                \hspace{1cm} inl = AddFun inlF\\
-                \hspace{1cm} inr = AddFun inrF\\
-                \hspace{1cm} jam = AddFun jamF\\
-            \vspace{2mm} 
-            inlF :: Additive b ⇒ a → a × b\\ 
-            inrF :: Additive a ⇒ b → a × b\\
-            jamF :: Additive a ⇒ a × a → a\\
-            \vspace{2mm} 
-            inlF = $\lambda$a → (a, 0)    \\ 
-            inrF = $\lambda$b → (0, b)    \\
-            jamF = $\lambda$(a, b) → a + b\\ 
     \end{itemize}
+\end{frame}
+\begin{frame}{instancia de $\to^+$}
+    \textbf{newtype} a $\to^+$ b = AddFun (a → b)\\
+    \vspace{2mm} 
+    \textbf{instance} Category ($\to^+$) \textbf{where}\\
+        \hspace{1cm}type Obj ($\to^+$) = Additive\\
+        \hspace{1cm}id = AddFun id\\
+        \hspace{1cm}AddFun g $\circ$ AddFun f = AddFun (g $\circ$ f )\\
+    \vspace{2mm} 
+    \textbf{instance} Monoidal ($\to^+$) \textbf{where}\\
+        \hspace{1cm}AddFun f × AddFun g = AddFun (f × g)\\
+    \vspace{2mm} 
+    \textbf{instance} Cartesian ($\to^+$) \textbf{where}\\
+        \hspace{1cm}exl = AddFun exl\\
+        \hspace{1cm}exr = AddFun exr\\
+        \hspace{1cm}dup = AddFun dup\\
+\end{frame}
+\begin{frame}{instancia de $\to^+$}
+    \textbf{instance} Cocartesian ($\to^+$) \textbf{where}\\
+        \hspace{1cm} inl = AddFun inlF\\
+        \hspace{1cm} inr = AddFun inrF\\
+        \hspace{1cm} jam = AddFun jamF\\
+    \vspace{2mm} 
+    inlF :: Additive b ⇒ a → a × b\\ 
+    inrF :: Additive a ⇒ b → a × b\\
+    jamF :: Additive a ⇒ a × a → a\\
+    \vspace{2mm} 
+    inlF = $\lambda$a → (a, 0)    \\ 
+    inrF = $\lambda$b → (0, b)    \\
+    jamF = $\lambda$(a, b) → a + b\\ 
 \end{frame}
 
 \section{Operacoes Numericas}
-\begin{frame}{Operações Numéricas}
+\begin{frame}{definição de NumCat}
+    \textbf{class} NumCat k a \textbf{where}\\
+        \hspace{1cm}negateC :: a ‘k‘ a\\
+        \hspace{1cm}addC :: (a × a) ‘k‘ a\\
+        \hspace{1cm}mulC :: (a × a) ‘k‘ a\\
+        \hspace{1cm}...\\
+    \vspace{2mm} 
+    \textbf{instance} Num a ⇒ NumCat (→) a \textbf{where}\\
+        \hspace{1cm}negateC = negate\\
+        \hspace{1cm}addC = uncurry (+)\\
+        \hspace{1cm}mulC = uncurry (·)\\
+        \hspace{1cm}...\\
+\end{frame}
+\begin{frame}
+    D (negate u) = negate (D u)\\
+    D (u + v) = D u + D v\\
+    D (u · v) = u · D v + v · D u\\
     \begin{itemize}
-        \item 
-            ola
+        \item
+            Impreciso na natureza de u e v.
+        \item
+            Algo mais preciso seria defenir a diferenciação das operações em si.
     \end{itemize}
 \end{frame}
+\begin{frame}
+    \textbf{class} Scalable k a \textbf{where}\\
+        \hspace{1cm}scale :: a → (a ‘k‘ a)\\
+    \vspace{2mm} 
+    \textbf{instance} Num a ⇒ Scalable ($\to^+$) a \textbf{where}\\
+        \hspace{1cm}scale a = AddFun ($\lambda$da → a · da)\\
+    \vspace{5mm} 
+    \textbf{instance} NumCat D \textbf{where}\\
+        \hspace{1cm}negateC = linearD negateC\\
+        \hspace{1cm}addC = linearD addC\\
+        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
+\end{frame}
+
 
 \section{Exemplos}
 \begin{frame}{Exemplos}
