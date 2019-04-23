@@ -1,0 +1,685 @@
+\documentclass{beamer}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+
+  \setbeamercovered{transparent}
+}
+
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+%\usepackage[latin1]{inputenc}
+\usepackage{ amssymb }
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+
+\title
+{...Machine Learning...}
+
+\author[Artur, Ezequiel, Nelson] 
+{Artur \and Ezequiel \and Nelson}
+
+\institute
+{Universidade do Minho}
+
+\date{26 de Abril} 
+
+\subject{Talks}
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Indice}
+  \tableofcontents
+\end{frame}
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+\section{Nelson}
+
+\begin{frame}{titulo}
+\end{frame}
+
+
+
+
+
+\section{Categorias}
+
+\begin{frame}{Uma curta introdução}
+\begin{itemize}
+ \item<1-> Queremos calcular $\mathcal{D}^{+}$.
+ \item<2-> Problema: $\mathcal{D}$ não é computável.
+ \item<3-> Solução: observar corolários apresentados e implementar recorrendo a categorias.
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{Uma curta introdução}
+
+    \begin{block}{Corolário 1.1}
+    NOTA: adicionar definição do corolário 1.1 aqui
+    \end{block}
+    
+    \begin{block}{Corolário 2.1}
+    NOTA: adicionar definição do corolário 2.1 aqui
+    \end{block}
+    
+    \begin{block}{Corolário 3.1}
+    NOTA: adicionar definição do corolário 3.1 aqui
+    \end{block}
+ 
+\end{frame}
+
+
+
+\begin{frame}{Categorias clássicas}
+
+Uma categoria é um conjunto de objetos(conjuntos e tipos) e de morfismos(operações entre objetos).
+Uma categoria tem definidas 2 operações básicas, identidade e composição de morfismos, e 2 leis:
+
+\begin{itemize}
+    \item<1-> $id \circ f = id \circ f = f$ ---- (C.1)
+    \item<2-> $f \circ (g \circ h) = (f \circ g) \circ h$ ---- (C.2)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Categorias clássicas}
+
+\begin{columns}
+ 
+\column{0.5\textwidth}
+class \textit{Category k} where
+
+\hspace{0.2cm}id :: (a'k'a)
+    
+\hspace{0.2cm}($\circ$) :: (b'k'c) → (a'k'b) → (a'k'c)
+ 
+\column{0.5\textwidth}
+instance \textit{Category (→)} where
+
+\hspace{0.2cm}id = $\lambda$a → a 
+
+\hspace{0.2cm}$g \circ f = \lambda$a → g (f a)  
+
+\end{columns}
+
+\begin{block}{Nota}
+Funções lineares e funções diferenciáveis também formam uma categoria própria
+\end{block}
+
+\begin{block}{Nota}
+Para os efeitos deste papel, objetos são tipos de dados e morfismos são funções
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Functores clássicos}
+
+Para converter entre categorias necessitamos de uma nova estrutura: o Functor
+
+Um functor \textit{F} entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+\begin{itemize}
+    \item para qualquer objeto t $\in \mathcal{U}$ temos que \textit{F} t $\in \mathcal{V}$
+    \item para qualquer morfismo m :: a → b $\in \mathcal{U}$ temos que \textit{F} m :: \textit{F} a → \textit{F} b $\in \mathcal{V}$
+    \item \textit{F} id ($\in \mathcal{U}$) = id ($\in \mathcal{V}$)
+    \item \textit{F} ($f \circ g$) = \textit{F} f $\circ$ \textit{F} g
+\end{itemize}
+
+Devido à definição de categoria deste papel(objetos são tipos de dados) os functores mapeiam tipos neles próprios.
+
+\end{frame}
+
+
+\begin{frame}{Objetivo}
+
+Observando as definições dos corolários podemos ver que não só as funções diferenciáveis formam uma categoria mas que é possível criar uma categoria para o qual $\mathcal{D}^{+}$ é functor.
+
+Esta categoria é o tipo de dados produzidos por $\mathcal{D}^{+}$: $a → b \times (a \multimap b)$
+
+Para tornar mais explicita a categoria começamos por definir um novo tipo de dados:
+newtype $\mathcal{D}$ a b = $\mathcal{D}$($a → b \times (a \multimap b)$)
+
+\end{frame}
+
+\begin{frame}{Objetivo}
+
+Depois adaptamos $\mathcal{D}^{+}$ para usar este tipo de dados:
+
+\begin{block}{Definição adaptada}
+
+$\mathcal{\hat{D}}$ :: (a → b) → $\mathcal{D}$ a b
+
+$\mathcal{\hat{D}}$ f = $\mathcal{D}$($\mathcal{D}^{+}$ f)
+
+\end{block}
+
+O nosso objetivo é assim deduzir uma instância de categoria para $\mathcal{D}$ onde $\mathcal{\hat{D}}$ seja functor.
+
+
+\end{frame}
+
+
+
+\begin{frame}{Dedução da instância}
+
+Recordando os corolários 3.1 e 1.1 deduzimos que
+\begin{itemize}
+    \item $\mathcal{D}^{+} id$ = $\lambda$a → (id a,id) ---- (DP.1)
+    \item $\mathcal{D}^{+}(g \circ f)$ = $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$)  ---- (DP.2)
+\end{itemize}
+
+$\mathcal{\hat{D}}$ ser functor é equivalente a dizer que, para todas as funções f e g de tipos apropriados:
+
+\begin{itemize}
+    \item id = $\mathcal{\hat{D}}$ id = $\mathcal{D} (\mathcal{D}^{+} id)$
+    \item $\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f = $\mathcal{\hat{D}}$  (g $\circ$ f) = $\mathcal{D} (\mathcal{D}^{+} (g \circ f))$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Dedução da instância}
+
+Com base em (DP.1) e (DP.2) podemos reescrever como sendo:
+\begin{itemize}
+    \item id = $\mathcal{D} (\lambda$a → (id a,id))
+    \item $\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f = $\mathcal{D}$ ( $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$) )
+\end{itemize}
+
+Resolver a primeira equação é trivial(definir id como sendo $\mathcal{D} (\lambda$a → (id a,id))).
+
+
+\end{frame}
+
+\begin{frame}{Dedução da instância}
+
+A segunda equação será resolvida resolvendo uma condição mais geral:
+
+$\mathcal{D} g \circ \mathcal{D} f$ = $\mathcal{D}$($\lambda a → let\{(b,f')$ = f a; $(c,g')$ = g b \} in $(c,g' \circ f'$)).
+
+A resolução desta equação é imediata, levando à seguinte definição da instância:
+\end{frame}
+
+
+\begin{frame}{Dedução da instância}
+
+\begin{block}{Definição de $\mathcal{\hat{D}}$ para funções lineares}
+linearD :: (a → b) → $\mathcal{D}$ a b
+
+linearD f = $\mathcal{D}$($\lambda$a → (f a,f))
+\end{block}
+
+\begin{block}{Instância da categoria que deduzimos}
+
+instance \textit{Category $\mathcal{D}$} where
+
+\hspace{0.2cm}id = linearD id
+
+\hspace{0.2cm}$\mathcal{D} g \circ \mathcal{D} f$ = $\mathcal{D}$($\lambda a → let\{(b,f')$ = f a; $(c,g')$ = g b \} in $(c,g' \circ f'$))
+
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Prova da instância}
+
+Antes de continuarmos devemos verificar se esta instância obedece às leis (C.1) e (C.2).
+
+Se considerarmos apenas morfismos $\hat{f}$ :: $\mathcal{D}$ a b tal que $\hat{f}$ = $\mathcal{D}^{+}$ f para f :: a → b(o que podemos garantir se transformarmos $\mathcal{D}$ a b em tipo abstrato) podemos garantir que $\mathcal{D}^{+}$ é functor.
+
+\end{frame}
+
+
+\begin{frame}{Prova da instância}
+
+Prova de (C.1):
+
+id $\circ \mathcal{\hat{D}}$ 
+
+=  $\mathcal{\hat{D}} id \circ \mathcal{\hat{D}}$ f -lei functor de id (especificação de $\mathcal{\hat{D}}$)
+
+= $\mathcal{\hat{D}}$ (id $\circ$ f) - lei functor para ($\circ$)
+
+= $\mathcal{\hat{D}}$ f - lei de categoria
+
+
+\end{frame}
+
+
+\begin{frame}{Prova da instância}
+
+Prova de (C.2):
+
+$\mathcal{\hat{D}}$ h $\circ$ ($\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f)
+
+= $\mathcal{\hat{D}}$ h $\circ$ $\mathcal{\hat{D}}$ (g $\circ$ f) - lei functor para ($\circ$)
+
+= $\mathcal{\hat{D}}$ (h $\circ$ (g $\circ$ f)) - lei functor para ($\circ$)
+
+= $\mathcal{\hat{D}}$ ((h $\circ$ g) $\circ$ f) - lei de categoria
+
+= $\mathcal{\hat{D}}$ (h $\circ$ g) $\circ$ $\mathcal{\hat{D}}$  f - lei functor para ($\circ$)
+
+= ($\mathcal{\hat{D}}$ h $\circ$ $\mathcal{\hat{D}}$ g) $\circ$ $\mathcal{\hat{D}}$ f - lei functor para ($\circ$)
+
+\end{frame}
+
+\begin{frame}{Prova da instância}
+
+\begin{alertblock}{Nota}
+Estas provas não requerem nada de $\mathcal{D}$ e $\mathcal{\hat{D}}$ para além das leis do functor.
+
+Isto é importante porque sabendo isto não precisaremos mais de voltar a realizar estas provas para instâncias deduzidas a partir de um functor.
+
+\end{alertblock}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Categorias monoidais}
+
+Anteriormente definimos composição paralela, identificando-a como importante para o nosso problema.Definiremos a versão generalizada desta através de uma categoria monoidal:
+
+\begin{columns}
+ 
+\column{0.6\textwidth}
+class \textit{Category k} $\Rightarrow$ \textit{Monoidal k} where
+
+\hspace{0.2cm}($\times$)::(a'k'c)→(b'k'd)→((a$\times$b)'k'(c$\times$d))
+ 
+\column{0.4\textwidth}
+instance \textit{Monoidal (→)} where
+
+\hspace{0.2cm}$f \times g= \lambda$(a,b)→(f a,g b)  
+
+\end{columns}
+
+\begin{block}{Nota}
+Note-se que é possível uma categoria ser monoidal sobre outras operações, mas que para este papel a definição anterior é suficiente.
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Functores monoidais}
+
+Do mesmo modo que relacionamos 2 categorias com um functor relacionamos duas categorias monoidais com um functor monoidal.
+
+Um functor \textit{F} monoidal entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+\begin{itemize}
+    \item \textit{F} é functor clássico
+    \item \textit{F} (f $\times$ g) = \textit{F} f $\times$ \textit{F} g
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Dedução da instância}
+
+A dedução da instância passará agora pelo corolário 2.1, de onde deduzimos:
+
+$\mathcal{D}^{+}$ (f $\times$ g) = $\lambda$(a,b) → let\{(c,f' )= $\mathcal{D}^{+}$ f a; (d,g') = $\mathcal{D}^{+}$ g b \} in ((c,d),f'$\times$g')
+
+
+Seja \textit{F} equivalente a $\mathcal{\hat{D}}$ sob sua definição expandida e invertamos a segunda condição do functor monoidal. Então ficamos com:
+
+$\mathcal{D}$($\mathcal{D}^{+}$ f) $\times$ $\mathcal{D}$($\mathcal{D}^{+}$ g) = $\mathcal{D}$($\mathcal{D}^{+}$ (f $\times$ g))
+
+\end{frame}
+
+
+\begin{frame}{Dedução da instância}
+
+Substituindo e fortalecendo a condição que tínhamos anteriormente obtemos:
+
+$\mathcal{D}$ f $\times$ $\mathcal{D}$ g = $\mathcal{D}$($\lambda$(a,b) → let\{(c,f') = f a; (d,g') =  g b \} in ((c,d),f'$\times$g'))
+
+e esta condição é suficiente para a nossa instância:
+
+\begin{block}{Instância da categoria que deduzimos}
+
+instance \textit{Monoidal $\mathcal{D}$} where
+
+\hspace{0.2cm}$\mathcal{D}$ f $\times$ $\mathcal{D}$ g = $\mathcal{D}$($\lambda$(a,b) → let\{(c,f') = f a; (d,g') =  g b \} in ((c,d),f'$\times$g'))
+
+\end{block}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{Categorias cartesianas}
+
+As categoria monoidais permitem-nos combinar funções mas não separar os dados obtidos.
+Para termos tal funcionalidade necessitamos de uma nova classe de categorias: a categoria cartesiana.
+
+\begin{columns}
+ 
+\column{0.6\textwidth}
+class \textit{Monoidal k} $\Rightarrow$ \textit{Cartesean k} where
+
+\hspace{0.2cm}exl :: (a$\times$b)'k'a
+
+\hspace{0.2cm}exr :: (a$\times$b)'k'b
+
+\hspace{0.2cm}dup :: a'k'(a$\times$a)
+ 
+\column{0.4\textwidth}
+instance \textit{Cartesean (→)} where
+
+\hspace{0.2cm}exl = $\lambda$(a,b) → a
+
+\hspace{0.2cm}exr = $\lambda$(a,b) → b
+
+\hspace{0.2cm}dup = $\lambda$a → (a,a)
+
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}{Functores cartesianos}
+
+Do mesmo modo que relacionamos 2 categorias com um functor relacionamos duas categorias cartesianas com um functor cartesiano.
+
+Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+\begin{itemize}
+    \item \textit{F} é functor monoidal
+    \item \textit{F} exl = exl
+    \item \textit{F} exp = exp
+    \item \textit{F} dup = dup
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Dedução da instância}
+
+A dedução da instância requer primeiro que pelo corolário 3.1 deduzamos(note-se que exl,exr e dup são lineares) que:
+
+$\mathcal{D}^{+}$ exl $\lambda$p → (exp p, exl)
+
+$\mathcal{D}^{+}$ exr $\lambda$p → (exr p, exr)
+
+$\mathcal{D}^{+}$ dup $\lambda$a → (dup a, dup)
+
+Após esta dedução podemos continuar a determinar a instância:
+
+exl = $\mathcal{D}$($\mathcal{D}^{+}$ exl)
+
+exr = $\mathcal{D}$($\mathcal{D}^{+}$ exr)
+
+dup = $\mathcal{D}$($\mathcal{D}^{+}$ dup)
+
+\end{frame}
+
+
+
+\begin{frame}{Dedução da instância} 
+
+Substituindo e usando a definição de linearD obtemos:
+
+exl = linearD exl
+
+exr = linearD exr
+
+dup = linearD dup
+
+E podemos converter a dedução acima diretamente em instância:
+
+\begin{block}{Instância da categoria que deduzimos}
+
+instance \textit{Cartesian $\mathcal{D}$} where
+
+\hspace{0.2cm}exl = linearD exl
+
+\hspace{0.2cm}exr = linearD exr
+
+\hspace{0.2cm}dup = linearD dup
+
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Categorias cocartesianas}
+
+São o dual das categorias cartesianas.
+
+Normalmente todas as categorias têm a noção de coproduto definida(somatório de tipos para a categoria (→)). No entanto para este papel os coprodutos coincidem com os produtos de categorias, i.e., estamos a usar categorias de biprodutos.
+
+class \textit{Category k} $\Rightarrow$ \textit{Cocartesian k} where:
+
+\hspace{0.2cm}inl :: a'k'(a$\times$b)
+
+\hspace{0.2cm}inlr:: b'k'(a$\times$b)
+
+\hspace{0.2cm}jam :: (a$\times$a)'k'a
+
+\end{frame}
+
+
+\begin{frame}{Categorias cocartesianas}
+
+\begin{block}{Nota}
+Devido ás limitações que definimos para este tipo de categorias não conseguimos definir uma instância para a categoria  (→). 
+
+Em vez disso definiremos mais tarde uma instância para  ($\to^+$) de funções aditivas que terá uma instância para este tipo de categorias.
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Functores cocartesianos}
+
+Do mesmo modo que relacionamos 2 categorias com um functor relacionamos duas categorias cocartesianas com um functor cocartesiano.
+
+Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+\begin{itemize}
+    \item \textit{F} é functor 
+    \item \textit{F} inl = inl
+    \item \textit{F} inr = inr
+    \item \textit{F} jam = jam
+\end{itemize}
+
+
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+\section{Fork e Join}
+\begin{frame}{Fork e Join}
+    \begin{itemize}
+        \item
+            $(\triangle)$ :: Cartesian k $\Rightarrow$ (a 'k' c) $\to$ (a 'k' d) $\to$ (a 'k' (c $\times$ d))
+        \item
+            $(\bigtriangledown)$ :: Cartesian k $\Rightarrow$ (c 'k' a) $\to$ (d 'k' a) $\to$ ((c $\times$ d) 'k' a)
+            \pause
+        \item
+            \textbf{instance} Cocartesian ($\to^+$) \textbf{where}\\
+                \hspace{1cm} inl = AddFun inlF\\
+                \hspace{1cm} inr = AddFun inrF\\
+                \hspace{1cm} jam = AddFun jamF\\
+            \vspace{2mm} 
+            inlF :: Additive b ⇒ a → a × b\\ 
+            inrF :: Additive a ⇒ b → a × b\\
+            jamF :: Additive a ⇒ a × a → a\\
+            \vspace{2mm} 
+            inlF = $\lambda$a → (a, 0)    \\ 
+            inrF = $\lambda$b → (0, b)    \\
+            jamF = $\lambda$(a, b) → a + b\\ 
+    \end{itemize}
+\end{frame}
+
+\section{Operacoes Numericas}
+\begin{frame}{Operações Numéricas}
+    \begin{itemize}
+        \item 
+            ola
+    \end{itemize}
+\end{frame}
+
+\section{Exemplos}
+\begin{frame}{Exemplos}
+\end{frame}
+
+\section{Generalizar}
+\begin{frame}{Generalizar}
+\end{frame}
+
+%============================EXEMPLO==========================
+%\section{Introduction}
+%
+%\subsection[Short First Subsection Name]{First Subsection Name}
+%
+%\begin{frame}{Make Titles Informative. Use Uppercase Letters.}{Subtitles are optional.}
+%  % - A title should summarize the slide in an understandable fashion
+%  %   for anyone how does not follow everything on the slide itself.
+%
+%  \begin{itemize}
+%  \item
+%    Use \texttt{itemize} a lot.
+%  \item
+%    Use very short sentences or short phrases.
+%  \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Make Titles Informative.}
+%
+%  You can create overlays\dots
+%  \begin{itemize}
+%  \item using the \texttt{pause} command:
+%    \begin{itemize}
+%    \item
+%      First item.
+%      \pause
+%    \item    
+%      Second item.
+%    \end{itemize}
+%  \item
+%    using overlay specifications:
+%    \begin{itemize}
+%    \item<3->
+%      First item.
+%    \item<4->
+%      Second item.
+%    \end{itemize}
+%  \item
+%    using the general \texttt{uncover} command:
+%    \begin{itemize}
+%      \uncover<5->{\item
+%        First item.}
+%      \uncover<6->{\item
+%        Second item.}
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{}
+%\end{frame}
+%
+%\subsection{Second Subsection}
+%
+%\begin{frame}{Make Titles Informative.}
+%\end{frame}
+%
+%
+%
+%\section{Summary}
+%
+%\subsection{coisas1}
+%
+%\begin{frame}{Summary}
+%
+%  % Keep the summary *very short*.
+%  \begin{itemize}
+%  \item
+%    The \alert{first main message} of your talk in one or two lines.
+%  \item
+%    The \alert{second main message} of your talk in one or two lines.
+%  \item
+%    Perhaps a \alert{third message}, but not more than that.
+%  \end{itemize}
+%  
+%  % The following outlook is optional.
+%  \vskip0pt plus.5fill
+%  \begin{itemize}
+%  \item
+%    Outlook
+%    \begin{itemize}
+%    \item
+%      Something you haven't solved.
+%    \item
+%      Something else you haven't solved.
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
+%
+%\subsection{coisas2}
+%\begin{frame}{coisas2}
+%
+%
+%\end{frame}
+%=================================================================
+
+\end{document}
+
+
+
