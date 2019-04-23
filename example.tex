@@ -91,11 +91,29 @@
             $(\triangle)$ :: Cartesian k $\Rightarrow$ (a 'k' c) $\to$ (a 'k' d) $\to$ (a 'k' (c $\times$ d))
         \item
             $(\bigtriangledown)$ :: Cartesian k $\Rightarrow$ (c 'k' a) $\to$ (d 'k' a) $\to$ ((c $\times$ d) 'k' a)
+            \pause
+        \item
+            \textbf{instance} Cocartesian ($\to^+$) \textbf{where}\\
+                \hspace{1cm} inl = AddFun inlF\\
+                \hspace{1cm} inr = AddFun inrF\\
+                \hspace{1cm} jam = AddFun jamF\\
+            \vspace{2mm} 
+            inlF :: Additive b ⇒ a → a × b\\ 
+            inrF :: Additive a ⇒ b → a × b\\
+            jamF :: Additive a ⇒ a × a → a\\
+            \vspace{2mm} 
+            inlF = $\lambda$a → (a, 0)    \\ 
+            inrF = $\lambda$b → (0, b)    \\
+            jamF = $\lambda$(a, b) → a + b\\ 
     \end{itemize}
 \end{frame}
 
 \section{Operacoes Numericas}
 \begin{frame}{Operações Numéricas}
+    \begin{itemize}
+        \item 
+            ola
+    \end{itemize}
 \end{frame}
 
 \section{Exemplos}
