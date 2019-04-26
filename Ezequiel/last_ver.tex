@@ -115,17 +115,21 @@
 
 \begin{frame}{Categorias clássicas}
 
-Uma categoria é um conjunto de objetos(conjuntos e tipos) e de morfismos(operações entre objetos).
-Uma categoria tem definidas 2 operações básicas, identidade e composição de morfismos, e 2 leis:
+Uma categoria é um conjunto de objetos(conjuntos e tipos) e de morfismos(operações entre objetos), tendo definidas 2 operações básicas, identidade e composição de morfismos, e 2 leis:
 
 \begin{itemize}
-    \item<1-> $id \circ f = id \circ f = f$ ---- (C.1)
-    \item<2-> $f \circ (g \circ h) = (f \circ g) \circ h$ ---- (C.2)
+    \item<1-> (C.1) ---- $id \circ f = id \circ f = f$ 
+    \item<2-> (C.2) ---- $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
-\end{frame}
 
-\begin{frame}{Categorias clássicas}
+\begin{block}
+
+Para os efeitos deste papel, objetos são tipos de dados e morfismos são funções
+
+\end{block}
+
+\begin{block}
 
 \begin{columns}
  
@@ -145,21 +149,15 @@ instance \textit{Category (→)} where
 
 \end{columns}
 
-\begin{block}{Nota}
-Funções lineares e funções diferenciáveis também formam uma categoria própria
-\end{block}
-
-\begin{block}{Nota}
-Para os efeitos deste papel, objetos são tipos de dados e morfismos são funções
 \end{block}
 
 \end{frame}
 
 
 
+
 \begin{frame}{Functores clássicos}
 
-Para converter entre categorias necessitamos de uma nova estrutura: o Functor
 
 Um functor \textit{F} entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
 \begin{itemize}
@@ -169,23 +167,18 @@ Um functor \textit{F} entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
     \item \textit{F} ($f \circ g$) = \textit{F} f $\circ$ \textit{F} g
 \end{itemize}
 
+
+\begin{block}{Nota}
 Devido à definição de categoria deste papel(objetos são tipos de dados) os functores mapeiam tipos neles próprios.
+\end{block}
 
 \end{frame}
 
-
 \begin{frame}{Objetivo}
 
-Observando as definições dos corolários podemos ver que não só as funções diferenciáveis formam uma categoria mas que é possível criar uma categoria para o qual $\mathcal{D}^{+}$ é functor.
+Começamos por definir um novo tipo de dados:
 
-Esta categoria é o tipo de dados produzidos por $\mathcal{D}^{+}$: $a → b \times (a \multimap b)$
-
-Para tornar mais explicita a categoria começamos por definir um novo tipo de dados:
 newtype $\mathcal{D}$ a b = $\mathcal{D}$($a → b \times (a \multimap b)$)
-
-\end{frame}
-
-\begin{frame}{Objetivo}
 
 Depois adaptamos $\mathcal{D}^{+}$ para usar este tipo de dados:
 
@@ -197,7 +190,7 @@ $\mathcal{\hat{D}}$ f = $\mathcal{D}$($\mathcal{D}^{+}$ f)
 
 \end{block}
 
-O nosso objetivo é assim deduzir uma instância de categoria para $\mathcal{D}$ onde $\mathcal{\hat{D}}$ seja functor.
+O nosso objetivo é a dedução de uma instância de categoria para $\mathcal{D}$ onde $\mathcal{\hat{D}}$ seja functor.
 
 
 \end{frame}
@@ -208,8 +201,10 @@ O nosso objetivo é assim deduzir uma instância de categoria para $\mathcal{D}$
 
 Recordando os corolários 3.1 e 1.1 deduzimos que
 \begin{itemize}
-    \item $\mathcal{D}^{+} id$ = $\lambda$a → (id a,id) ---- (DP.1)
-    \item $\mathcal{D}^{+}(g \circ f)$ = $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$)  ---- (DP.2)
+    \item (DP.1) ---- $\mathcal{D}^{+} id$ = $\lambda$a → (id a,id)
+    \item (DP.2) ----
+    
+    $\mathcal{D}^{+}(g \circ f)$ = $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$)   
 \end{itemize}
 
 $\mathcal{\hat{D}}$ ser functor é equivalente a dizer que, para todas as funções f e g de tipos apropriados:
@@ -230,22 +225,17 @@ Com base em (DP.1) e (DP.2) podemos reescrever como sendo:
     \item $\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f = $\mathcal{D}$ ( $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$) )
 \end{itemize}
 
-Resolver a primeira equação é trivial(definir id como sendo $\mathcal{D} (\lambda$a → (id a,id))).
+Resolver a primeira equação é trivial(definir id da instância como sendo $\mathcal{D} (\lambda$a → (id a,id))).
 
-
-\end{frame}
-
-\begin{frame}{Dedução da instância}
 
 A segunda equação será resolvida resolvendo uma condição mais geral:
+$\mathcal{D} g \circ \mathcal{D} f$ = $\mathcal{D}$($\lambda a → let\{(b,f')$ = f a; $(c,g')$ = g b \} in $(c,g' \circ f'$)), cuja solução é igualmente trivial.
 
-$\mathcal{D} g \circ \mathcal{D} f$ = $\mathcal{D}$($\lambda a → let\{(b,f')$ = f a; $(c,g')$ = g b \} in $(c,g' \circ f'$)).
 
-A resolução desta equação é imediata, levando à seguinte definição da instância:
 \end{frame}
 
-
 \begin{frame}{Dedução da instância}
+
 
 \begin{block}{Definição de $\mathcal{\hat{D}}$ para funções lineares}
 linearD :: (a → b) → $\mathcal{D}$ a b
@@ -263,7 +253,9 @@ instance \textit{Category $\mathcal{D}$} where
 
 \end{block}
 
+
 \end{frame}
+
 
 
 \begin{frame}{Prova da instância}
@@ -272,12 +264,8 @@ Antes de continuarmos devemos verificar se esta instância obedece às leis (C.1
 
 Se considerarmos apenas morfismos $\hat{f}$ :: $\mathcal{D}$ a b tal que $\hat{f}$ = $\mathcal{D}^{+}$ f para f :: a → b(o que podemos garantir se transformarmos $\mathcal{D}$ a b em tipo abstrato) podemos garantir que $\mathcal{D}^{+}$ é functor.
 
-\end{frame}
 
-
-\begin{frame}{Prova da instância}
-
-Prova de (C.1):
+\begin{block}{Prova de (C.1)}
 
 id $\circ \mathcal{\hat{D}}$ 
 
@@ -286,14 +274,14 @@ id $\circ \mathcal{\hat{D}}$
 = $\mathcal{\hat{D}}$ (id $\circ$ f) - lei functor para ($\circ$)
 
 = $\mathcal{\hat{D}}$ f - lei de categoria
+\end{block}
 
 
 \end{frame}
 
-
 \begin{frame}{Prova da instância}
 
-Prova de (C.2):
+\begin{block}{Prova de (C.2)}
 
 $\mathcal{\hat{D}}$ h $\circ$ ($\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f)
 
@@ -307,14 +295,10 @@ $\mathcal{\hat{D}}$ h $\circ$ ($\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$
 
 = ($\mathcal{\hat{D}}$ h $\circ$ $\mathcal{\hat{D}}$ g) $\circ$ $\mathcal{\hat{D}}$ f - lei functor para ($\circ$)
 
-\end{frame}
-
-\begin{frame}{Prova da instância}
+\end{block}
 
 \begin{alertblock}{Nota}
-Estas provas não requerem nada de $\mathcal{D}$ e $\mathcal{\hat{D}}$ para além das leis do functor.
-
-Isto é importante porque sabendo isto não precisaremos mais de voltar a realizar estas provas para instâncias deduzidas a partir de um functor.
+Estas provas não requerem nada de $\mathcal{D}$ e $\mathcal{\hat{D}}$ para além das leis do functor, logo nas próximas instâncias deduzidas de um functor não precisamos de voltar a realizar estas provas.
 
 \end{alertblock}
 
@@ -323,13 +307,16 @@ Isto é importante porque sabendo isto não precisaremos mais de voltar a realiz
 
 
 
-\begin{frame}{Categorias monoidais}
+\begin{frame}{Categorias e functores monoidais}
 
-Anteriormente definimos composição paralela, identificando-a como importante para o nosso problema.Definiremos a versão generalizada desta através de uma categoria monoidal:
+A versão generalizada da composição paralela será definida através de uma categoria monoidal:
+
+\begin{block}
+
 
 \begin{columns}
  
-\column{0.6\textwidth}
+\column{0.5\textwidth}
 class \textit{Category k} $\Rightarrow$ \textit{Monoidal k} where
 
 \hspace{0.2cm}($\times$)::(a'k'c)→(b'k'd)→((a$\times$b)'k'(c$\times$d))
@@ -341,16 +328,10 @@ instance \textit{Monoidal (→)} where
 
 \end{columns}
 
-\begin{block}{Nota}
-Note-se que é possível uma categoria ser monoidal sobre outras operações, mas que para este papel a definição anterior é suficiente.
 \end{block}
 
-\end{frame}
 
-
-\begin{frame}{Functores monoidais}
-
-Do mesmo modo que relacionamos 2 categorias com um functor relacionamos duas categorias monoidais com um functor monoidal.
+\begin{block}{Definição de functor monoidal}
 
 Um functor \textit{F} monoidal entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
 \begin{itemize}
@@ -358,30 +339,32 @@ Um functor \textit{F} monoidal entre categorias $\mathcal{U}$ e $\mathcal{V}$ é
     \item \textit{F} (f $\times$ g) = \textit{F} f $\times$ \textit{F} g
 \end{itemize}
 
+\end{block}
+
 \end{frame}
+
 
 
 \begin{frame}{Dedução da instância}
 
-A dedução da instância passará agora pelo corolário 2.1, de onde deduzimos:
+A partir do corolário 2.1 deduzimos que:
 
 $\mathcal{D}^{+}$ (f $\times$ g) = $\lambda$(a,b) → let\{(c,f' )= $\mathcal{D}^{+}$ f a; (d,g') = $\mathcal{D}^{+}$ g b \} in ((c,d),f'$\times$g')
 
-
-Seja \textit{F} equivalente a $\mathcal{\hat{D}}$ sob sua definição expandida e invertamos a segunda condição do functor monoidal. Então ficamos com:
+Se definirmos o functor F a partir de $\mathcal{\hat{D}}$ chegamos à seguinte condição:
 
 $\mathcal{D}$($\mathcal{D}^{+}$ f) $\times$ $\mathcal{D}$($\mathcal{D}^{+}$ g) = $\mathcal{D}$($\mathcal{D}^{+}$ (f $\times$ g))
+
+Substituindo e fortalecendo-a obtemos:
+
+$\mathcal{D}$ f $\times$ $\mathcal{D}$ g = $\mathcal{D}$($\lambda$(a,b) → let\{(c,f') = f a; (d,g') =  g b \} in ((c,d),f'$\times$g'))
+
+e esta condição é suficiente para obtermos a nossa instância.
 
 \end{frame}
 
 
 \begin{frame}{Dedução da instância}
-
-Substituindo e fortalecendo a condição que tínhamos anteriormente obtemos:
-
-$\mathcal{D}$ f $\times$ $\mathcal{D}$ g = $\mathcal{D}$($\lambda$(a,b) → let\{(c,f') = f a; (d,g') =  g b \} in ((c,d),f'$\times$g'))
-
-e esta condição é suficiente para a nossa instância:
 
 \begin{block}{Instância da categoria que deduzimos}
 
@@ -395,16 +378,13 @@ instance \textit{Monoidal $\mathcal{D}$} where
 
 
 
+\begin{frame}{Categorias e funtores cartesianas}
 
-
-\begin{frame}{Categorias cartesianas}
-
-As categoria monoidais permitem-nos combinar funções mas não separar os dados obtidos.
-Para termos tal funcionalidade necessitamos de uma nova classe de categorias: a categoria cartesiana.
+\begin{block}
 
 \begin{columns}
  
-\column{0.6\textwidth}
+\column{0.5\textwidth}
 class \textit{Monoidal k} $\Rightarrow$ \textit{Cartesean k} where
 
 \hspace{0.2cm}exl :: (a$\times$b)'k'a
@@ -424,12 +404,11 @@ instance \textit{Cartesean (→)} where
 
 \end{columns}
 
-\end{frame}
+\end{block}
 
 
-\begin{frame}{Functores cartesianos}
+\begin{block}
 
-Do mesmo modo que relacionamos 2 categorias com um functor relacionamos duas categorias cartesianas com um functor cartesiano.
 
 Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
 \begin{itemize}
@@ -439,12 +418,18 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
     \item \textit{F} dup = dup
 \end{itemize}
 
+
+\end{block}
+
+
 \end{frame}
+
+
 
 
 \begin{frame}{Dedução da instância}
 
-A dedução da instância requer primeiro que pelo corolário 3.1 deduzamos(note-se que exl,exr e dup são lineares) que:
+Pelo corolário 3.1 e pelo facto que exl,exr e dup são linerares deduzimos que:
 
 $\mathcal{D}^{+}$ exl $\lambda$p → (exp p, exl)
 
@@ -495,8 +480,11 @@ instance \textit{Cartesian $\mathcal{D}$} where
 \begin{frame}{Categorias cocartesianas}
 
 São o dual das categorias cartesianas.
+\begin{block}{Nota}
+Neste papel os coprodutos correspondem aos produtos das categorias, i.e., categorias de biprodutos.
+\end{block}
 
-Normalmente todas as categorias têm a noção de coproduto definida(somatório de tipos para a categoria (→)). No entanto para este papel os coprodutos coincidem com os produtos de categorias, i.e., estamos a usar categorias de biprodutos.
+\begin{block}
 
 class \textit{Category k} $\Rightarrow$ \textit{Cocartesian k} where:
 
@@ -506,23 +494,16 @@ class \textit{Category k} $\Rightarrow$ \textit{Cocartesian k} where:
 
 \hspace{0.2cm}jam :: (a$\times$a)'k'a
 
-\end{frame}
-
-
-\begin{frame}{Categorias cocartesianas}
-
-\begin{block}{Nota}
-Devido ás limitações que definimos para este tipo de categorias não conseguimos definir uma instância para a categoria  (→). 
-
-Em vez disso definiremos mais tarde uma instância para  ($\to^+$) de funções aditivas que terá uma instância para este tipo de categorias.
 \end{block}
+
 
 \end{frame}
 
 
 \begin{frame}{Functores cocartesianos}
 
-Do mesmo modo que relacionamos 2 categorias com um functor relacionamos duas categorias cocartesianas com um functor cocartesiano.
+\begin{block}{Definição de functor cocartesiano}
+
 
 Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
 \begin{itemize}
@@ -533,8 +514,10 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \end{itemize}
 
 
-\end{frame}
+\end{block}
 
+
+\end{frame}
 
 
 
