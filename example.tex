@@ -162,6 +162,33 @@
         \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
 \end{frame}
 
+\section{Generalizing Automatic Differentiation}
+\begin{frame}{Generalizing Automatic Differentiation}
+    newtype $D_k$ a b = D (a → b × (a ‘k‘ b))\\
+    \vspace{2mm} 
+    linearD :: (a → b) → (a ‘k‘ b) → $D_k$ a b\\
+    linearD f f'= D ($\lambda$a → (f a, f'))\\
+    \vspace{2mm} 
+    \textbf{instance} Category k ⇒ Category $D_k$ \textbf{where}\\
+        \hspace{1cm}type Obj $D_k$ = Additive ∧ Obj k ...\\
+    \vspace{2mm} 
+    \textbf{instance} Monoidal k ⇒ Monoidal $D_k$ \textbf{where} ...\\
+    \vspace{2mm} 
+    \textbf{instance} Cartesian k ⇒ Cartesian $D_k$ \textbf{where} ...\\
+    \vspace{2mm} 
+    \textbf{instance} Cocartesian k ⇒ Cocartesian $D_k$ \textbf{where}\\
+        \hspace{1cm}inl = linearD inlF inl\\
+        \hspace{1cm}inr = linearD inrF inr\\
+        \hspace{1cm}jam = linearD jamF jam\\
+    \vspace{2mm} 
+\end{frame}
+
+\begin{frame}
+    \textbf{instance} Scalable k s ⇒ NumCat $D_k$ s \textbf{where}\\
+        \hspace{1cm}negateC = linearD negateC negateC\\
+        \hspace{1cm}addC = linearD addC addC\\
+        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
+\end{frame}
 
 \section{Exemplos}
 \begin{frame}{Exemplos}
