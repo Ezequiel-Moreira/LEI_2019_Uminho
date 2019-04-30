@@ -17,6 +17,7 @@
 \usepackage{stmaryrd}
 \usepackage{graphicx,color}
 \usepackage{url}
+\usepackage{lmodern}
 %\textwidth 15cm
 %\textheight 22cm
 %\hoffset -1.5cm
@@ -815,7 +816,7 @@ Algo mais preciso seria defenir a diferenciação das operações em si.
 \begin{frame}
 \vspace{2.5mm}
 \textbf{class} Scalable k a \textbf{where}\\
-\hspace{1cm}scale :: a $\rightarrow$ (a ?k? a)\\
+\hspace{1cm}scale :: a $\rightarrow$ (a 'k' a)\\
 \vspace{2mm} 
 \textbf{instance} Num a $\Rightarrow$ Scalable ($\to^+$) a \textbf{where}\\
 \hspace{1cm}scale a = AddFun ($\lambda$da $\rightarrow$ a · da)\\
@@ -826,13 +827,33 @@ Algo mais preciso seria defenir a diferenciação das operações em si.
 \hspace{1cm}mulC = D ($\lambda$(a, b) $\rightarrow$ (a · b, scale b $\nabla$ scale a))\\
 \end{frame}
 
-
 \section{Exemplos}
 \begin{frame}{Exemplos}
 \end{frame}
 
-\section{Generalizar}
-\begin{frame}{Generalizar}
+\section{Generalizar AD}
+\begin{frame}{Generalizar AD}
+    newtype $D_k$ a b = D (a $\to$ b $\times$ (a 'k' b))\\
+    \vspace{2mm} 
+    linearD :: (a $\to$ b) $\to$ (a 'k' b) $\to$ $D_k$ a b\\
+    linearD f f'= D ($\lambda$a $\to$ (f a, f'))\\
+    \vspace{2mm} 
+    \textbf{instance} Category k $\to$ Category $D_k$ \textbf{where}\\
+        \hspace{1cm}type Obj $D_k$ = Additive $\wedge$ Obj k ...\\
+    \vspace{2mm} 
+    \textbf{instance} Monoidal k $\Rightarrow$ Monoidal $D_k$ \textbf{where} ...\\
+    \vspace{2mm} 
+    \textbf{instance} Cartesian k $\Rightarrow$ Cartesian $D_k$ \textbf{where} ...\\
+    \vspace{2mm} 
+    \textbf{instance} Cocartesian k $\Rightarrow$ Cocartesian $D_k$ \textbf{where}\\
+        \hspace{1cm}inl = linearD inlF inl\\
+        \hspace{1cm}inr = linearD inrF inr\\
+        \hspace{1cm}jam = linearD jamF jam\\
+    \vspace{2mm} 
+    \textbf{instance} Scalable k s $\Rightarrow$ NumCat $D_k$ s \textbf{where}\\
+        \hspace{1cm}negateC = linearD negateC negateC\\
+        \hspace{1cm}addC = linearD addC addC\\
+        \hspace{1cm}mulC = D ($\lambda$(a, b) $\to$ (a · b, scale b $\nabla$ scale a))\\
 \end{frame}
 
 %============================EXEMPLO==========================
