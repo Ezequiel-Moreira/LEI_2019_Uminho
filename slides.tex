@@ -1,0 +1,603 @@
+\documentclass{beamer}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+
+  \setbeamercovered{transparent}
+}
+
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+%\usepackage[latin1]{inputenc}
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+%% ODER: format ==         = "\mathrel{==}"
+%% ODER: format /=         = "\neq "
+%
+%
+\makeatletter
+\@ifundefined{lhs2tex.lhs2tex.sty.read}%
+  {\@namedef{lhs2tex.lhs2tex.sty.read}{}%
+   \newcommand\SkipToFmtEnd{}%
+   \newcommand\EndFmtInput{}%
+   \long\def\SkipToFmtEnd#1\EndFmtInput{}%
+  }\SkipToFmtEnd
+
+\newcommand\ReadOnlyOnce[1]{\@ifundefined{#1}{\@namedef{#1}{}}\SkipToFmtEnd}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\DeclareFontFamily{OT1}{cmtex}{}
+\DeclareFontShape{OT1}{cmtex}{m}{n}
+  {<5><6><7><8>cmtex8
+   <9>cmtex9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmtex10}{}
+\DeclareFontShape{OT1}{cmtex}{m}{it}
+  {<-> ssub * cmtt/m/it}{}
+\newcommand{\texfamily}{\fontfamily{cmtex}\selectfont}
+\DeclareFontShape{OT1}{cmtt}{bx}{n}
+  {<5><6><7><8>cmtt8
+   <9>cmbtt9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmbtt10}{}
+\DeclareFontShape{OT1}{cmtex}{bx}{n}
+  {<-> ssub * cmtt/bx/n}{}
+\newcommand{\tex}[1]{\text{\texfamily#1}}	% NEU
+
+\newcommand{\Sp}{\hskip.33334em\relax}
+
+
+\newcommand{\Conid}[1]{\mathit{#1}}
+\newcommand{\Varid}[1]{\mathit{#1}}
+\newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
+\newcommand{\plus}{\mathbin{+\!\!\!+}}
+\newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
+\newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
+\newcommand{\sequ}{\mathbin{>\!\!\!>}}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\usepackage{polytable}
+
+%mathindent has to be defined
+\@ifundefined{mathindent}%
+  {\newdimen\mathindent\mathindent\leftmargini}%
+  {}%
+
+\def\resethooks{%
+  \global\let\SaveRestoreHook\empty
+  \global\let\ColumnHook\empty}
+\newcommand*{\savecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\savecolumns[#1]}}
+\newcommand*{\restorecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\restorecolumns[#1]}}
+\newcommand*{\aligncolumn}[2]%
+  {\g@addto@macro\ColumnHook{\column{#1}{#2}}}
+
+\resethooks
+
+\newcommand{\onelinecommentchars}{\quad-{}- }
+\newcommand{\commentbeginchars}{\enskip\{-}
+\newcommand{\commentendchars}{-\}\enskip}
+
+\newcommand{\visiblecomments}{%
+  \let\onelinecomment=\onelinecommentchars
+  \let\commentbegin=\commentbeginchars
+  \let\commentend=\commentendchars}
+
+\newcommand{\invisiblecomments}{%
+  \let\onelinecomment=\empty
+  \let\commentbegin=\empty
+  \let\commentend=\empty}
+
+\visiblecomments
+
+\newlength{\blanklineskip}
+\setlength{\blanklineskip}{0.66084ex}
+
+\newcommand{\hsindent}[1]{\quad}% default is fixed indentation
+\let\hspre\empty
+\let\hspost\empty
+\newcommand{\NB}{\textbf{NB}}
+\newcommand{\Todo}[1]{$\langle$\textbf{To do:}~#1$\rangle$}
+
+\EndFmtInput
+\makeatother
+%
+%
+%
+%
+%
+%
+% This package provides two environments suitable to take the place
+% of hscode, called "plainhscode" and "arrayhscode". 
+%
+% The plain environment surrounds each code block by vertical space,
+% and it uses \abovedisplayskip and \belowdisplayskip to get spacing
+% similar to formulas. Note that if these dimensions are changed,
+% the spacing around displayed math formulas changes as well.
+% All code is indented using \leftskip.
+%
+% Changed 19.08.2004 to reflect changes in colorcode. Should work with
+% CodeGroup.sty.
+%
+\ReadOnlyOnce{polycode.fmt}%
+\makeatletter
+
+\newcommand{\hsnewpar}[1]%
+  {{\parskip=0pt\parindent=0pt\par\vskip #1\noindent}}
+
+% can be used, for instance, to redefine the code size, by setting the
+% command to \small or something alike
+\newcommand{\hscodestyle}{}
+
+% The command \sethscode can be used to switch the code formatting
+% behaviour by mapping the hscode environment in the subst directive
+% to a new LaTeX environment.
+
+\newcommand{\sethscode}[1]%
+  {\expandafter\let\expandafter\hscode\csname #1\endcsname
+   \expandafter\let\expandafter\endhscode\csname end#1\endcsname}
+
+% "compatibility" mode restores the non-polycode.fmt layout.
+
+\newenvironment{compathscode}%
+  {\par\noindent
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \let\hspre\(\let\hspost\)%
+   \pboxed}%
+  {\endpboxed\)%
+   \par\noindent
+   \ignorespacesafterend}
+
+\newcommand{\compaths}{\sethscode{compathscode}}
+
+% "plain" mode is the proposed default.
+% It should now work with \centering.
+% This required some changes. The old version
+% is still available for reference as oldplainhscode.
+
+\newenvironment{plainhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\hspre\(\let\hspost\)%
+   \pboxed}%
+  {\endpboxed%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+\newenvironment{oldplainhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \(\pboxed}%
+  {\endpboxed\)%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+% Here, we make plainhscode the default environment.
+
+\newcommand{\plainhs}{\sethscode{plainhscode}}
+\newcommand{\oldplainhs}{\sethscode{oldplainhscode}}
+\plainhs
+
+% The arrayhscode is like plain, but makes use of polytable's
+% parray environment which disallows page breaks in code blocks.
+
+\newenvironment{arrayhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \(\parray}%
+  {\endparray\)%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+\newcommand{\arrayhs}{\sethscode{arrayhscode}}
+
+% The mathhscode environment also makes use of polytable's parray 
+% environment. It is supposed to be used only inside math mode 
+% (I used it to typeset the type rules in my thesis).
+
+\newenvironment{mathhscode}%
+  {\parray}{\endparray}
+
+\newcommand{\mathhs}{\sethscode{mathhscode}}
+
+% texths is similar to mathhs, but works in text mode.
+
+\newenvironment{texthscode}%
+  {\(\parray}{\endparray\)}
+
+\newcommand{\texths}{\sethscode{texthscode}}
+
+% The framed environment places code in a framed box.
+
+\def\codeframewidth{\arrayrulewidth}
+\RequirePackage{calc}
+
+\newenvironment{framedhscode}%
+  {\parskip=\abovedisplayskip\par\noindent
+   \hscodestyle
+   \arrayrulewidth=\codeframewidth
+   \tabular{@{}|p{\linewidth-2\arraycolsep-2\arrayrulewidth-2pt}|@{}}%
+   \hline\framedhslinecorrect\\{-1.5ex}%
+   \let\endoflinesave=\\
+   \let\\=\@normalcr
+   \(\pboxed}%
+  {\endpboxed\)%
+   \framedhslinecorrect\endoflinesave{.5ex}\hline
+   \endtabular
+   \parskip=\belowdisplayskip\par\noindent
+   \ignorespacesafterend}
+
+\newcommand{\framedhslinecorrect}[2]%
+  {#1[#2]}
+
+\newcommand{\framedhs}{\sethscode{framedhscode}}
+
+% The inlinehscode environment is an experimental environment
+% that can be used to typeset displayed code inline.
+
+\newenvironment{inlinehscode}%
+  {\(\def\column##1##2{}%
+   \let\>\undefined\let\<\undefined\let\\\undefined
+   \newcommand\>[1][]{}\newcommand\<[1][]{}\newcommand\\[1][]{}%
+   \def\fromto##1##2##3{##3}%
+   \def\nextline{}}{\) }%
+
+\newcommand{\inlinehs}{\sethscode{inlinehscode}}
+
+% The joincode environment is a separate environment that
+% can be used to surround and thereby connect multiple code
+% blocks.
+
+\newenvironment{joincode}%
+  {\let\orighscode=\hscode
+   \let\origendhscode=\endhscode
+   \def\endhscode{\def\hscode{\endgroup\def\@currenvir{hscode}\\}\begingroup}
+   %\let\SaveRestoreHook=\empty
+   %\let\ColumnHook=\empty
+   %\let\resethooks=\empty
+   \orighscode\def\hscode{\endgroup\def\@currenvir{hscode}}}%
+  {\origendhscode
+   \global\let\hscode=\orighscode
+   \global\let\endhscode=\origendhscode}%
+
+\makeatother
+\EndFmtInput
+%
+
+\newenvironment{slide}[1]{\begin{frame}\frametitle{#1}}{\end{frame}}
+
+
+\title
+{...Machine Learning...}
+
+\author[Artur, Ezequiel, Nelson] 
+{Artur \and Ezequiel \and Nelson}
+
+\institute
+{Universidade do Minho}
+
+\date
+{26 de Abril}
+
+\subject{Talks}
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+\begin{slide}{Instance of \ensuremath{\rightarrow^+ }}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{newtype}\;\Varid{a}\rightarrow^+ \Varid{b}\mathrel{=}\Conid{AddFun}\;(\Varid{a}\to \Varid{b}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\mathbf{type}\;\Conid{Obj}\;(\rightarrow^+ )\mathrel{=}\Conid{Additive}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{id}\mathrel{=}\Conid{AddFun}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Conid{AddFun}\;\Varid{g}\mathbin{\circ}\Conid{AddFun}\;\Varid{f}\mathrel{=}\Conid{AddFun}\;(\Varid{g}\mathbin{\circ}\Varid{f}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Conid{AddFun}\;\Varid{f}\mathbin{×}\Conid{AddFun}\;\Varid{g}\mathrel{=}\Conid{AddFun}\;(\Varid{f}\mathbin{×}\Varid{g}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{exl}\mathrel{=}\Conid{AddFun}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{exr}\mathrel{=}\Conid{AddFun}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{dup}\mathrel{=}\Conid{AddFun}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{slide}
+
+\begin{slide}{Fork and Join}
+    \begin{itemize}
+        \item
+            \ensuremath{ \bigtriangledown \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow (\Varid{a}\;\text{\ttfamily 'k'}\;\Varid{c})\to (\Varid{a}\;\text{\ttfamily 'k'}\;\Varid{d})\to (\Varid{a}\;\text{\ttfamily 'k'}\;(\Varid{c}\mathbin{×}\Varid{d}))}
+        \item
+            \ensuremath{ \bigtriangleup \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow (\Varid{c}\;\text{\ttfamily 'k'}\;\Varid{a})\to (\Varid{d}\;\text{\ttfamily 'k'}\;\Varid{a})\to ((\Varid{c}\mathbin{+}\Varid{d})\;\text{\ttfamily 'k'}\;\Varid{a})}
+    \end{itemize}
+\end{slide}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Indice}
+  \tableofcontents
+\end{frame}
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+\section{Nelson}
+
+\begin{frame}{titulo}
+\end{frame}
+
+
+\section{Ezequiel}
+
+\begin{frame}{titulo}
+\end{frame}
+
+\section{Fork e Join}
+\begin{frame}{Fork e Join}
+    \begin{itemize}
+        \item
+            $(\bigtriangleup)$ :: Cartesian k $\Rightarrow$ (a 'k' c) $\to$ (a 'k' d) $\to$ (a 'k' (c $\times$ d))
+        \item
+            $(\bigtriangledown)$ :: Cartesian k $\Rightarrow$ (c 'k' a) $\to$ (d 'k' a) $\to$ ((c $\times$ d) 'k' a)
+    \end{itemize}
+\end{frame}
+\begin{frame}{instancia de $\to^+$}
+    \textbf{newtype} a $\to^+$ b = AddFun (a → b)\\
+    \vspace{2mm} 
+    \textbf{instance} Category ($\to^+$) \textbf{where}\\
+        \hspace{1cm}type Obj ($\to^+$) = Additive\\
+        \hspace{1cm}id = AddFun id\\
+        \hspace{1cm}AddFun g $\circ$ AddFun f = AddFun (g $\circ$ f )\\
+    \vspace{2mm} 
+    \textbf{instance} Monoidal ($\to^+$) \textbf{where}\\
+        \hspace{1cm}AddFun f × AddFun g = AddFun (f × g)\\
+    \vspace{2mm} 
+    \textbf{instance} Cartesian ($\to^+$) \textbf{where}\\
+        \hspace{1cm}exl = AddFun exl\\
+        \hspace{1cm}exr = AddFun exr\\
+        \hspace{1cm}dup = AddFun dup\\
+\end{frame}
+\begin{frame}{instancia de $\to^+$}
+    \textbf{instance} Cocartesian ($\to^+$) \textbf{where}\\
+        \hspace{1cm} inl = AddFun inlF\\
+        \hspace{1cm} inr = AddFun inrF\\
+        \hspace{1cm} jam = AddFun jamF\\
+    \vspace{2mm} 
+    inlF :: Additive b ⇒ a → a × b\\ 
+    inrF :: Additive a ⇒ b → a × b\\
+    jamF :: Additive a ⇒ a × a → a\\
+    \vspace{2mm} 
+    inlF = $\lambda$a → (a, 0)    \\ 
+    inrF = $\lambda$b → (0, b)    \\
+    jamF = $\lambda$(a, b) → a + b\\ 
+\end{frame}
+
+\section{Operacoes Numericas}
+\begin{frame}{definição de NumCat}
+    \textbf{class} NumCat k a \textbf{where}\\
+        \hspace{1cm}negateC :: a ‘k‘ a\\
+        \hspace{1cm}addC :: (a × a) ‘k‘ a\\
+        \hspace{1cm}mulC :: (a × a) ‘k‘ a\\
+        \hspace{1cm}...\\
+    \vspace{2mm} 
+    \textbf{instance} Num a ⇒ NumCat (→) a \textbf{where}\\
+        \hspace{1cm}negateC = negate\\
+        \hspace{1cm}addC = uncurry (+)\\
+        \hspace{1cm}mulC = uncurry (·)\\
+        \hspace{1cm}...\\
+\end{frame}
+\begin{frame}
+    D (negate u) = negate (D u)\\
+    D (u + v) = D u + D v\\
+    D (u · v) = u · D v + v · D u\\
+    \begin{itemize}
+        \item
+            Impreciso na natureza de u e v.
+        \item
+            Algo mais preciso seria defenir a diferenciação das operações em si.
+    \end{itemize}
+\end{frame}
+\begin{frame}
+    \textbf{class} Scalable k a \textbf{where}\\
+        \hspace{1cm}scale :: a → (a ‘k‘ a)\\
+    \vspace{2mm} 
+    \textbf{instance} Num a ⇒ Scalable ($\to^+$) a \textbf{where}\\
+        \hspace{1cm}scale a = AddFun ($\lambda$da → a · da)\\
+    \vspace{5mm} 
+    \textbf{instance} NumCat D \textbf{where}\\
+        \hspace{1cm}negateC = linearD negateC\\
+        \hspace{1cm}addC = linearD addC\\
+        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
+\end{frame}
+
+\section{Generalizing Automatic Differentiation}
+\begin{frame}{Generalizing Automatic Differentiation}
+    newtype $D_k$ a b = D (a → b × (a ‘k‘ b))\\
+    \vspace{2mm} 
+    linearD :: (a → b) → (a ‘k‘ b) → $D_k$ a b\\
+    linearD f f'= D ($\lambda$a → (f a, f'))\\
+    \vspace{2mm} 
+    \textbf{instance} Category k ⇒ Category $D_k$ \textbf{where}\\
+        \hspace{1cm}type Obj $D_k$ = Additive ∧ Obj k ...\\
+    \vspace{2mm} 
+    \textbf{instance} Monoidal k ⇒ Monoidal $D_k$ \textbf{where} ...\\
+    \vspace{2mm} 
+    \textbf{instance} Cartesian k ⇒ Cartesian $D_k$ \textbf{where} ...\\
+    \vspace{2mm} 
+    \textbf{instance} Cocartesian k ⇒ Cocartesian $D_k$ \textbf{where}\\
+        \hspace{1cm}inl = linearD inlF inl\\
+        \hspace{1cm}inr = linearD inrF inr\\
+        \hspace{1cm}jam = linearD jamF jam\\
+    \vspace{2mm} 
+\end{frame}
+
+\begin{frame}
+    \textbf{instance} Scalable k s ⇒ NumCat $D_k$ s \textbf{where}\\
+        \hspace{1cm}negateC = linearD negateC negateC\\
+        \hspace{1cm}addC = linearD addC addC\\
+        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
+\end{frame}
+
+\section{Exemplos}
+\begin{frame}{Exemplos}
+\end{frame}
+
+\section{Generalizar}
+\begin{frame}{Generalizar}
+\end{frame}
+
+%============================EXEMPLO==========================
+%\section{Introduction}
+%
+%\subsection[Short First Subsection Name]{First Subsection Name}
+%
+%\begin{frame}{Make Titles Informative. Use Uppercase Letters.}{Subtitles are optional.}
+%  % - A title should summarize the slide in an understandable fashion
+%  %   for anyone how does not follow everything on the slide itself.
+%
+%  \begin{itemize}
+%  \item
+%    Use \texttt{itemize} a lot.
+%  \item
+%    Use very short sentences or short phrases.
+%  \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Make Titles Informative.}
+%
+%  You can create overlays\dots
+%  \begin{itemize}
+%  \item using the \texttt{pause} command:
+%    \begin{itemize}
+%    \item
+%      First item.
+%      \pause
+%    \item    
+%      Second item.
+%    \end{itemize}
+%  \item
+%    using overlay specifications:
+%    \begin{itemize}
+%    \item<3->
+%      First item.
+%    \item<4->
+%      Second item.
+%    \end{itemize}
+%  \item
+%    using the general \texttt{uncover} command:
+%    \begin{itemize}
+%      \uncover<5->{\item
+%        First item.}
+%      \uncover<6->{\item
+%        Second item.}
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
+%
+%\begin{frame}{}
+%\end{frame}
+%
+%\subsection{Second Subsection}
+%
+%\begin{frame}{Make Titles Informative.}
+%\end{frame}
+%
+%
+%
+%\section{Summary}
+%
+%\subsection{coisas1}
+%
+%\begin{frame}{Summary}
+%
+%  % Keep the summary *very short*.
+%  \begin{itemize}
+%  \item
+%    The \alert{first main message} of your talk in one or two lines.
+%  \item
+%    The \alert{second main message} of your talk in one or two lines.
+%  \item
+%    Perhaps a \alert{third message}, but not more than that.
+%  \end{itemize}
+%  
+%  % The following outlook is optional.
+%  \vskip0pt plus.5fill
+%  \begin{itemize}
+%  \item
+%    Outlook
+%    \begin{itemize}
+%    \item
+%      Something you haven't solved.
+%    \item
+%      Something else you haven't solved.
+%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
+%
+%\subsection{coisas2}
+%\begin{frame}{coisas2}
+%
+%
+%\end{frame}
+%=================================================================
+
+\end{document}
+
+
