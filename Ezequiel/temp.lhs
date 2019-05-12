@@ -28,7 +28,6 @@
 %format bigDhat = "\mathcal{\hat{D}}"
 %format bigU = "\mathcal{U}"
 %format bigV = "\mathcal{V}"
-%format -o = "\multimap"
 %format => = "\Rightarrow"
 %----------------------------------------------------
 
@@ -244,7 +243,7 @@ Given this papers category properties(objects are data types) we have that funct
 Let's start by defining a new data type:
 
 \begin{code}
-newtype bigD a b = bigD (a -> b \times (a -o b))
+newtype bigD a b = bigD (a -> b \times (a \multimap b))
 \end{code}
 
 and adapting |bigDplus| to use it:
@@ -271,16 +270,14 @@ Using corollaries 3.1 and 1.1 we deduce that
 
 \begin{itemize}
     \item (DP.1) |---- bigDplus id = \lambda a -> (id a,id)|
-    \item (DP.2) |----    
-    bigDplus(g \circ f) = \lambda a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b } in (c,g' \circ f')   
-    |
+    \item (DP.2) ----    
+    |bigDplus(g \circ f) = \lambda a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b } in (c,g' \circ f')|   
 \end{itemize}
 |saying that bigDhat a functor is equivalent to, for all f e g functions of correct types:|
 
-\begin{code}
-    id = bigDhat id = bigD (bigDplus id)
-    bigDhat g \circ bigDhat f = bigDhat  (g \circ f) = bigD (bigDhat (g \circ f))
-\end{code}
+    |id = bigDhat id = bigD (bigDplus id)|
+    |bigDhat g \circ bigDhat f = bigDhat  (g \circ f) = bigD (bigDhat (g \circ f))|
+
 
 \end{frame}
 
@@ -289,10 +286,10 @@ Using corollaries 3.1 and 1.1 we deduce that
 \begin{frame}{Instance deduction}
 
 Based on  (DP.1) e (DP.2) we'll rewrite the above into the following defenition:
-\begin{code}
-    id = bigD (\lambda a -> (id a,id))
-    bidDhat g \circ bigDhat f = bigD (\lambda a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' \circ f'))
-\end{code}
+
+    |id = bigD (\lambda a -> (id a,id))|
+    |bidDhat g \circ bigDhat f = bigD (\lambda a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' \circ f'))|
+
 
 The first equasion has a trivial solution(define id of instance as |bigD(\lambda a -> (id a,id))|)
 
@@ -312,8 +309,8 @@ To solve the secound we'll first solve a more general one:
 \begin{block}{ |bigDhat| definition for linear functions}
 \begin{code}
 
-linearD :: (a → b) → bigD a b
-linearD f = bigD(\lambda a → (f a,f))
+linearD :: (a -> b) -> bigD a b
+linearD f = bigD(\lambda a -> (f a,f))
 
 \end{code}
 \end{block}
@@ -343,28 +340,25 @@ If we do, then |bigDplus| is a functor.
 
 
 \begin{block}{(C.1) proof}
-\begin{code}
 
-id \circ bigDhat
-= bigDhat id \circ bigDhat f - functor law for id (specification of bigDhat)
-= bigDhat (id \circ f) - functor law for (\circ)
-= bigDhat f - cathegorical law
+|id \circ bigDhat|
+|= bigDhat id \circ bigDhat f - functor law for id (specification of bigDhat)|
+|= bigDhat (id \circ f) - functor law for (\circ)|
+|= bigDhat f - cathegorical law|
 
-\end{code}
 \end{frame}
 
 
 \begin{frame}{Instance proof}
 
 \begin{block}{(C.2) proof}
-\begin{code}
 
-bigDhat h \circ (bigDhat g \circ bigDhat f)
-= bigDhat h \circ bigDhat (g \circ f) - functor law for (\circ)
-= bigDhat (h \circ (g \circ f)) - functor law for (\circ)
-= bigDhat ((h \circ g) \circ f) - categorical law
-= bigDhat (h \circ g) \circ bigDhat f - functor law for (\circ)
-= (bigDhat h \circ bigDhat g) \circ bigDhat f - functor law for (\circ)
+|bigDhat h \circ (bigDhat g \circ bigDhat f)|
+|= bigDhat h \circ bigDhat (g \circ f) - functor law for (\circ)|
+|= bigDhat (h \circ (g \circ f)) - functor law for (\circ)|
+|= bigDhat ((h \circ g) \circ f) - categorical law|
+|= bigDhat (h \circ g) \circ bigDhat f - functor law for (\circ)|
+|= (bigDhat h \circ bigDhat g) \circ bigDhat f - functor law for (\circ)|
 
 \end{code}
 \end{block}
@@ -496,29 +490,24 @@ A cartesian functor F between categories |bigU and bigV| is such that:
 \begin{frame}{Instance deduction}
 
 From corollary 3.1 and from exl,exr and dup beeing linear function we can deduce that:
-\begin{code}
 
-bigDplus exl \lambda p -> (exl p,exl)
-bigDplus exr \lambda p -> (exr p,exr)
-bigDplus dup \lambda p -> (dup a,dup)
+|bigDplus exl \lambda p -> (exl p,exl)|
+|bigDplus exr \lambda p -> (exr p,exr)|
+|bigDplus dup \lambda p -> (dup a,dup)|
 
-\end{code}
 
 With this in mind we'll deduce the instance:
-\begin{code}
+    exl = |bigD(bigDplus exl)|
+    exr = |bigD(bigDplus exr)|
+    dup = |bigD(bigDplus dup)|
 
-exl = bigD(bigDplus exl)
-exr = bigD(bigDplus exr)
-dup = bigD(bigDplus dup)
-
-\end{code}
 \end{frame}
 
 
 
 \begin{frame}{Instance deduction} 
 
-Replacing bigDplus with it's definition and remembering linearD we can obtain:
+Replacing |bigDplus| with it's definition and remembering linearD we can obtain:
 
 exl = linearD exl
 exr = linearD exr
