@@ -137,7 +137,44 @@ Em particular, cada mapa de A \multimap s pode ser exprimido na forma dot u para
 
 |class HasDot^{S} u where dot :: u -> (u \multimap s)|
 |instance HasDot^{IR} where dot=scale|
-||
+|instance (HasDot^{S} a,HasDot^{S} b) => HasDot^{S} (a \times b) where dot(u,v) = dot u fork dot v|
+
+Como o tipo |Cont_{k}^{r}| pode tomar qualquer tipo/objeto r, usaremos o valor do campo s para r.
+Assim a representação interna de |Cont_{s}^{\multimap} a b| é |(b \multimap s) -> (a \multimap s)|, que 
+,pela isomorfia de s e seu espaço dual, é isomorfo a |b -> a|.
+A esta representação chamaremos dual(ou oposto) de k:
+|newtype Dual_{k} a b = Dual(b 'k' a)|
+
+
+Para criarmos representações duais de mapas lineares generalizados basta converter de |Cont_{k}^{s}| para
+|Dual_{k}| através de um funtor que iremos derivar a seguir, sendo que a composição deste com a função
+|cont::(a'k'b) -> Cont_{k}^{s} a b| nos dará um funtor de k para |Dual_{k}|.
+
+O funtor em questão é
+
+\begin{code}
+asDual :: (HasDot^{S} a,HasDot^{S} b) => ((b \multimap s) -> (a \multimap s)) -> (b \multimap a)
+asDual (Cont f) = Dual (onDot f)
+\end{code}
+
+,onde onDot é definido por:
+
+\begin{code}
+onDot :: (HasDot^{S} a,HasDot^{S} b) => ((b \multimap s) -> (a \multimap s)) -> (b \multimap a)
+onDot f = dot^{"-1"} \circ f \circ dot
+\end{code}
+
+A partir deste novo funtor derivamos as isntâncias de categoria correspondentes(ver figura 10)
+e provamos que asDual é homomorfismo nessas instâncias.
+
+Adicionalmente obtemos o seguinte corolário:
+
+|Dual f join Dual g = Dual(f fork g)|
+|Dual f fork Dual g = Dual(f join g)|
+
+Note-se que com base na representação do capitulo 8 de matrizes podemos
+concluir que a dualidade de matrizes corresponde à transposição das mesmas,
+e que |Dual_{k}| não involve calculos de matrizes sem que k também os envolva.
 
 
 \end{frame}
@@ -148,6 +185,22 @@ Em particular, cada mapa de A \multimap s pode ser exprimido na forma dot u para
 \section{Foward-Mode Automatic Differentiation(FAD)}
 \begin{frame}{Esboço}
 
+Tendo criado o Cont e o Dual podemos aplicar as mesmas técnicas para tentar criar composição
+totalmente à direita de modo a definir um algoritmo generalizado para FAD que é mais apropriado
+a dominios de baixa dimensão.
+
+|newtype Begin_{k}^{r} a b = Begin((r 'k' a) -> (r 'k' b))|
+
+\begin{code}
+
+begin :: Category k => (a 'k' b) -> Begin_{k}^{r} a b
+begin f = Begin(f \circ)
+
+\end{code}
+
+
+Após termos isto definido podemos aplicar o mesmo processo que feito anteriormente por especificação
+homomorfica para begin, e escolhendo r como campo escalar de s notando que |s \multimap a| é isomorfico a a
 
 
 
