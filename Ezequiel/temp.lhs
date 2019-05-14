@@ -198,8 +198,8 @@ A category is a collection of objects(sets and types) e morphisms(operation betw
 with 2 basic operations: identity and composition of morfisms, and 2 laws:
 
 \begin{itemize}
-    \item<1-> (C.1) |---- $id \circ f = id \circ f = f$ |
-    \item<2-> (C.2) |---- $f \circ (g \circ h) = (f \circ g) \circ h$|
+    \item<1-> (C.1)  id $\circ$ f = id $\circ$ f = f
+    \item<2-> (C.2)  f $\circ$ (g $\circ$ h) = (f $\circ$ g) $\circ$ h
 \end{itemize}
 
 \begin{block}
@@ -235,7 +235,7 @@ A functor F between 2 categories |bigU and bigV| is such that:
     \item given any object |t \in bigU| there exists a object |F t \in bigV|
     \item given any morphism |m :: a -> b \in bigU| there exists a morphism |F m :: F a -> F b \in bigV|
     \item |F id (\in bigU) = id (\in bigV)| 
-    \item |F (f \circ g) = F f \circ F g|
+    \item |F (f $\circ$ g) = F f $\circ$ F g|
 \end{itemize}
 
 \begin{block}{Note}
@@ -250,9 +250,7 @@ Given this papers category properties(objects are data types) we have that funct
 
 Let's start by defining a new data type:
 
-\begin{code}
-newtype bigD a b = bigD (a -> b x (a \multimap b))
-\end{code}
+|newtype bigD a b = bigD (a -> b x (a $\multimap$ b))|
 
 and adapting |bigDplus| to use it:
 
@@ -277,14 +275,14 @@ Our objective is to deduce an instance of Category for |bigD where bigDhat| is a
 Using corollaries 3.1 and 1.1 we deduce that
 
 \begin{itemize}
-    \item (DP.1) |---- bigDplus id = \lambda a -> (id a,id)|
+    \item (DP.1) |---- bigDplus id = $\lambda$ a -> (id a,id)|
     \item (DP.2) ----    
-    |bigDplus(g \circ f) = \lambda a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b } in (c,g' \circ f')|   
+    |bigDplus(g $\circ$ f) = $\lambda$ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b } in (c,g' $\circ$ f')|   
 \end{itemize}
 |saying that bigDhat a functor is equivalent to, for all f e g functions of correct types:|
 
     |id = bigDhat id = bigD (bigDplus id)|
-    |bigDhat g \circ bigDhat f = bigDhat  (g \circ f) = bigD (bigDhat (g \circ f))|
+    |bigDhat g $\circ$ bigDhat f = bigDhat  (g $\circ$ f) = bigD (bigDhat (g $\circ$ f))|
 
 
 \end{frame}
@@ -295,14 +293,14 @@ Using corollaries 3.1 and 1.1 we deduce that
 
 Based on  (DP.1) e (DP.2) we'll rewrite the above into the following defenition:
 
-    |id = bigD (\lambda a -> (id a,id))|
-    |bidDhat g \circ bigDhat f = bigD (\lambda a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' \circ f'))|
+    |id = bigD ($\lambda$ a -> (id a,id))|
+    |bidDhat g $\circ$ bigDhat f = bigD ($\lambda$ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' $\circ$ f'))|
 
 
-The first equasion has a trivial solution(define id of instance as |bigD(\lambda a -> (id a,id))|)
+The first equasion has a trivial solution(define id of instance as |bigD($\lambda$ a -> (id a,id))|)
 
 To solve the secound we'll first solve a more general one:
-|bigD g \circ bigD f = bigD(\lambda a -> let{(b,f') = f a; (c,g') = g b \} in(c,g' \circ f'))|
+|bigD g $\circ$ bigD f = bigD($\lambda$ a -> let{(b,f') = f a; (c,g') = g b \} in(c,g' $\circ$ f'))|
 , and this has an equivalently trivial solution in our instance.
 
 \end{frame}
@@ -349,9 +347,9 @@ If we do, then |bigDplus| is a functor.
 
 \begin{block}{(C.1) proof}
 
-|id \circ bigDhat|
-|= bigDhat id \circ bigDhat f - functor law for id (specification of bigDhat)|
-|= bigDhat (id \circ f) - functor law for (\circ)|
+|id $\circ$ bigDhat|
+|= bigDhat id $\circ$ bigDhat f - functor law for id (specification of bigDhat)|
+|= bigDhat (id $\circ$ f) - functor law for ($\circ$)|
 |= bigDhat f - cathegorical law|
 
 \end{frame}
@@ -361,14 +359,13 @@ If we do, then |bigDplus| is a functor.
 
 \begin{block}{(C.2) proof}
 
-|bigDhat h \circ (bigDhat g \circ bigDhat f)|
-|= bigDhat h \circ bigDhat (g \circ f) - functor law for (\circ)|
-|= bigDhat (h \circ (g \circ f)) - functor law for (\circ)|
-|= bigDhat ((h \circ g) \circ f) - categorical law|
-|= bigDhat (h \circ g) \circ bigDhat f - functor law for (\circ)|
-|= (bigDhat h \circ bigDhat g) \circ bigDhat f - functor law for (\circ)|
+|bigDhat h $\circ$ (bigDhat g $\circ$ bigDhat f)|
+|= bigDhat h $\circ$ bigDhat (g $\circ$ f) - functor law for ($\circ$)|
+|= bigDhat (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)|
+|= bigDhat ((h $\circ$ g) $\circ$ f) - categorical law|
+|= bigDhat (h $\circ$ g) $\circ$ bigDhat f - functor law for ($\circ$)|
+|= (bigDhat h $\circ$ bigDhat g) $\circ$ bigDhat f - functor law for ($\circ$)|
 
-\end{code}
 \end{block}
 
 \begin{alertblock}{Note}
@@ -413,7 +410,7 @@ instance Monoidal (->) where
 A monoidal functor F between categories |bigU and bigV| is such that:
 \begin{itemize}
     \item F is a functor
-    \item F (f |\times| g) = F f |\times| F g
+    \item F (f |$\times$| g) = F f |$\times$| F g
 \end{itemize}
 \end{block}
 \end{frame}
@@ -422,15 +419,15 @@ A monoidal functor F between categories |bigU and bigV| is such that:
 \begin{frame}{Instance deduction}
 
 From corollary 2.1 we can deduce that:
-|bigDplus (f \times g) = \lambda (a,b) -> let{(c,f')=bigDplus f a;(d,g')= bigDplus g b} in ((c,d),f' \times g')|
+|bigDplus (f $\times$ g) = $\lambda$ (a,b) -> let{(c,f')=bigDplus f a;(d,g')= bigDplus g b} in ((c,d),f' $\times$ g')|
 
 Defining F from |bigDhat| leaves us with the following definition:
 
-|bigD (bigDplus f) \times bigD (bigDplus g) = bigD (bigDplus (f \times g))|
+|bigD (bigDplus f) $\times$ bigD (bigDplus g) = bigD (bigDplus (f $\times$ g))|
 
 Using the same method as before, we replace |bigDplus| with it's definition and generalize the condition:
 
-|bigD f \times bigD g = bigD (\lambda (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' \times g'))|
+|bigD f $\times$ bigD g = bigD ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))|
 
 and this is enouth for our new instance.
 \end{frame}
@@ -571,239 +568,6 @@ A cocartesian functor F between categories |bigU and bigV| is such that:
 \end{frame}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Fork e Join}
-\begin{frame}{Fork e Join}
-    \begin{itemize}
-        \item
-            $(\bigtriangleup)$ :: Cartesian k $\Rightarrow$ (a 'k' c) $\to$ (a 'k' d) $\to$ (a 'k' (c $\times$ d))
-        \item
-            $(\bigtriangledown)$ :: Cartesian k $\Rightarrow$ (c 'k' a) $\to$ (d 'k' a) $\to$ ((c $\times$ d) 'k' a)
-    \end{itemize}
-\end{frame}
-\begin{frame}{instancia de $\to^+$}
-    \textbf{newtype} a $\to^+$ b = AddFun (a → b)\\
-    \vspace{2mm} 
-    \textbf{instance} Category ($\to^+$) \textbf{where}\\
-        \hspace{1cm}type Obj ($\to^+$) = Additive\\
-        \hspace{1cm}id = AddFun id\\
-        \hspace{1cm}AddFun g $\circ$ AddFun f = AddFun (g $\circ$ f )\\
-    \vspace{2mm} 
-    \textbf{instance} Monoidal ($\to^+$) \textbf{where}\\
-        \hspace{1cm}AddFun f × AddFun g = AddFun (f × g)\\
-    \vspace{2mm} 
-    \textbf{instance} Cartesian ($\to^+$) \textbf{where}\\
-        \hspace{1cm}exl = AddFun exl\\
-        \hspace{1cm}exr = AddFun exr\\
-        \hspace{1cm}dup = AddFun dup\\
-\end{frame}
-\begin{frame}{instancia de $\to^+$}
-    \textbf{instance} Cocartesian ($\to^+$) \textbf{where}\\
-        \hspace{1cm} inl = AddFun inlF\\
-        \hspace{1cm} inr = AddFun inrF\\
-        \hspace{1cm} jam = AddFun jamF\\
-    \vspace{2mm} 
-    inlF :: Additive b ⇒ a → a × b\\ 
-    inrF :: Additive a ⇒ b → a × b\\
-    jamF :: Additive a ⇒ a × a → a\\
-    \vspace{2mm} 
-    inlF = $\lambda$a → (a, 0)    \\ 
-    inrF = $\lambda$b → (0, b)    \\
-    jamF = $\lambda$(a, b) → a + b\\ 
-\end{frame}
-
-\section{Operacoes Numericas}
-\begin{frame}{definição de NumCat}
-    \textbf{class} NumCat k a \textbf{where}\\
-        \hspace{1cm}negateC :: a ‘k‘ a\\
-        \hspace{1cm}addC :: (a × a) ‘k‘ a\\
-        \hspace{1cm}mulC :: (a × a) ‘k‘ a\\
-        \hspace{1cm}...\\
-    \vspace{2mm} 
-    \textbf{instance} Num a ⇒ NumCat (→) a \textbf{where}\\
-        \hspace{1cm}negateC = negate\\
-        \hspace{1cm}addC = uncurry (+)\\
-        \hspace{1cm}mulC = uncurry (·)\\
-        \hspace{1cm}...\\
-\end{frame}
-\begin{frame}
-    D (negate u) = negate (D u)\\
-    D (u + v) = D u + D v\\
-    D (u · v) = u · D v + v · D u\\
-    \begin{itemize}
-        \item
-            Impreciso na natureza de u e v.
-        \item
-            Algo mais preciso seria defenir a diferenciação das operações em si.
-    \end{itemize}
-\end{frame}
-\begin{frame}
-    \textbf{class} Scalable k a \textbf{where}\\
-        \hspace{1cm}scale :: a → (a ‘k‘ a)\\
-    \vspace{2mm} 
-    \textbf{instance} Num a ⇒ Scalable ($\to^+$) a \textbf{where}\\
-        \hspace{1cm}scale a = AddFun ($\lambda$da → a · da)\\
-    \vspace{5mm} 
-    \textbf{instance} NumCat D \textbf{where}\\
-        \hspace{1cm}negateC = linearD negateC\\
-        \hspace{1cm}addC = linearD addC\\
-        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
-\end{frame}
-
-\section{Generalizing Automatic Differentiation}
-\begin{frame}{Generalizing Automatic Differentiation}
-    newtype $D_k$ a b = D (a → b × (a ‘k‘ b))\\
-    \vspace{2mm} 
-    linearD :: (a → b) → (a ‘k‘ b) → $D_k$ a b\\
-    linearD f f'= D ($\lambda$a → (f a, f'))\\
-    \vspace{2mm} 
-    \textbf{instance} Category k ⇒ Category $D_k$ \textbf{where}\\
-        \hspace{1cm}type Obj $D_k$ = Additive ∧ Obj k ...\\
-    \vspace{2mm} 
-    \textbf{instance} Monoidal k ⇒ Monoidal $D_k$ \textbf{where} ...\\
-    \vspace{2mm} 
-    \textbf{instance} Cartesian k ⇒ Cartesian $D_k$ \textbf{where} ...\\
-    \vspace{2mm} 
-    \textbf{instance} Cocartesian k ⇒ Cocartesian $D_k$ \textbf{where}\\
-        \hspace{1cm}inl = linearD inlF inl\\
-        \hspace{1cm}inr = linearD inrF inr\\
-        \hspace{1cm}jam = linearD jamF jam\\
-    \vspace{2mm} 
-\end{frame}
-
-\begin{frame}
-    \textbf{instance} Scalable k s ⇒ NumCat $D_k$ s \textbf{where}\\
-        \hspace{1cm}negateC = linearD negateC negateC\\
-        \hspace{1cm}addC = linearD addC addC\\
-        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
-\end{frame}
-
-\section{Exemplos}
-\begin{frame}{Exemplos}
-\end{frame}
-
-\section{Generalizar}
-\begin{frame}{Generalizar}
-\end{frame}
-
-%============================EXEMPLO==========================
-%\section{Introduction}
-%
-%\subsection[Short First Subsection Name]{First Subsection Name}
-%
-%\begin{frame}{Make Titles Informative. Use Uppercase Letters.}{Subtitles are optional.}
-%  % - A title should summarize the slide in an understandable fashion
-%  %   for anyone how does not follow everything on the slide itself.
-%
-%  \begin{itemize}
-%  \item
-%    Use \texttt{itemize} a lot.
-%  \item
-%    Use very short sentences or short phrases.
-%  \end{itemize}
-%\end{frame}
-%
-%\begin{frame}{Make Titles Informative.}
-%
-%  You can create overlays\dots
-%  \begin{itemize}
-%  \item using the \texttt{pause} command:
-%    \begin{itemize}
-%    \item
-%      First item.
-%      \pause
-%    \item    
-%      Second item.
-%    \end{itemize}
-%  \item
-%    using overlay specifications:
-%    \begin{itemize}
-%    \item<3->
-%      First item.
-%    \item<4->
-%      Second item.
-%    \end{itemize}
-%  \item
-%    using the general \texttt{uncover} command:
-%    \begin{itemize}
-%      \uncover<5->{\item
-%        First item.}
-%      \uncover<6->{\item
-%        Second item.}
-%    \end{itemize}
-%  \end{itemize}
-%\end{frame}
-%
-%\begin{frame}{}
-%\end{frame}
-%
-%\subsection{Second Subsection}
-%
-%\begin{frame}{Make Titles Informative.}
-%\end{frame}
-%
-%
-%
-%\section{Summary}
-%
-%\subsection{coisas1}
-%
-%\begin{frame}{Summary}
-%
-%  % Keep the summary *very short*.
-%  \begin{itemize}
-%  \item
-%    The \alert{first main message} of your talk in one or two lines.
-%  \item
-%    The \alert{second main message} of your talk in one or two lines.
-%  \item
-%    Perhaps a \alert{third message}, but not more than that.
-%  \end{itemize}
-%  
-%  % The following outlook is optional.
-%  \vskip0pt plus.5fill
-%  \begin{itemize}
-%  \item
-%    Outlook
-%    \begin{itemize}
-%    \item
-%      Something you haven't solved.
-%    \item
-%      Something else you haven't solved.
-%    \end{itemize}
-%  \end{itemize}
-%\end{frame}
-%
-%\subsection{coisas2}
-%\begin{frame}{coisas2}
-%
-%
-%\end{frame}
-%=================================================================
 
 \end{document}
 
