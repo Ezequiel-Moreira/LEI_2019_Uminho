@@ -74,6 +74,26 @@
 \begin{document}
 
 
+\begin{code}
+
+(f x g)(a,b) = (f a,g b)
+
+newtype a ->+ b=AddFun(a->b)
+
+instance Category (->+) where
+   type Obj (->+) = Additive
+   id = AddFun id
+   AddFun g . AddFun f = AddFun (g . f )
+
+instance Monoidal (->+) where
+   AddFun f × AddFun g = AddFun (f × g)
+
+instance Cartesian (->+) where
+   exl = AddFun exl
+   exr = AddFun exr
+   dup = AddFun dup
+\end{code}
+
 
 
 \section{Ezequiel 2}
@@ -100,7 +120,7 @@ permite-nos garantir a propriedade que queremos: todas as composições são fei
 
 Nesta instância de categoria as composições na computação transformam-se em computações na continuação.
 Por exemplo, |g \circ f| com continuação k (|k \circ (g \circ f)|) transforma-se em f com continuação
-|g \circ g| ((k \circ g) \circ f).
+|g \circ g ((k \circ g) \circ f)|.
 
 Nota: a composição inicial para qualquer morfismo é id (|id \circ f =  id|)
 
@@ -110,7 +130,7 @@ Usando a mesma ideia estabelecida no capitulo 4 criamos um novo tipo de dados e 
 
 \begin{code}
 cont :: Category k => (a 'k' b) -> Cont_{k}^{r} a b
-cont f = Cont(\circ f)
+cont f = Cont(. f)
 \end{code}
 
 e derivamos uma instância(ver figura 7), provando que cont é homomorfismo nessa derivação.
@@ -158,7 +178,7 @@ We'll begin by creating a new data type:
 And then defining a functor from it:
 \begin{code}
 cont :: Category k => (a 'k' b) -> Cont_{k}^{r} a b
-cont f = Cont(\circ f)
+cont f = Cont(. f)
 \end{code}
 
 
@@ -175,20 +195,20 @@ newtype  Cont_{k}^{r} a b = Cont((b'k'r) -> (a'k'r))
 
 instance Category k => Category Cont_{k}^{r} where
   id = Cont id
-  Cont g \circ Cont f = Cont(f \circ g)
+  Cont g . Cont f = Cont(f . g)
 
 instance Monoidal k => Monoidal Cont_{k}^{r} where
-  Conf f \times Cont g = Cont(join \circ (f \times g) \circ unjoin)
+  Conf f x Cont g = Cont(join . (f x g) . unjoin)
 
 instance Cartesian k => Cartesian Cont_{k}^{r} where
-  exl = Cont(join \circ inl)
-  exr = Cont(join \circ inr)
-  dup = Cont(jam \circ unjoin)
+  exl = Cont(join . inl)
+  exr = Cont(join . inr)
+  dup = Cont(jam . unjoin)
 
 instance Cocartesian k => Cocartesian Cont_{k}^{r} where
-  inl = Cont(exl \circ unjoin)
-  inr = Cont(exr \circ unjoin)
-  jam = Cont(join \circ dup)
+  inl = Cont(exl . unjoin)
+  inr = Cont(exr . unjoin)
+  jam = Cont(join . dup)
 
 instance Scalable k a => Scalable Cont_{k}^{r} a where
   scale s = Cont(scale s)
@@ -239,7 +259,7 @@ asDual (Cont f) = Dual (onDot f)
 
 \begin{code}
 onDot :: (HasDot^{S} a,HasDot^{S} b) => ((b \multimap s) -> (a \multimap s)) -> (b \multimap a)
-onDot f = dot^{"-1"} \circ f \circ dot
+onDot f = dot^{"-1"} . f . dot
 \end{code}
 
 A partir deste novo funtor derivamos as isntâncias de categoria correspondentes(ver figura 10)
@@ -308,7 +328,7 @@ where
 
 \begin{code}
 onDot :: (HasDot^{S} a,HasDot^{S} b) => ((b \multimap s) -> (a \multimap s)) -> (b \multimap a)
-onDot f = dot^{"-1"} \circ f \circ dot
+onDot f = dot^{"-1"} . f . dot
 \end{code}
 
 Given this we can now derive our new categorical instances
@@ -322,10 +342,10 @@ Given this we can now derive our new categorical instances
 
 instance Category k => Category Dual_{k} where
   id = Dual id
-  Dual g \circ Dual f = Dual (f \circ g)
+  Dual g . Dual f = Dual (f . g)
 
 instance Monoidal k => Monoidal Dual_{k} where
-  Dual f \times Dual g = Dual (f \times g)
+  Dual f x Dual g = Dual (f x g)
 
 instance Cartesian k => Cartesian Dual_{k} where
   exl = Dual inl
@@ -382,7 +402,7 @@ a dominios de baixa dimensão.
 \begin{code}
 
 begin :: Category k => (a 'k' b) -> Begin_{k}^{r} a b
-begin f = Begin(f \circ)
+begin f = Begin(f .)
 
 \end{code}
 
@@ -409,7 +429,7 @@ This algorithm is far more apropriated for low dimention domains.
 
 \begin{code}
 begin :: Category k => (a 'k' b) -> Begin_{k}^{r} a b
-begin f = Begin(f \circ)
+begin f = Begin(f .)
 \end{code}
 
 We can derive categorical instances from the functor above and we can choose r to be the scalar field s, noting that |s \multimap a| is isomorfic to a.
