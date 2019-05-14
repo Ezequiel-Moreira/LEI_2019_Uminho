@@ -208,22 +208,21 @@ Note: for this paper, objects are data types and morfisms are functions
 
 \begin{block}
 \begin{columns}
-\column{0.5\textwidth}
-
+\begin{column}{0.5\textwidth}
 \begin{code}
 class Category k where
     id :: (a'k'a)
     (.) :: (b'k'c) -> (a'k'b) -> (a'k'c)
 \end{code}
+\end{column}
 
-\column{0.5\textwidth}
-
+\begin{column}{0.5\textwidth}
 \begin{code}
 instance Category (->) where
     id = \a -> a 
     g . f = \a -> g (f a)  
 \end{code}
-
+\end{column}
 \end{columns}
 \end{block}
 \end{frame}
@@ -392,8 +391,7 @@ Generalized parallel composition will be defined using a monoidal category:
 
 \begin{block}
 \begin{columns}
- 
-\column{0.5\textwidth}
+\begin{column}{0.5\textwidth}
 \begin{code}
 
 
@@ -401,14 +399,15 @@ class Category k => Monoidal k where
     (x) :: (a 'k' c) -> (b 'k' d) -> ((a x b) 'k' (c x d)) 
 
 \end{code}
-
-\column{0.4\textwidth}
+\end{column}
+\begin{column}{0.4\textwidth}
 \begin{code}
 
 instance Monoidal (->) where
     f x g = \(a,b) -> (f a,g b)
 
 \end{code}
+\end{column}
 \end{columns}
 \end{block}
 
@@ -460,7 +459,7 @@ instance Monoidal bigD where
 \begin{block}
 \begin{columns}
  
-\column{0.5\textwidth}
+\begin{column}{0.5\textwidth}
 \begin{code}
 
 class Monoidal k => Cartesean k where
@@ -469,8 +468,8 @@ class Monoidal k => Cartesean k where
     dup :: a'k'(a,a)
 
 \end{code}
-
-\column{0.4\textwidth}
+\end{column}
+\begin{column}{0.4\textwidth}
 \begin{code}
 
 instance Cartesean (->) where
@@ -479,6 +478,7 @@ instance Cartesean (->) where
     dup = \a -> (a,a)
 
 \end{code}
+\end{column}
 \end{columns}
 \end{block}
 
