@@ -206,7 +206,6 @@ with 2 basic operations: identity and composition of morfisms, and 2 laws:
 Note: for this paper, objects are data types and morfisms are functions
 \end{block}
 
-\begin{block}
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{code}
@@ -224,7 +223,6 @@ instance Category (->) where
 \end{code}
 \end{column}
 \end{columns}
-\end{block}
 \end{frame}
 
 
@@ -389,7 +387,6 @@ As such, all other instances of categories created from a functor won't require 
 Generalized parallel composition will be defined using a monoidal category:
 
 
-\begin{block}
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{code}
@@ -409,7 +406,6 @@ instance Monoidal (->) where
 \end{code}
 \end{column}
 \end{columns}
-\end{block}
 
 
 \begin{block}{Monoidal Functor definition}
@@ -456,9 +452,7 @@ instance Monoidal bigD where
 
 
 \begin{frame}{Cartesian categories and functors}
-\begin{block}
 \begin{columns}
- 
 \begin{column}{0.5\textwidth}
 \begin{code}
 
@@ -480,7 +474,6 @@ instance Cartesean (->) where
 \end{code}
 \end{column}
 \end{columns}
-\end{block}
 
 
 \begin{block}
