@@ -213,7 +213,7 @@ Note: for this paper, objects are data types and morfisms are functions
 \begin{code}
 class Category k where
     id :: (a'k'a)
-    (.) :: (b'k'c) → (a'k'b) → (a'k'c)
+    (.) :: (b'k'c) -> (a'k'b) -> (a'k'c)
 \end{code}
 
 \column{0.5\textwidth}
