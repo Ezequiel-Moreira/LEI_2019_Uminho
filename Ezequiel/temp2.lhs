@@ -78,20 +78,7 @@
 
 (f x g)(a,b) = (f a,g b)
 
-newtype a ->+ b=AddFun(a->b)
-
-instance Category (->+) where
-   type Obj (->+) = Additive
-   id = AddFun id
-   AddFun g . AddFun f = AddFun (g . f )
-
-instance Monoidal (->+) where
-   AddFun f × AddFun g = AddFun (f × g)
-
-instance Cartesian (->+) where
-   exl = AddFun exl
-   exr = AddFun exr
-   dup = AddFun dup
+(f = undefined)
 \end{code}
 
 

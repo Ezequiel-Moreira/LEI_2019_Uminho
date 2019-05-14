@@ -72,10 +72,18 @@
 
 
 \begin{document}
-\begin{slide}{Instance of |->+|}
+
 \begin{code}
 
 (f x g)(a,b) = (f a,g b)
+
+(f = undefined)
+\end{code}
+
+
+\begin{slide}{Instance of |->+|}
+\begin{code}
+
 
 newtype a ->+ b=AddFun(a->b)
 
