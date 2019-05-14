@@ -195,11 +195,11 @@ instance Cartesian (->+) where
 \begin{frame}{Categories}
 
 A category is a collection of objects(sets and types) e morphisms(operation between objects),
-with 2 basic operations: identity and composition of morfisms, and 2 laws:
+with 2 basic operations(identity and composition) of morfisms, and 2 laws:
 
 \begin{itemize}
-    \item<1-> (C.1)  id $\circ$ f = id $\circ$ f = f
-    \item<2-> (C.2)  f $\circ$ (g $\circ$ h) = (f $\circ$ g) $\circ$ h
+    \item (C.1)  $id \circ f = id \circ f = f$
+    \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
 \begin{block}
