@@ -74,6 +74,9 @@
 \begin{document}
 \begin{slide}{Instance of |->+|}
 \begin{code}
+
+(f x g)(a,b) = (f a,g b)
+
 newtype a ->+ b=AddFun(a->b)
 
 instance Category (->+) where
@@ -202,15 +205,15 @@ Note: for this paper, objects are data types and morfisms are functions
 \begin{code}
 class Category k where
     id :: (a'k'a)
-    (\circ) :: (b'k'c) → (a'k'b) → (a'k'c)
+    (.) :: (b'k'c) → (a'k'b) → (a'k'c)
 \end{code}
 
 \column{0.5\textwidth}
 
 \begin{code}
 instance Category (->) where
-    id = \lambda a -> a 
-    g \circ f = \lambda a -> g (f a)  
+    id = \a -> a 
+    g . f = \a -> g (f a)  
 \end{code}
 
 \end{columns}
@@ -243,7 +246,7 @@ Given this papers category properties(objects are data types) we have that funct
 Let's start by defining a new data type:
 
 \begin{code}
-newtype bigD a b = bigD (a -> b \times (a \multimap b))
+newtype bigD a b = bigD (a -> b x (a \multimap b))
 \end{code}
 
 and adapting |bigDplus| to use it:
@@ -310,7 +313,7 @@ To solve the secound we'll first solve a more general one:
 \begin{code}
 
 linearD :: (a -> b) -> bigD a b
-linearD f = bigD(\lambda a -> (f a,f))
+linearD f = bigD(\a -> (f a,f))
 
 \end{code}
 \end{block}
@@ -322,7 +325,7 @@ linearD f = bigD(\lambda a -> (f a,f))
 
 instance Category bigD where
     id = linearD id
-    bigD g \circ bigD f = bigD(\lambda a -> let{(b,f') = f a;(c,g') = g b} in (c,g' \circ f'))
+    bigD g . bigD f = bigD( \a -> let{(b,f') = f a;(c,g') = g b} in (c,g' . f'))
 
 \end{code}
 \end{block}
@@ -385,8 +388,9 @@ Generalized parallel composition will be defined using a monoidal category:
 \column{0.5\textwidth}
 \begin{code}
 
+
 class Category k => Monoidal k where
-    (\times) :: (a 'k' c) -> (b 'k' d) -> ((a \times b) 'k' (c \times d)) 
+    (x) :: (a 'k' c) -> (b 'k' d) -> ((a x b) 'k' (c x d)) 
 
 \end{code}
 
@@ -394,7 +398,7 @@ class Category k => Monoidal k where
 \begin{code}
 
 instance Monoidal (->) where
-    f \times g = \lambda (a,b) -> (f a,g b)
+    f x g = \(a,b) -> (f a,g b)
 
 \end{code}
 \end{columns}
@@ -435,7 +439,7 @@ and this is enouth for our new instance.
 \begin{code}
 
 instance Monoidal bigD where
-    bigD f \times bigD g = bigD(\lambda (a,b) -> let{(c,f') = f a;(d,g') = g b} in ((c,d),f' \times g'))
+    bigD f x bigD g = bigD(\(a,b) -> let{(c,f') = f a;(d,g') = g b} in ((c,d),f' x g'))
 
 \end{code}
 \end{block}
@@ -452,9 +456,9 @@ instance Monoidal bigD where
 \begin{code}
 
 class Monoidal k => Cartesean k where
-    exl :: (a \times b)'k'a
-    exr :: (a \times b)'k'b
-    dup :: a'k'(a \times a)
+    exl :: (a,b)'k'a
+    exr :: (a,b)'k'b
+    dup :: a'k'(a,a)
 
 \end{code}
 
@@ -462,9 +466,9 @@ class Monoidal k => Cartesean k where
 \begin{code}
 
 instance Cartesean (->) where
-    exl = \lambda (a,b) -> a
-    exr = \lambda (a,b) -> b
-    dup = \lambda a -> (a,a)
+    exl = \(a,b) -> a
+    exr = \(a,b) -> b
+    dup = \a -> (a,a)
 
 \end{code}
 \end{columns}
@@ -491,9 +495,9 @@ A cartesian functor F between categories |bigU and bigV| is such that:
 
 From corollary 3.1 and from exl,exr and dup beeing linear function we can deduce that:
 
-|bigDplus exl \lambda p -> (exl p,exl)|
-|bigDplus exr \lambda p -> (exr p,exr)|
-|bigDplus dup \lambda p -> (dup a,dup)|
+|bigDplus exl \p -> (exl p,exl)|
+|bigDplus exr \p -> (exr p,exr)|
+|bigDplus dup \p -> (dup a,dup)|
 
 
 With this in mind we'll deduce the instance:
@@ -541,9 +545,9 @@ In this paper coproducts are categorical products, i.e., biproducts
 \begin{code}
 
 class Category k => Cocartesian k where:
-    inl :: a 'k' (a \times b)
-    inr :: b 'k' (a \times b)
-    jam :: (a \times a) 'k' a
+    inl :: a 'k' (a,b)
+    inr :: b 'k' (a,b)
+    jam :: (a,a) 'k' a
 
 \end{code}
 \end{block}
