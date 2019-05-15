@@ -321,431 +321,517 @@
 
 \begin{document}
 
+\begin{frame}
+  \titlepage
+\end{frame}
 
-\section{Reverse-Mode Automatic Differentiation(RAD)}
-\begin{frame}{Esboço}
-
-O algoritmo AD que derivamos nas categorias(capitulo 4) e cuja instância se encontra generalizada na
-figura 6 do documento pode ser visto como familia de algoritmos que pode tomar forma de FAD caso usemos
-apenas composição à direita ou de RAD caso usemos apenas composição à esquerda(podendo tomar outras formas
-se não usarmos exclusivamente uma composição, mas não nos interressa muito isso para este papel).
-
-Sabendo que queremos definir RAD e sabendo o que temos do parágrafo anterior uma pergunta aparece:
-como forçar a composição à esquerda?
-
-Dada uma qualquer categoria k podemos representar os seus morfismos de forma a indicar
-que queremos compor à esquerda com um morfismo h que ainda iremos definir.
-
-Para tal um morfismo f :: a 'k' b é representado pela função \ensuremath{(\lambda \Varid{circ}\;\Varid{f})\mathbin{::}(\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})},
-com r objeto em k.
-
-Ao morfismo h chamaremos continuação de f, e a construção de uma categoria à volta desta ideia
-permite-nos garantir a propriedade que queremos: todas as composições são feitas à esquerda.
-
-Nesta instância de categoria as composições na computação transformam-se em computações na continuação.
-Por exemplo, \ensuremath{\Varid{g}\lambda \Varid{circ}\;\Varid{f}} com continuação k (\ensuremath{\Varid{k}\lambda \Varid{circ}\;(\Varid{g}\lambda \Varid{circ}\;\Varid{f})}) transforma-se em f com continuação
-\ensuremath{\Varid{g}\lambda \Varid{circ}\;\Varid{g}\;((\Varid{k}\lambda \Varid{circ}\;\Varid{g})\lambda \Varid{circ}\;\Varid{f})}.
-
-Nota: a composição inicial para qualquer morfismo é id (\ensuremath{\Varid{id}\lambda \Varid{circ}\;\Varid{f}\mathrel{=}\Varid{id}})
-
-Usando a mesma ideia estabelecida no capitulo 4 criamos um novo tipo de dados e geramos a categoria associada:
-
-\ensuremath{\mathbf{newtype}\;\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r}))}
-
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow \Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}{}\<[E]%
-\\
-\>[B]{}\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f}){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-e derivamos uma instância(ver figura 7), provando que cont é homomorfismo nessa derivação.
-
+\begin{frame}{Indice}
+  \tableofcontents
 \end{frame}
 
 
 
 
+\section{Categories}
+
 \begin{frame}{A short introdution}
-
-
 \begin{itemize}
-    \item<1-> In chapter 4 we've derived an AD algorithm that was generalized in figure 6 of the document
-    \item<2-> With fully right-associated compositions this algoritm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
-    \item<3-> We want to obtain generalized FAD and RAD algoritms 
-    \item<4-> How do we describe this in Categorical notation?
+ \item<1-> We want to calculate \ensuremath{\mathcal{D}}.
+ \item<2-> However, \ensuremath{\mathcal{D}} is not computable.
+ \item<3-> Solution: reimplement corollaries using category theory
 \end{itemize}
 
 \end{frame}
 
 
 
-
-\begin{frame}{Converting morfisms}
-
-Given a category k we can represent its morfisms using the intent to left-compose with another morfism:
-
-\ensuremath{\Varid{f}\mathbin{::}\Varid{a'k'b}\;\Varid{becomes}\;(\lambda \Varid{circ}\;\Varid{f})\mathbin{::}(\Varid{b'k'r})\rightarrow (\Varid{a'k'r})} where r is any object of k.
-If h is the morfism we'll compose with f then h is the continuation of f.
-
-With this idea in mind we can derive a category based on it, creating a generalization of the RAD algoritm.
-
-\end{frame}
-
-
-
-
-\begin{frame}{Instance deduction}
-
-We'll begin by creating a new data type:
-
-\ensuremath{\mathbf{newtype}\;\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b'k'r})\rightarrow (\Varid{a'k'r}))}
-
-And then defining a functor from it:
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow \Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}{}\<[E]%
-\\
-\>[B]{}\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f}){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-
-With this we can derive new categorical isntances:
-
-\end{frame}
-
-
-
-\begin{frame}{Instance deduction}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{10}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;{}\<[10]%
-\>[10]{}\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b'k'r})\rightarrow (\Varid{a'k'r})){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{id}\mathrel{=}\Conid{Cont}\;\Varid{id}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Conid{Cont}\;\Varid{g}\mathbin{\circ}\Conid{Cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Conid{Conf}\;\Varid{f}\;\Varid{x}\;\Conid{Cont}\;\Varid{g}\mathrel{=}\Conid{Cont}\;( \bigtriangleup \mathbin{\circ}(\Varid{f}\;\Varid{x}\;\Varid{g})\mathbin{\circ}\Varid{unjoin}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{exl}\mathrel{=}\Conid{Cont}\;( \bigtriangleup \mathbin{\circ}\Varid{inl}){}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{exr}\mathrel{=}\Conid{Cont}\;( \bigtriangleup \mathbin{\circ}\Varid{inr}){}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{dup}\mathrel{=}\Conid{Cont}\;(\Varid{jam}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{inl}\mathrel{=}\Conid{Cont}\;(\Varid{exl}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{inr}\mathrel{=}\Conid{Cont}\;(\Varid{exr}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{jam}\mathrel{=}\Conid{Cont}\;( \bigtriangleup \mathbin{\circ}\Varid{dup}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\Rightarrow\Conid{Scalable}\;\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Cont}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-\end{frame}
-
-
-
-
-
-
-
-\section{Gradient and Duality}
-\begin{frame}{Esboço}
-
-Continuando da secção anterior vamos falar de um caso especial de RAD: computação de gradientes.
-
-Dado um espeço vetorial A sobre um campo escalar s o dual de A é A \multimap s(mapas lineares para o campo s).
-Como este espaço dual também é vetorial e A é finito concluimos que tanto o dual como o primal são isomorfos.
-
-Em particular, cada mapa de A \multimap s pode ser exprimido na forma dot u para u :: A onde:
-
-\ensuremath{\mathbf{class}\;\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{u}\;\mathbf{where}\;\Varid{dot}\mathbin{::}\Varid{u}\rightarrow (\Varid{u}\lambda \Varid{multimap}\;\Varid{s})}
-\ensuremath{\mathbf{instance}\;\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{IR}\mskip1.5mu\}\;\mathbf{where}\;\Varid{dot}\mathrel{=}\Varid{scale}}
-\ensuremath{\mathbf{instance}\;(\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{a},\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{b})\Rightarrow\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;(\Varid{a}\lambda \Varid{times}\;\Varid{b})\;\mathbf{where}\;\Varid{dot}\;(\Varid{u},\Varid{v})\mathrel{=}\Varid{dot}\;\Varid{u}\; \bigtriangledown \;\Varid{dot}\;\Varid{v}}
-
-Como o tipo \ensuremath{\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}} pode tomar qualquer tipo/objeto r, usaremos o valor do campo s para r.
-Assim a representação interna de \ensuremath{\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{s}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \lambda \Varid{multimap}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}} é \ensuremath{(\Varid{b}\lambda \Varid{multimap}\;\Varid{s})\rightarrow (\Varid{a}\lambda \Varid{multimap}\;\Varid{s})}, que 
-,pela isomorfia de s e seu espaço dual, é isomorfo a \ensuremath{\Varid{b}\rightarrow \Varid{a}}.
-A esta representação chamaremos dual(ou oposto) de k:
-\ensuremath{\mathbf{newtype}\;\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b}\;\text{\tt 'k'}\;\Varid{a})}
-
-
-Para criarmos representações duais de mapas lineares generalizados basta converter de \ensuremath{\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{s}\mskip1.5mu\}} para
-\ensuremath{\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}} através de um funtor que iremos derivar a seguir, sendo que a composição deste com a função
-\ensuremath{\Varid{cont}\mathbin{::}(\Varid{a'k'b})\rightarrow \Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{s}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}} nos dará um funtor de k para \ensuremath{\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}}.
-
-O funtor em questão é
-
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{asDual}\mathbin{::}(\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{a},\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{b})\Rightarrow((\Varid{b}\lambda \Varid{multimap}\;\Varid{s})\rightarrow (\Varid{a}\lambda \Varid{multimap}\;\Varid{s}))\rightarrow (\Varid{b}\lambda \Varid{multimap}\;\Varid{a}){}\<[E]%
-\\
-\>[B]{}\Varid{asDual}\;(\Conid{Cont}\;\Varid{f})\mathrel{=}\Conid{Dual}\;(\Varid{onDot}\;\Varid{f}){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-,onde onDot é definido por:
-
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{onDot}\mathbin{::}(\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{a},\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{b})\Rightarrow((\Varid{b}\lambda \Varid{multimap}\;\Varid{s})\rightarrow (\Varid{a}\lambda \Varid{multimap}\;\Varid{s}))\rightarrow (\Varid{b}\lambda \Varid{multimap}\;\Varid{a}){}\<[E]%
-\\
-\>[B]{}\Varid{onDot}\;\Varid{f}\mathrel{=}\Varid{dot}\mathbin{\uparrow}\{\mskip1.5mu \text{\tt \char34 -1\char34}\mskip1.5mu\}\mathbin{\circ}\Varid{f}\mathbin{\circ}\Varid{dot}{}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-A partir deste novo funtor derivamos as isntâncias de categoria correspondentes(ver figura 10)
-e provamos que asDual é homomorfismo nessas instâncias.
-
-Adicionalmente obtemos o seguinte corolário:
-
-\ensuremath{\Conid{Dual}\;\Varid{f}\; \bigtriangleup \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \bigtriangledown \;\Varid{g})}
-\ensuremath{\Conid{Dual}\;\Varid{f}\; \bigtriangledown \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \bigtriangleup \;\Varid{g})}
-
-Note-se que com base na representação do capitulo 8 de matrizes podemos
-concluir que a dualidade de matrizes corresponde à transposição das mesmas,
-e que \ensuremath{\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}} não involve calculos de matrizes sem que k também os envolva.
-
-
-\end{frame}
-
-
-
-
-
-
-
 \begin{frame}{A short introdution}
 
-Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
-
-A vector space A over a scalar field has \ensuremath{\Conid{A}\lambda \Varid{multimap}\;\Varid{s}} as it's dual(i.e., the linear maps of the udnerlaying field of A are it's dual)
-This dual space is also a vector space and if A is finite in dimention they are isomorfic.
-
-Each linear map in \ensuremath{\Conid{A}\lambda \Varid{multimap}\;\Varid{s}} can be represented in the form of dot u for some u :: A where
-
-\ensuremath{\mathbf{class}\;\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{u}\;\mathbf{where}\;\Varid{dot}\mathbin{::}\Varid{u}\rightarrow (\Varid{u}\lambda \Varid{multimap}\;\Varid{s})}
-\ensuremath{\mathbf{instance}\;\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{IR}\mskip1.5mu\}\;\Conid{IR}\;\mathbf{where}\;\Varid{dot}\mathrel{=}\Varid{scale}}
-\ensuremath{\mathbf{instance}\;(\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{a},\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{b})\Rightarrow\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;(\Varid{a}\lambda \Varid{times}\;\Varid{b})\;\mathbf{where}\;\Varid{dot}\;(\Varid{u},\Varid{v})\mathrel{=}\Varid{dot}\;\Varid{u}\; \bigtriangledown \;\Varid{dot}\;\Varid{v}}
-
-
-\end{frame}
-
-
-
-\begin{frame}{Instance deduction}
-
-Since \ensuremath{\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}} works for any type/object r we can use it with the scalar field s.
-The internal representation of \ensuremath{\Conid{Cont\char95 }\;\{\mskip1.5mu \lambda \Varid{multimap}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{s}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}} is \ensuremath{(\Varid{b}\lambda \Varid{multimap}\;\Varid{s})\rightarrow (\Varid{a}\lambda \Varid{multimap}\;\Varid{s})\;\Varid{and}\;\Varid{that}\;\Varid{this}\;\Varid{is}\;\Varid{isomorfic}\;\Varid{to}\;(\Varid{a}\rightarrow \Varid{b})},
-With this in mind we can call this representation as the dual/opposite of k:
-
-\ensuremath{\mathbf{newtype}\;\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b'k'a})}
-
+    \begin{block}{Corollary 1.1}
+    NOTA: adicionar definição do corolário 1.1 aqui
+    \end{block}
+    
+    \begin{block}{Corollary 2.1}
+    NOTA: adicionar definição do corolário 2.1 aqui
+    \end{block}
+    
+    \begin{block}{Corollary 3.1}
+    NOTA: adicionar definição do corolário 3.1 aqui
+    \end{block}
+ 
 \end{frame}
 
 
 
 
-\begin{frame}{Instance deduction}
+\begin{frame}{Categories}
 
-With this construction all we need to do to create dual representations of linear maps is to
-convert from \ensuremath{\Conid{Cont\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}} to \ensuremath{\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}} using a functor that we'll now derive:
-
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{asDual}\mathbin{::}(\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{a},\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{b})\Rightarrow((\Varid{b}\lambda \Varid{multimap}\;\Varid{s})\rightarrow (\Varid{a}\lambda \Varid{multimap}\;\Varid{s}))\rightarrow (\Varid{b}\lambda \Varid{multimap}\;\Varid{a}){}\<[E]%
-\\
-\>[B]{}\Varid{asDual}\;(\Conid{Cont}\;\Varid{f})\mathrel{=}\Conid{Dual}\;(\Varid{onDot}\;\Varid{f}){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-where
-
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{onDot}\mathbin{::}(\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{a},\Conid{HasDot}\mathbin{\uparrow}\{\mskip1.5mu \Conid{S}\mskip1.5mu\}\;\Varid{b})\Rightarrow((\Varid{b}\lambda \Varid{multimap}\;\Varid{s})\rightarrow (\Varid{a}\lambda \Varid{multimap}\;\Varid{s}))\rightarrow (\Varid{b}\lambda \Varid{multimap}\;\Varid{a}){}\<[E]%
-\\
-\>[B]{}\Varid{onDot}\;\Varid{f}\mathrel{=}\Varid{dot}\mathbin{\uparrow}\{\mskip1.5mu \text{\tt \char34 -1\char34}\mskip1.5mu\}\mathbin{\circ}\Varid{f}\mathbin{\circ}\Varid{dot}{}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-Given this we can now derive our new categorical instances
-
-\end{frame}
-
-
-
-\begin{frame}{Instance deduction}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{id}\mathrel{=}\Conid{Dual}\;\Varid{id}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Conid{Dual}\;\Varid{g}\mathbin{\circ}\Conid{Dual}\;\Varid{f}\mathrel{=}\Conid{Dual}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Conid{Dual}\;\Varid{f}\;\Varid{x}\;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\;\Varid{x}\;\Varid{g}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{exl}\mathrel{=}\Conid{Dual}\;\Varid{inl}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{exr}\mathrel{=}\Conid{Dual}\;\Varid{inr}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{dup}\mathrel{=}\Conid{Dual}\;\Varid{jam}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{inl}\mathrel{=}\Conid{Dual}\;\Varid{exl}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{inr}\mathrel{=}\Conid{Dual}\;\Varid{exr}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{jam}\mathrel{=}\Conid{Dual}\;\Varid{dup}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\Rightarrow\Conid{Scalable}\;\Conid{Dual\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Dual}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-\end{frame}
-
-
-
-\begin{frame}{Final notes}
+A category is a collection of objects(sets and types) and morphisms(operation between objects),
+with 2 basic operations(identity and composition) of morfisms, and 2 laws:
 
 \begin{itemize}
-  \item \ensuremath{ \bigtriangleup \;\Varid{and}\; \bigtriangledown } mutually dualize \ensuremath{(\Conid{Dual}\;\Varid{f}\; \bigtriangleup \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \bigtriangledown \;\Varid{g})\;\Varid{and}\;\Conid{Dual}\;\Varid{f}\; \bigtriangledown \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \bigtriangleup \;\Varid{g}))}
-  \item Using the definition from chapter 8 we can determine that the duality of a matrix corresponds to it's transposition
+    \item (C.1)  $id \circ f = id \circ f = f$
+    \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
+\begin{block}{Note}
+For this paper, objects are data types and morfisms are functions
+\end{block}
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathbin{::}(\Varid{a'k'a}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b'k'c})\rightarrow (\Varid{a'k'b})\rightarrow (\Varid{a'k'c}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathrel{=}\lambda \Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{g}\mathbin{\circ}\Varid{f}\mathrel{=}\lambda \Varid{a}\rightarrow \Varid{g}\;(\Varid{f}\;\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+\begin{frame}{Functors}
+
+A functor F between 2 categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
+\begin{itemize}
+    \item given any object t $\in$ \ensuremath{\mathcal{U}} there exists an object F t $\in$ \ensuremath{\mathcal{V}}
+    \item given any morphism m :: a \ensuremath{\rightarrow } b $\in$ \ensuremath{\mathcal{U}} there exists a morphism F m :: F a \ensuremath{\rightarrow } F b $\in$ \ensuremath{\mathcal{V}}
+    \item F id ($\in$ \ensuremath{\mathcal{U}}) = id ($\in$ \ensuremath{\mathcal{V}})
+    \item F (f $\circ$ g) = F f $\circ$ F g
+\end{itemize}
+
+\begin{block}{Note}
+Given this papers category properties(objects are data types) functors map types to themselves
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Objective}
+
+Let's start by defining a new data type:
+
+newtype \ensuremath{\mathcal{D}} a b = \ensuremath{\mathcal{D}} (a \ensuremath{\rightarrow } b $\times$ (a $\multimap$ b))
+
+,and adapting \ensuremath{\mathcal{D}^{+}} to use it:
+
+\begin{block}{Adapted definition}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathcal{\hat{D}}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+Our objective is to deduce an instance of a Category for \ensuremath{\mathcal{D}} where \ensuremath{\mathcal{\hat{D}}} is a functor.
+
+\end{frame}
+
+
+
+
+\begin{frame}{Instance deduction}
+
+Before deducing our instance we must first note that using corollaries 3.1 and 1.1 we can determine that
+
+\begin{itemize}
+    \item (DP.1) \ensuremath{\mathcal{D}^{+}} id = $\lambda$ a -> (id a,id)
+    \item (DP.2)    
+    \ensuremath{\mathcal{D}^{+}}(g $\circ$ f) = $\lambda$ a -> let{(b,f') = \ensuremath{\mathcal{D}^{+}} f a; (c,g') = \ensuremath{\mathcal{D}^{+}} g b } 
+        in (c,g' $\circ$ f')
+\end{itemize}
+
+Saying that \ensuremath{\mathcal{\hat{D}}} is a functor is equivalent to, for all f and g functions of apropriate types:
+
+    \ensuremath{\Varid{id}\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{id})}
+
+    \ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f = \ensuremath{\mathcal{\hat{D}}}  (g $\circ$ f) = \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{\hat{D}}} (g $\circ$ f))
+
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+
+Based on  (DP.1) and (DP.2) we'll rewrite the above into the following definition:
+
+id = \ensuremath{\mathcal{D}} ($\lambda$ a -> (id a,id))
+
+\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f = \ensuremath{\mathcal{D}} ($\lambda$ a -> let{(b,f') = \ensuremath{\mathcal{D}^{+}} f a; (c,g') = \ensuremath{\mathcal{D}^{+}} g b} in (c,g' $\circ$ f'))
+
+
+The first equation shown above has a trivial solution(define id of instance as \ensuremath{\mathcal{D}}($\lambda$ a -> (id a,id)))
+
+To solve the second we'll first solve a more general one:
+
+\ensuremath{\mathcal{D}} g $\circ$ \ensuremath{\mathcal{D}} f = \ensuremath{\mathcal{D}}($\lambda$ a -> let{(b,f') = f a; (c,g') = g b } in(c,g' $\circ$ f'))
+
+This condition also leads us to a trivial solution inside our instance.
+
 \end{frame}
 
 
 
 
 
+\begin{frame}{Instance deduction}
 
-
-
-
-
-
-
-
-
-
-
-
-\section{Foward-Mode Automatic Differentiation(FAD)}
-\begin{frame}{Esboço}
-
-Tendo criado o Cont e o Dual podemos aplicar as mesmas técnicas para tentar criar composição
-totalmente à direita de modo a definir um algoritmo generalizado para FAD que é mais apropriado
-a dominios de baixa dimensão.
-
-\ensuremath{\mathbf{newtype}\;\Conid{Begin\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{r}\;\text{\tt 'k'}\;\Varid{b}))}
-
+\begin{block}{ \ensuremath{\mathcal{\hat{D}}} definition for linear functions}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow \Conid{Begin\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[B]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
-\>[B]{}\Varid{begin}\;\Varid{f}\mathrel{=}\Conid{Begin}\;(\Varid{f}\mathbin{\circ}){}\<[E]%
+\>[B]{}\Varid{linearD}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathrel{=}\Varid{linearD}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{Instance proof}
+
+In order to prove that the instance is correct we must check if it follows laws (C.1) and (C.2).
+
+First we must make a concession: that we only use morfisms arising from \ensuremath{\mathcal{D}^{+}}(we can force this by transforming \ensuremath{\mathcal{D}} into an abstract type).
+If we do, then \ensuremath{\mathcal{D}^{+}} is a functor.
+
+
+\begin{block}{(C.1) proof}
+
+id $\circ$ \ensuremath{\mathcal{\hat{D}}}
+
+= \ensuremath{\mathcal{\hat{D}}} id $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for id (specification of \ensuremath{\mathcal{\hat{D}}})
+
+= \ensuremath{\mathcal{\hat{D}}} (id $\circ$ f) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} f - categorical law
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Instance proof}
+
+\begin{block}{(C.2) proof}
+
+\ensuremath{\mathcal{\hat{D}}} h $\circ$ (\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f)
+
+= \ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} (g $\circ$ f) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} ((h $\circ$ g) $\circ$ f) - categorical law
+
+= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for ($\circ$)
+
+= (\ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for ($\circ$)
+
+\end{block}
+
+\begin{alertblock}{Note}
+This proofs don't require anything from \ensuremath{\mathcal{D}\;\Varid{and}\;\mathcal{\hat{D}}} aside from functor laws.
+As such, all other instances of categories created from a functor won't require further proving like this onr did.
+
+\end{alertblock}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Monoidal categories and functors}
+
+Generalized parallel composition shall be defined using a monoidal category:
+
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}(\Varid{x})\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a}\;\Varid{x}\;\Varid{b})\;\text{\tt 'k'}\;(\Varid{c}\;\Varid{x}\;\Varid{d})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{f}\;\Varid{x}\;\Varid{g}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
 
-Após termos isto definido podemos aplicar o mesmo processo que feito anteriormente por especificação
-homomorfica para begin, e escolhendo r como campo escalar de s notando que \ensuremath{\Varid{s}\lambda \Varid{multimap}\;\Varid{a}} é isomorfico a a
+
+\begin{block}{Monoidal Functor definition}
+
+A monoidal functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
+\begin{itemize}
+    \item F is a functor
+    \item F (f $\times$ g) = F f $\times$ F g
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Instance deduction}
+
+From corollary 2.1 we can deduce that:
+
+\ensuremath{\mathcal{D}^{+}} (f $\times$ g) = $\lambda$ (a,b) -> let{(c,f')=\ensuremath{\mathcal{D}^{+}} f a;(d,g')= \ensuremath{\mathcal{D}^{+}} g b} 
+
+    in ((c,d),f' $\times$ g')
+
+Deriving F from \ensuremath{\mathcal{\hat{D}}} leaves us with the following definition:
+
+\ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} f) $\times$ \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} g) = \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} (f $\times$ g))
+
+Using the same method as before, we replace \ensuremath{\mathcal{D}^{+}} with it's definition and generalize the condition:
+
+\ensuremath{\mathcal{D}} f $\times$ \ensuremath{\mathcal{D}} g =
+
+\ensuremath{\mathcal{D}} ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))
+
+and this is enough for our new instance.
+\end{frame}
 
 
 
+\begin{frame}{Instance deduction}
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{38}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{f}\;\Varid{x}\;\mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\\
+\>[5]{}\hsindent{33}{}\<[38]%
+\>[38]{}\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\;\Varid{x}\;\Varid{g'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
 \end{frame}
 
 
 
 
-
-
-
-\begin{frame}{Fowards-mode Automatic Differentiation(FAD)}
-
-We can use the same deductions we've done in Cont and Dual to derive a category with full right-side association, thus creating a generized FAD algorithm.
-This algorithm is far more apropriated for low dimention domains.
-
-\ensuremath{\mathbf{newtype}\;\Conid{Begin\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r'k'a})\rightarrow (\Varid{r'k'b}))}
-
+\begin{frame}{Cartesian categories and functors}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow \Conid{Begin\char95 }\;\{\mskip1.5mu \Varid{k}\mskip1.5mu\}\mathbin{\uparrow}\{\mskip1.5mu \Varid{r}\mskip1.5mu\}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[B]{}\mathbf{class}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
-\>[B]{}\Varid{begin}\;\Varid{f}\mathrel{=}\Conid{Begin}\;(\Varid{f}\mathbin{\circ}){}\<[E]%
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
-We can derive categorical instances from the functor above and we can choose r to be the scalar field s, noting that \ensuremath{\Varid{s}\lambda \Varid{multimap}\;\Varid{a}} is isomorfic to a.
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{a},\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 
 
+
+\begin{block}
+
+A cartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
+
+\begin{itemize}
+    \item F is a monoidal functor
+    \item F exl = exl
+    \item F exp = exp
+    \item F dup = dup
+\end{itemize}
+\end{block}
 \end{frame}
 
 
 
 
+\begin{frame}{Instance deduction}
+
+From corollary 3.1 and from exl,exr and dup being linear functions we can deduce that:
+
+\ensuremath{\mathcal{D}^{+}} exl = \ensuremath{\lambda \Varid{p}\rightarrow } (exl p,exl)
+
+\ensuremath{\mathcal{D}^{+}} exr = \ensuremath{\lambda \Varid{p}\rightarrow } (exr p,exr)
+
+\ensuremath{\mathcal{D}^{+}} dup = \ensuremath{\lambda \Varid{p}\rightarrow } (dup a,dup)
+
+
+With this in mind we can arrive at our instance:
+
+exl = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} exl)
+
+exr = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} exr)
+
+dup = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} dup)
+
+\end{frame}
 
 
 
+\begin{frame}{Instance deduction} 
+
+Replacing \ensuremath{\mathcal{D}^{+}} with it's definition and remembering linearD's definition we can obtain:
+
+exl = linearD exl
+
+exr = linearD exr
+
+dup = linearD dup
+
+
+and  convert this directly into a new instance:
+
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\Varid{linearD}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\Varid{linearD}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\Varid{linearD}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+\end{frame}
 
 
 
+\begin{frame}{Cocartesian category}
 
+This type of categories is the dual of the cartesian type of categories.
+
+\begin{block}{Note}
+In this paper coproducts are categorical products, i.e., biproducts
+\end{block}
+
+\begin{block}{Definition}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}\mathbin{:}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inl}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inr}\mathbin{::}\Varid{b'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Cocartesian functors}
+
+\begin{block}{Cocartesian functor definition}
+
+A cocartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
+\begin{itemize}
+    \item F is a functor
+    \item F inl = inl
+    \item F inr = inr
+    \item F jam = jam
+\end{itemize}
+\end{block}
+\end{frame}
 
 
 

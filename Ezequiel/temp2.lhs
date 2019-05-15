@@ -81,8 +81,8 @@
 
 \begin{itemize}
     \item<1-> In chapter 4 we've derived an AD algorithm that was generalized in figure 6 of the document
-    \item<2-> With fully right-associated compositions this algoritm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
-    \item<3-> We want to obtain generalized FAD and RAD algoritms 
+    \item<2-> With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
+    \item<3-> We want to obtain generalized FAD and RAD algorithms 
     \item<4-> How do we describe this in Categorical notation?
 \end{itemize}
 
@@ -98,8 +98,7 @@ Given a category k we can represent its morfisms using the intent to left-compos
 f :: a'k'b becomes ($\circ$ f) :: (b'k'r) |->| (a'k'r) where r is any object of k.
 If h is the morfism we'll compose with f then h is the continuation of f.
 
-With this idea in mind we can derive a category based on it, creating a generalization of the RAD algoritm.
-
+Creating a category based around this functor will give us our generalized RAD algorithm.
 \end{frame}
 
 
@@ -121,7 +120,7 @@ cont f = Cont(. f)
 \end{code}
 
 
-With this we can derive new categorical isntances:
+With this we can derive new categorical instances:
 
 \end{frame}
 
@@ -164,8 +163,7 @@ instance Scalable k a => Scalable Cont(k,r) a where
 
 Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
 
-A vector space A over a scalar field has A $\multimap$ s as it's dual(i.e., the linear maps of the udnerlaying field of A are it's dual)
-This dual space is also a vector space and if A is finite in dimention they are isomorfic.
+A vector space A over a scalar field has A $\multimap$ s as its dual(i.e., the linear maps of the underlaying field of A are its dual).
 
 Each linear map in A $\multimap$ s can be represented in the form of dot u for some u :: A where
 

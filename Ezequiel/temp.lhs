@@ -84,13 +84,13 @@
 
 
 
-\section{Categorias}
+\section{Categories}
 
 \begin{frame}{A short introdution}
 \begin{itemize}
  \item<1-> We want to calculate |bigD|.
  \item<2-> However, |bigD| is not computable.
- \item<3-> Solution: reimplement corollaries using category teory
+ \item<3-> Solution: reimplement corollaries using category theory
 \end{itemize}
 
 \end{frame}
@@ -118,7 +118,7 @@
 
 \begin{frame}{Categories}
 
-A category is a collection of objects(sets and types) e morphisms(operation between objects),
+A category is a collection of objects(sets and types) and morphisms(operation between objects),
 with 2 basic operations(identity and composition) of morfisms, and 2 laws:
 
 \begin{itemize}
@@ -156,14 +156,14 @@ instance Category (->) where
 
 A functor F between 2 categories |bigU and bigV| is such that:
 \begin{itemize}
-    \item given any object t $\in$ |bigU| there exists a object F t $\in$ |bigV|
+    \item given any object t $\in$ |bigU| there exists an object F t $\in$ |bigV|
     \item given any morphism m :: a |->| b $\in$ |bigU| there exists a morphism F m :: F a |->| F b $\in$ |bigV|
     \item F id ($\in$ |bigU|) = id ($\in$ |bigV|)
     \item F (f $\circ$ g) = F f $\circ$ F g
 \end{itemize}
 
 \begin{block}{Note}
-Given this papers category properties(objects are data types) we have that functors map types to themselvs
+Given this papers category properties(objects are data types) functors map types to themselves
 \end{block}
 
 \end{frame}
@@ -176,7 +176,7 @@ Let's start by defining a new data type:
 
 newtype |bigD| a b = |bigD| (a |->| b $\times$ (a $\multimap$ b))
 
-and adapting |bigDplus| to use it:
+,and adapting |bigDplus| to use it:
 
 \begin{block}{Adapted definition}
 \begin{code}
@@ -187,7 +187,7 @@ bigDhat f = bigD(bigDplus f)
 \end{code}
 \end{block}
 
-Our objective is to deduce an instance of Category for |bigD| where |bigDhat| is a functor.
+Our objective is to deduce an instance of a Category for |bigD| where |bigDhat| is a functor.
 
 \end{frame}
 
@@ -196,16 +196,19 @@ Our objective is to deduce an instance of Category for |bigD| where |bigDhat| is
 
 \begin{frame}{Instance deduction}
 
-Using corollaries 3.1 and 1.1 we deduce that
+Before deducing our instance we must first note that using corollaries 3.1 and 1.1 we can determine that
 
 \begin{itemize}
-    \item (DP.1) - |bigDplus| id = $\lambda$ a -> (id a,id)
-    \item (DP.2) -    
-    |bigDplus|(g $\circ$ f) = $\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b } in (c,g' $\circ$ f')
+    \item (DP.1) |bigDplus| id = $\lambda$ a -> (id a,id)
+    \item (DP.2)    
+    |bigDplus|(g $\circ$ f) = $\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b } 
+        in (c,g' $\circ$ f')
 \end{itemize}
-saying that |bigDhat| a functor is equivalent to, for all f e g functions of apropriate types:
+
+Saying that |bigDhat| is a functor is equivalent to, for all f and g functions of apropriate types:
 
     |id = bigDhat id = bigD (bigDplus id)|
+
     |bigDhat| g $\circ$ |bigDhat| f = |bigDhat|  (g $\circ$ f) = |bigD| (|bigDhat| (g $\circ$ f))
 
 
@@ -215,20 +218,20 @@ saying that |bigDhat| a functor is equivalent to, for all f e g functions of apr
 
 \begin{frame}{Instance deduction}
 
-Based on  (DP.1) e (DP.2) we'll rewrite the above into the following definition:
+Based on  (DP.1) and (DP.2) we'll rewrite the above into the following definition:
 
 id = |bigD| ($\lambda$ a -> (id a,id))
 
 |bigDhat| g $\circ$ |bigDhat| f = |bigD| ($\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b} in (c,g' $\circ$ f'))
 
 
-The first equasion has a trivial solution(define id of instance as |bigD|($\lambda$ a -> (id a,id)))
+The first equation shown above has a trivial solution(define id of instance as |bigD|($\lambda$ a -> (id a,id)))
 
-To solve the secound we'll first solve a more general one:
+To solve the second we'll first solve a more general one:
 
 |bigD| g $\circ$ |bigD| f = |bigD|($\lambda$ a -> let{(b,f') = f a; (c,g') = g b } in(c,g' $\circ$ f'))
 
-, and this has an equivalently trivial solution in our instance.
+This condition also leads us to a trivial solution inside our instance.
 
 \end{frame}
 
@@ -261,7 +264,7 @@ instance Category bigD where
 
 \begin{frame}{Instance proof}
 
-In order to prove that the instance is correct we must observe if it follows laws (C.1) and (C.2).
+In order to prove that the instance is correct we must check if it follows laws (C.1) and (C.2).
 
 First we must make a concession: that we only use morfisms arising from |bigDplus|(we can force this by transforming |bigD| into an abstract type).
 If we do, then |bigDplus| is a functor.
@@ -275,7 +278,7 @@ id $\circ$ |bigDhat|
 
 = |bigDhat| (id $\circ$ f) - functor law for ($\circ$)
 
-= |bigDhat| f - cathegorical law
+= |bigDhat| f - categorical law
 \end{block}
 
 \end{frame}
@@ -301,7 +304,7 @@ id $\circ$ |bigDhat|
 
 \begin{alertblock}{Note}
 This proofs don't require anything from |bigD and bigDhat| aside from functor laws.
-As such, all other instances of categories created from a functor won't require further proofs.
+As such, all other instances of categories created from a functor won't require further proving like this onr did.
 
 \end{alertblock}
 \end{frame}
@@ -312,7 +315,7 @@ As such, all other instances of categories created from a functor won't require 
 
 \begin{frame}{Monoidal categories and functors}
 
-Generalized parallel composition will be defined using a monoidal category:
+Generalized parallel composition shall be defined using a monoidal category:
 
 
 \begin{code}
@@ -347,11 +350,11 @@ A monoidal functor F between categories |bigU and bigV| is such that:
 
 From corollary 2.1 we can deduce that:
 
-|bigDplus| (f $\times$ g) =
+|bigDplus| (f $\times$ g) = $\lambda$ (a,b) -> let{(c,f')=|bigDplus| f a;(d,g')= |bigDplus| g b} 
 
-$\lambda$ (a,b) -> let{(c,f')=|bigDplus| f a;(d,g')= |bigDplus| g b} in ((c,d),f' $\times$ g')
+    in ((c,d),f' $\times$ g')
 
-Defining F from |bigDhat| leaves us with the following definition:
+Deriving F from |bigDhat| leaves us with the following definition:
 
 |bigD| (|bigDplus| f) $\times$ |bigD| (|bigDplus| g) = |bigD| (|bigDplus| (f $\times$ g))
 
@@ -361,7 +364,7 @@ Using the same method as before, we replace |bigDplus| with it's definition and 
 
 |bigD| ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))
 
-and this is enouth for our new instance.
+and this is enough for our new instance.
 \end{frame}
 
 
@@ -384,7 +387,7 @@ instance Monoidal bigD where
 \begin{frame}{Cartesian categories and functors}
 \begin{code}
 
-class Monoidal k => Cartesean k where
+class Monoidal k => Cartesian k where
     exl :: (a,b)'k'a
     exr :: (a,b)'k'b
     dup :: a'k'(a,a)
@@ -393,7 +396,7 @@ class Monoidal k => Cartesean k where
 
 \begin{code}
 
-instance Cartesean (->) where
+instance Cartesian (->) where
     exl = \(a,b) -> a
     exr = \(a,b) -> b
     dup = \a -> (a,a)
@@ -420,7 +423,7 @@ A cartesian functor F between categories |bigU and bigV| is such that:
 
 \begin{frame}{Instance deduction}
 
-From corollary 3.1 and from exl,exr and dup beeing linear function we can deduce that:
+From corollary 3.1 and from exl,exr and dup being linear functions we can deduce that:
 
 |bigDplus| exl = |\p ->| (exl p,exl)
 
@@ -429,7 +432,7 @@ From corollary 3.1 and from exl,exr and dup beeing linear function we can deduce
 |bigDplus| dup = |\p ->| (dup a,dup)
 
 
-With this in mind we'll deduce the instance:
+With this in mind we can arrive at our instance:
 
 exl = |bigD|(|bigDplus| exl)
 
@@ -443,7 +446,7 @@ dup = |bigD|(|bigDplus| dup)
 
 \begin{frame}{Instance deduction} 
 
-Replacing |bigDplus| with it's definition and remembering linearD we can obtain:
+Replacing |bigDplus| with it's definition and remembering linearD's definition we can obtain:
 
 exl = linearD exl
 
@@ -452,7 +455,7 @@ exr = linearD exr
 dup = linearD dup
 
 
-and we can directly convert this into a new instance:
+and  convert this directly into a new instance:
 
 \begin{block}{Categorical instance we've deduced}
 \begin{code}
@@ -470,7 +473,7 @@ instance Cartesian D where
 
 \begin{frame}{Cocartesian category}
 
-This type of categories are the dual of the cartesian categories.
+This type of categories is the dual of the cartesian type of categories.
 
 \begin{block}{Note}
 In this paper coproducts are categorical products, i.e., biproducts
