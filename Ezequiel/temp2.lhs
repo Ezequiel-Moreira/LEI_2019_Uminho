@@ -74,61 +74,10 @@
 \begin{document}
 
 
-\begin{code}
-
-(f x g)(a,b) = (f a,g b)
-
-(f = undefined)
-\end{code}
-
-
-
-\section{Ezequiel 2}
-
 \section{Reverse-Mode Automatic Differentiation(RAD)}
-\begin{frame}{Esboço}
-
-O algoritmo AD que derivamos nas categorias(capitulo 4) e cuja instância se encontra generalizada na
-figura 6 do documento pode ser visto como familia de algoritmos que pode tomar forma de FAD caso usemos
-apenas composição à direita ou de RAD caso usemos apenas composição à esquerda(podendo tomar outras formas
-se não usarmos exclusivamente uma composição, mas não nos interressa muito isso para este papel).
-
-Sabendo que queremos definir RAD e sabendo o que temos do parágrafo anterior uma pergunta aparece:
-como forçar a composição à esquerda?
-
-Dada uma qualquer categoria k podemos representar os seus morfismos de forma a indicar
-que queremos compor à esquerda com um morfismo h que ainda iremos definir.
-
-Para tal um morfismo f :: a 'k' b é representado pela função |(\circ f) :: (b 'k' r) -> (a 'k' r)|,
-com r objeto em k.
-
-Ao morfismo h chamaremos continuação de f, e a construção de uma categoria à volta desta ideia
-permite-nos garantir a propriedade que queremos: todas as composições são feitas à esquerda.
-
-Nesta instância de categoria as composições na computação transformam-se em computações na continuação.
-Por exemplo, |g \circ f| com continuação k (|k \circ (g \circ f)|) transforma-se em f com continuação
-|g \circ g ((k \circ g) \circ f)|.
-
-Nota: a composição inicial para qualquer morfismo é id (|id \circ f =  id|)
-
-Usando a mesma ideia estabelecida no capitulo 4 criamos um novo tipo de dados e geramos a categoria associada:
-
-|newtype Cont_{k}^{r} a b = Cont((b 'k' r) -> (a 'k' r))|
-
-\begin{code}
-cont :: Category k => (a 'k' b) -> Cont_{k}^{r} a b
-cont f = Cont(. f)
-\end{code}
-
-e derivamos uma instância(ver figura 7), provando que cont é homomorfismo nessa derivação.
-
-\end{frame}
-
-
 
 
 \begin{frame}{A short introdution}
-
 
 \begin{itemize}
     \item<1-> In chapter 4 we've derived an AD algorithm that was generalized in figure 6 of the document
@@ -146,7 +95,7 @@ e derivamos uma instância(ver figura 7), provando que cont é homomorfismo ness
 
 Given a category k we can represent its morfisms using the intent to left-compose with another morfism:
 
-|f :: a'k'b becomes (\circ f) :: (b'k'r) -> (a'k'r)| where r is any object of k.
+f :: a'k'b becomes ($\circ$ f) :: (b'k'r) |->| (a'k'r) where r is any object of k.
 If h is the morfism we'll compose with f then h is the continuation of f.
 
 With this idea in mind we can derive a category based on it, creating a generalization of the RAD algoritm.
@@ -160,11 +109,14 @@ With this idea in mind we can derive a category based on it, creating a generali
 
 We'll begin by creating a new data type:
 
-|newtype  Cont_{k}^{r} a b = Cont((b'k'r) -> (a'k'r))|
+\begin{code}
+newtype Cont(k,r) a b = Cont((b'k'r) -> (a'k'r))
+\end{code}
+
 
 And then defining a functor from it:
 \begin{code}
-cont :: Category k => (a 'k' b) -> Cont_{k}^{r} a b
+cont :: Category k => (a 'k' b) -> Cont(k,r) a b
 cont f = Cont(. f)
 \end{code}
 
@@ -178,26 +130,22 @@ With this we can derive new categorical isntances:
 \begin{frame}{Instance deduction}
 \begin{code}
 
-newtype  Cont_{k}^{r} a b = Cont((b'k'r) -> (a'k'r))
-
-instance Category k => Category Cont_{k}^{r} where
+instance Category k => Category Cont(k,r)where
   id = Cont id
   Cont g . Cont f = Cont(f . g)
 
-instance Monoidal k => Monoidal Cont_{k}^{r} where
+instance Monoidal k => Monoidal Cont(k,r)where
   Conf f x Cont g = Cont(join . (f x g) . unjoin)
 
-instance Cartesian k => Cartesian Cont_{k}^{r} where
-  exl = Cont(join . inl)
-  exr = Cont(join . inr)
+instance Cartesian k => Cartesian Cont(k,r) where
+  exl = Cont(join . inl) ; exr = Cont(join . inr) 
   dup = Cont(jam . unjoin)
 
-instance Cocartesian k => Cocartesian Cont_{k}^{r} where
-  inl = Cont(exl . unjoin)
-  inr = Cont(exr . unjoin)
+instance Cocartesian k => Cocartesian Cont(k,r) where
+  inl = Cont(exl . unjoin) ; inr = Cont(exr . unjoin) 
   jam = Cont(join . dup)
 
-instance Scalable k a => Scalable Cont_{k}^{r} a where
+instance Scalable k a => Scalable Cont(k,r) a where
   scale s = Cont(scale s)
 
 
@@ -211,78 +159,25 @@ instance Scalable k a => Scalable Cont_{k}^{r} a where
 
 
 \section{Gradient and Duality}
-\begin{frame}{Esboço}
-
-Continuando da secção anterior vamos falar de um caso especial de RAD: computação de gradientes.
-
-Dado um espeço vetorial A sobre um campo escalar s o dual de A é A \multimap s(mapas lineares para o campo s).
-Como este espaço dual também é vetorial e A é finito concluimos que tanto o dual como o primal são isomorfos.
-
-Em particular, cada mapa de A \multimap s pode ser exprimido na forma dot u para u :: A onde:
-
-|class HasDot^{S} u where dot :: u -> (u \multimap s)|
-|instance HasDot^{IR} where dot=scale|
-|instance (HasDot^{S} a,HasDot^{S} b) => HasDot^{S} (a \times b) where dot(u,v) = dot u fork dot v|
-
-Como o tipo |Cont_{k}^{r}| pode tomar qualquer tipo/objeto r, usaremos o valor do campo s para r.
-Assim a representação interna de |Cont_{s}^{\multimap} a b| é |(b \multimap s) -> (a \multimap s)|, que 
-,pela isomorfia de s e seu espaço dual, é isomorfo a |b -> a|.
-A esta representação chamaremos dual(ou oposto) de k:
-|newtype Dual_{k} a b = Dual(b 'k' a)|
-
-
-Para criarmos representações duais de mapas lineares generalizados basta converter de |Cont_{k}^{s}| para
-|Dual_{k}| através de um funtor que iremos derivar a seguir, sendo que a composição deste com a função
-|cont::(a'k'b) -> Cont_{k}^{s} a b| nos dará um funtor de k para |Dual_{k}|.
-
-O funtor em questão é
-
-\begin{code}
-asDual :: (HasDot^{S} a,HasDot^{S} b) => ((b \multimap s) -> (a \multimap s)) -> (b \multimap a)
-asDual (Cont f) = Dual (onDot f)
-\end{code}
-
-,onde onDot é definido por:
-
-\begin{code}
-onDot :: (HasDot^{S} a,HasDot^{S} b) => ((b \multimap s) -> (a \multimap s)) -> (b \multimap a)
-onDot f = dot^{"-1"} . f . dot
-\end{code}
-
-A partir deste novo funtor derivamos as isntâncias de categoria correspondentes(ver figura 10)
-e provamos que asDual é homomorfismo nessas instâncias.
-
-Adicionalmente obtemos o seguinte corolário:
-
-|Dual f join Dual g = Dual(f fork g)|
-|Dual f fork Dual g = Dual(f join g)|
-
-Note-se que com base na representação do capitulo 8 de matrizes podemos
-concluir que a dualidade de matrizes corresponde à transposição das mesmas,
-e que |Dual_{k}| não involve calculos de matrizes sem que k também os envolva.
-
-
-\end{frame}
-
-
-
-
-
-
 
 \begin{frame}{A short introdution}
 
 Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
 
-A vector space A over a scalar field has |A \multimap s| as it's dual(i.e., the linear maps of the udnerlaying field of A are it's dual)
+A vector space A over a scalar field has A $\multimap$ s as it's dual(i.e., the linear maps of the udnerlaying field of A are it's dual)
 This dual space is also a vector space and if A is finite in dimention they are isomorfic.
 
-Each linear map in |A \multimap s| can be represented in the form of dot u for some u :: A where
+Each linear map in A $\multimap$ s can be represented in the form of dot u for some u :: A where
 
-|class HasDot^{S} u where dot :: u -> (u \multimap s)|
-|instance HasDot^{IR} IR where dot = scale |
-|instance (HasDot^{S} a,HasDot^{S} b) => HasDot^{S} (a \times b) where dot(u,v) = dot u fork dot v|
+\begin{code}
+class HasDot(S) u where dot :: u -> (u -o s)
 
+instance HasDot(IR) IR where dot = scale 
+
+instance (HasDot(S) a,HasDot(S) b) => HasDot(S) (a x b) 
+
+  where dot(u,v) = dot u fork dot v
+\end{code}
 
 \end{frame}
 
@@ -290,11 +185,14 @@ Each linear map in |A \multimap s| can be represented in the form of dot u for s
 
 \begin{frame}{Instance deduction}
 
-Since |Cont_{k}^{r}| works for any type/object r we can use it with the scalar field s.
-The internal representation of |Cont_{\multimap}^{s} a b| is |(b \multimap s) -> (a \multimap s) and that this is isomorfic to (a -> b)|,
+Since $Cont_{k}^{r}$ works for any type/object r we can use it with the scalar field s.
+
+The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) -> (a $\multimap$ s) which is isomorfic to (a -> b).
 With this in mind we can call this representation as the dual/opposite of k:
 
-|newtype Dual_{k} a b = Dual(b'k'a)|
+\begin{code}
+newtype Dual(K) a b = Dual(b'k'a)
+\end{code}
 
 \end{frame}
 
@@ -304,17 +202,19 @@ With this in mind we can call this representation as the dual/opposite of k:
 \begin{frame}{Instance deduction}
 
 With this construction all we need to do to create dual representations of linear maps is to
-convert from |Cont_{k}^{S}| to |Dual_{k}| using a functor that we'll now derive:
+convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor that we'll now derive:
 
 \begin{code}
-asDual :: (HasDot^{S} a,HasDot^{S} b) => ((b \multimap s) -> (a \multimap s)) -> (b \multimap a)
+asDual :: (HasDot(S) a,HasDot(S) b) => 
+  ((b -o s) -> (a -o s)) -> (b -o a)
 asDual (Cont f) = Dual (onDot f)
 \end{code}
 
 where
 
 \begin{code}
-onDot :: (HasDot^{S} a,HasDot^{S} b) => ((b \multimap s) -> (a \multimap s)) -> (b \multimap a)
+onDot :: (HasDot(S) a,HasDot(S) b) => 
+  ((b -o s) -> (a -o s)) -> (b -o a)
 onDot f = dot^{"-1"} . f . dot
 \end{code}
 
@@ -327,24 +227,20 @@ Given this we can now derive our new categorical instances
 \begin{frame}{Instance deduction}
 \begin{code}
 
-instance Category k => Category Dual_{k} where
+instance Category k => Category Dual(k) where
   id = Dual id
   Dual g . Dual f = Dual (f . g)
 
-instance Monoidal k => Monoidal Dual_{k} where
+instance Monoidal k => Monoidal Dual(k) where
   Dual f x Dual g = Dual (f x g)
 
-instance Cartesian k => Cartesian Dual_{k} where
-  exl = Dual inl
-  exr = Dual inr
-  dup = Dual jam
+instance Cartesian k => Cartesian Dual(k) where
+  exl = Dual inl ;  exr = Dual inr ;  dup = Dual jam
 
-instance Cocartesian k => Cocartesian Dual_{k} where
-  inl = Dual exl
-  inr = Dual exr
-  jam = Dual dup
+instance Cocartesian k => CocartesianDual(k) where
+  inl = Dual exl ; inr = Dual exr ; jam = Dual dup
 
-instance Scalable k => Scalable Dual_{k} where
+instance Scalable k => Scalable Dual(k) where
   scale s = Dual(scale s)
 
 \end{code}
@@ -355,7 +251,9 @@ instance Scalable k => Scalable Dual_{k} where
 \begin{frame}{Final notes}
 
 \begin{itemize}
-  \item |join and fork| mutually dualize |(Dual f join Dual g = Dual (f fork g) and Dual f fork Dual g = Dual(f join g))|
+  \item |join and fork| mutually dualize 
+  
+  |(Dual f join Dual g = Dual (f fork g) and Dual f fork Dual g = Dual(f join g))|
   \item Using the definition from chapter 8 we can determine that the duality of a matrix corresponds to it's transposition
 \end{itemize}
 
@@ -378,48 +276,22 @@ instance Scalable k => Scalable Dual_{k} where
 
 
 \section{Foward-Mode Automatic Differentiation(FAD)}
-\begin{frame}{Esboço}
-
-Tendo criado o Cont e o Dual podemos aplicar as mesmas técnicas para tentar criar composição
-totalmente à direita de modo a definir um algoritmo generalizado para FAD que é mais apropriado
-a dominios de baixa dimensão.
-
-|newtype Begin_{k}^{r} a b = Begin((r 'k' a) -> (r 'k' b))|
-
-\begin{code}
-
-begin :: Category k => (a 'k' b) -> Begin_{k}^{r} a b
-begin f = Begin(f .)
-
-\end{code}
-
-
-Após termos isto definido podemos aplicar o mesmo processo que feito anteriormente por especificação
-homomorfica para begin, e escolhendo r como campo escalar de s notando que |s \multimap a| é isomorfico a a
-
-
-
-\end{frame}
-
-
-
-
-
-
 
 \begin{frame}{Fowards-mode Automatic Differentiation(FAD)}
 
 We can use the same deductions we've done in Cont and Dual to derive a category with full right-side association, thus creating a generized FAD algorithm.
 This algorithm is far more apropriated for low dimention domains.
 
-|newtype Begin_{k}^{r} a b = Begin((r'k'a) -> (r'k'b))|
 
 \begin{code}
-begin :: Category k => (a 'k' b) -> Begin_{k}^{r} a b
+
+newtype Begin(k,r) a b = Begin((r'k'a) -> (r'k'b))
+
+begin :: Category k => (a 'k' b) -> Begin(k,r) a b
 begin f = Begin(f .)
 \end{code}
 
-We can derive categorical instances from the functor above and we can choose r to be the scalar field s, noting that |s \multimap a| is isomorfic to a.
+We can derive categorical instances from the functor above and we can choose r to be the scalar field s, noting that s $\multimap$ a is isomorfic to a.
 
 
 \end{frame}
