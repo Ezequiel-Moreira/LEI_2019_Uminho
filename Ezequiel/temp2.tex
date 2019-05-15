@@ -1,0 +1,893 @@
+\documentclass{beamer}
+
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+
+  \setbeamercovered{transparent}
+}
+
+
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+%\usepackage[latin1]{inputenc}
+
+\usepackage{times}
+\usepackage[T1]{fontenc}
+% Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+%---------- lhs2tex ---------------------------------
+%% ODER: format ==         = "\mathrel{==}"
+%% ODER: format /=         = "\neq "
+%
+%
+\makeatletter
+\@ifundefined{lhs2tex.lhs2tex.sty.read}%
+  {\@namedef{lhs2tex.lhs2tex.sty.read}{}%
+   \newcommand\SkipToFmtEnd{}%
+   \newcommand\EndFmtInput{}%
+   \long\def\SkipToFmtEnd#1\EndFmtInput{}%
+  }\SkipToFmtEnd
+
+\newcommand\ReadOnlyOnce[1]{\@ifundefined{#1}{\@namedef{#1}{}}\SkipToFmtEnd}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\DeclareFontFamily{OT1}{cmtex}{}
+\DeclareFontShape{OT1}{cmtex}{m}{n}
+  {<5><6><7><8>cmtex8
+   <9>cmtex9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmtex10}{}
+\DeclareFontShape{OT1}{cmtex}{m}{it}
+  {<-> ssub * cmtt/m/it}{}
+\newcommand{\texfamily}{\fontfamily{cmtex}\selectfont}
+\DeclareFontShape{OT1}{cmtt}{bx}{n}
+  {<5><6><7><8>cmtt8
+   <9>cmbtt9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmbtt10}{}
+\DeclareFontShape{OT1}{cmtex}{bx}{n}
+  {<-> ssub * cmtt/bx/n}{}
+\newcommand{\tex}[1]{\text{\texfamily#1}}	% NEU
+
+\newcommand{\Sp}{\hskip.33334em\relax}
+
+
+\newcommand{\Conid}[1]{\mathit{#1}}
+\newcommand{\Varid}[1]{\mathit{#1}}
+\newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
+\newcommand{\plus}{\mathbin{+\!\!\!+}}
+\newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
+\newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
+\newcommand{\sequ}{\mathbin{>\!\!\!>}}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\usepackage{polytable}
+
+%mathindent has to be defined
+\@ifundefined{mathindent}%
+  {\newdimen\mathindent\mathindent\leftmargini}%
+  {}%
+
+\def\resethooks{%
+  \global\let\SaveRestoreHook\empty
+  \global\let\ColumnHook\empty}
+\newcommand*{\savecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\savecolumns[#1]}}
+\newcommand*{\restorecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\restorecolumns[#1]}}
+\newcommand*{\aligncolumn}[2]%
+  {\g@addto@macro\ColumnHook{\column{#1}{#2}}}
+
+\resethooks
+
+\newcommand{\onelinecommentchars}{\quad-{}- }
+\newcommand{\commentbeginchars}{\enskip\{-}
+\newcommand{\commentendchars}{-\}\enskip}
+
+\newcommand{\visiblecomments}{%
+  \let\onelinecomment=\onelinecommentchars
+  \let\commentbegin=\commentbeginchars
+  \let\commentend=\commentendchars}
+
+\newcommand{\invisiblecomments}{%
+  \let\onelinecomment=\empty
+  \let\commentbegin=\empty
+  \let\commentend=\empty}
+
+\visiblecomments
+
+\newlength{\blanklineskip}
+\setlength{\blanklineskip}{0.66084ex}
+
+\newcommand{\hsindent}[1]{\quad}% default is fixed indentation
+\let\hspre\empty
+\let\hspost\empty
+\newcommand{\NB}{\textbf{NB}}
+\newcommand{\Todo}[1]{$\langle$\textbf{To do:}~#1$\rangle$}
+
+\EndFmtInput
+\makeatother
+%
+%
+%
+%
+%
+%
+% This package provides two environments suitable to take the place
+% of hscode, called "plainhscode" and "arrayhscode". 
+%
+% The plain environment surrounds each code block by vertical space,
+% and it uses \abovedisplayskip and \belowdisplayskip to get spacing
+% similar to formulas. Note that if these dimensions are changed,
+% the spacing around displayed math formulas changes as well.
+% All code is indented using \leftskip.
+%
+% Changed 19.08.2004 to reflect changes in colorcode. Should work with
+% CodeGroup.sty.
+%
+\ReadOnlyOnce{polycode.fmt}%
+\makeatletter
+
+\newcommand{\hsnewpar}[1]%
+  {{\parskip=0pt\parindent=0pt\par\vskip #1\noindent}}
+
+% can be used, for instance, to redefine the code size, by setting the
+% command to \small or something alike
+\newcommand{\hscodestyle}{}
+
+% The command \sethscode can be used to switch the code formatting
+% behaviour by mapping the hscode environment in the subst directive
+% to a new LaTeX environment.
+
+\newcommand{\sethscode}[1]%
+  {\expandafter\let\expandafter\hscode\csname #1\endcsname
+   \expandafter\let\expandafter\endhscode\csname end#1\endcsname}
+
+% "compatibility" mode restores the non-polycode.fmt layout.
+
+\newenvironment{compathscode}%
+  {\par\noindent
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \let\hspre\(\let\hspost\)%
+   \pboxed}%
+  {\endpboxed\)%
+   \par\noindent
+   \ignorespacesafterend}
+
+\newcommand{\compaths}{\sethscode{compathscode}}
+
+% "plain" mode is the proposed default.
+% It should now work with \centering.
+% This required some changes. The old version
+% is still available for reference as oldplainhscode.
+
+\newenvironment{plainhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\hspre\(\let\hspost\)%
+   \pboxed}%
+  {\endpboxed%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+\newenvironment{oldplainhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \(\pboxed}%
+  {\endpboxed\)%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+% Here, we make plainhscode the default environment.
+
+\newcommand{\plainhs}{\sethscode{plainhscode}}
+\newcommand{\oldplainhs}{\sethscode{oldplainhscode}}
+\plainhs
+
+% The arrayhscode is like plain, but makes use of polytable's
+% parray environment which disallows page breaks in code blocks.
+
+\newenvironment{arrayhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \(\parray}%
+  {\endparray\)%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+\newcommand{\arrayhs}{\sethscode{arrayhscode}}
+
+% The mathhscode environment also makes use of polytable's parray 
+% environment. It is supposed to be used only inside math mode 
+% (I used it to typeset the type rules in my thesis).
+
+\newenvironment{mathhscode}%
+  {\parray}{\endparray}
+
+\newcommand{\mathhs}{\sethscode{mathhscode}}
+
+% texths is similar to mathhs, but works in text mode.
+
+\newenvironment{texthscode}%
+  {\(\parray}{\endparray\)}
+
+\newcommand{\texths}{\sethscode{texthscode}}
+
+% The framed environment places code in a framed box.
+
+\def\codeframewidth{\arrayrulewidth}
+\RequirePackage{calc}
+
+\newenvironment{framedhscode}%
+  {\parskip=\abovedisplayskip\par\noindent
+   \hscodestyle
+   \arrayrulewidth=\codeframewidth
+   \tabular{@{}|p{\linewidth-2\arraycolsep-2\arrayrulewidth-2pt}|@{}}%
+   \hline\framedhslinecorrect\\{-1.5ex}%
+   \let\endoflinesave=\\
+   \let\\=\@normalcr
+   \(\pboxed}%
+  {\endpboxed\)%
+   \framedhslinecorrect\endoflinesave{.5ex}\hline
+   \endtabular
+   \parskip=\belowdisplayskip\par\noindent
+   \ignorespacesafterend}
+
+\newcommand{\framedhslinecorrect}[2]%
+  {#1[#2]}
+
+\newcommand{\framedhs}{\sethscode{framedhscode}}
+
+% The inlinehscode environment is an experimental environment
+% that can be used to typeset displayed code inline.
+
+\newenvironment{inlinehscode}%
+  {\(\def\column##1##2{}%
+   \let\>\undefined\let\<\undefined\let\\\undefined
+   \newcommand\>[1][]{}\newcommand\<[1][]{}\newcommand\\[1][]{}%
+   \def\fromto##1##2##3{##3}%
+   \def\nextline{}}{\) }%
+
+\newcommand{\inlinehs}{\sethscode{inlinehscode}}
+
+% The joincode environment is a separate environment that
+% can be used to surround and thereby connect multiple code
+% blocks.
+
+\newenvironment{joincode}%
+  {\let\orighscode=\hscode
+   \let\origendhscode=\endhscode
+   \def\endhscode{\def\hscode{\endgroup\def\@currenvir{hscode}\\}\begingroup}
+   %\let\SaveRestoreHook=\empty
+   %\let\ColumnHook=\empty
+   %\let\resethooks=\empty
+   \orighscode\def\hscode{\endgroup\def\@currenvir{hscode}}}%
+  {\origendhscode
+   \global\let\hscode=\orighscode
+   \global\let\endhscode=\origendhscode}%
+
+\makeatother
+\EndFmtInput
+%
+%----------------------------------------------------
+
+\newenvironment{slide}[1]{\begin{frame}\frametitle{#1}}{\end{frame}}
+
+\title
+{...Machine Learning...}
+
+\author[Artur, Ezequiel, Nelson] 
+{Artur \and Ezequiel \and Nelson}
+
+\institute
+{Universidade do Minho}
+
+\date
+{26 de Abril}
+
+\subject{Talks}
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+
+\begin{document}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}(\Varid{f}\;\Varid{x}\;\Varid{g})\;(\Varid{a},\Varid{b})\mathrel{=}(\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}(\Varid{f}\mathrel{=}\bot ){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+
+\begin{slide}{Instance of \ensuremath{\rightarrow^+ }}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{newtype}\;\Varid{a}\rightarrow^+ \Varid{b}\mathrel{=}\Conid{AddFun}\;(\Varid{a}\rightarrow \Varid{b}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\mathbf{type}\;\Conid{Obj}\;(\rightarrow^+ )\mathrel{=}\Conid{Additive}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{id}\mathrel{=}\Conid{AddFun}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Conid{AddFun}\;\Varid{g}\mathbin{\circ}\Conid{AddFun}\;\Varid{f}\mathrel{=}\Conid{AddFun}\;(\Varid{g}\mathbin{\circ}\Varid{f}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Conid{AddFun}\;\Varid{f}\mathbin{×}\Conid{AddFun}\;\Varid{g}\mathrel{=}\Conid{AddFun}\;(\Varid{f}\mathbin{×}\Varid{g}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{exl}\mathrel{=}\Conid{AddFun}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{exr}\mathrel{=}\Conid{AddFun}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{dup}\mathrel{=}\Conid{AddFun}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{slide}
+
+\begin{slide}{Fork and Join}
+    \begin{itemize}
+        \item
+            \ensuremath{ \bigtriangledown \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{d})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;(\Varid{c}\mathbin{×}\Varid{d}))}
+        \item
+            \ensuremath{ \bigtriangleup \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{c}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{d}\;\text{\tt 'k'}\;\Varid{a})\rightarrow ((\Varid{c}\mathbin{+}\Varid{d})\;\text{\tt 'k'}\;\Varid{a})}
+    \end{itemize}
+\end{slide}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Indice}
+  \tableofcontents
+\end{frame}
+
+% - Exactly two or three sections (other than the summary).
+% - At *most* three subsections per section.
+% - Talk about 30s to 2min per frame. So there should be between about
+%   15 and 30 frames, all told.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Ezequiel}
+
+
+\section{Categorias}
+
+\begin{frame}{A short introdution}
+\begin{itemize}
+ \item<1-> We want to calculate \ensuremath{\mathcal{D}}.
+ \item<2-> However, \ensuremath{\mathcal{D}} is not computable.
+ \item<3-> Solution: reimplement corollaries using category teory
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{A short introdution}
+
+    \begin{block}{Corollary 1.1}
+    NOTA: adicionar definição do corolário 1.1 aqui
+    \end{block}
+    
+    \begin{block}{Corollary 2.1}
+    NOTA: adicionar definição do corolário 2.1 aqui
+    \end{block}
+    
+    \begin{block}{Corollary 3.1}
+    NOTA: adicionar definição do corolário 3.1 aqui
+    \end{block}
+ 
+\end{frame}
+
+
+
+
+\begin{frame}{Categories}
+
+A category is a collection of objects(sets and types) e morphisms(operation between objects),
+with 2 basic operations(identity and composition) of morfisms, and 2 laws:
+
+\begin{itemize}
+    \item (C.1)  $id \circ f = id \circ f = f$
+    \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
+\end{itemize}
+
+\begin{block}
+Note: for this paper, objects are data types and morfisms are functions
+\end{block}
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathbin{::}(\Varid{a'k'a}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b'k'c})\rightarrow (\Varid{a'k'b})\rightarrow (\Varid{a'k'c}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathrel{=}\lambda \Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{g}\mathbin{\circ}\Varid{f}\mathrel{=}\lambda \Varid{a}\rightarrow \Varid{g}\;(\Varid{f}\;\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+\begin{frame}{Functors}
+
+A functor F between 2 categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
+\begin{itemize}
+    \item given any object \ensuremath{\Varid{t}\lambda \mathbf{in}\;\mathcal{U}} there exists a object \ensuremath{\Conid{F}\;\Varid{t}\lambda \mathbf{in}\;\mathcal{V}}
+    \item given any morphism \ensuremath{\Varid{m}\mathbin{::}\Varid{a}\rightarrow \Varid{b}\lambda \mathbf{in}\;\mathcal{U}} there exists a morphism \ensuremath{\Conid{F}\;\Varid{m}\mathbin{::}\Conid{F}\;\Varid{a}\rightarrow \Conid{F}\;\Varid{b}\lambda \mathbf{in}\;\mathcal{V}}
+    \item \ensuremath{\Conid{F}\;\Varid{id}\;(\lambda \mathbf{in}\;\mathcal{U})\mathrel{=}\Varid{id}\;(\lambda \mathbf{in}\;\mathcal{V})} 
+    \item \ensuremath{\Conid{F}\;(\Varid{f}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{g})\mathrel{=}\Conid{F}\;\Varid{f}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Conid{F}\;\Varid{g}}
+\end{itemize}
+
+\begin{block}{Note}
+Given this papers category properties(objects are data types) we have that functors map types to themselfs
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Objective}
+
+Let's start by defining a new data type:
+
+\ensuremath{\mathbf{newtype}\;\mathcal{D}\;\Varid{a}\;\Varid{b}\mathrel{=}\mathcal{D}\;(\Varid{a}\rightarrow \Varid{b}\;\Varid{x}\;(\Varid{a}\mathbin{\$\char92 }\Varid{multimap}\mathbin{\$}\Varid{b}))}
+
+and adapting \ensuremath{\mathcal{D}^{+}} to use it:
+
+\begin{block}{Adapted definition}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathcal{\hat{D}}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+Our objective is to deduce an instance of Category for \ensuremath{\mathcal{D}\;\mathbf{where}\;\mathcal{\hat{D}}} is a functor.
+
+\end{frame}
+
+
+
+
+\begin{frame}{Instance deduction}
+
+Using corollaries 3.1 and 1.1 we deduce that
+
+\begin{itemize}
+    \item (DP.1) \ensuremath{\mbox{\onelinecomment  bigDplus id = $\lambda$ a -> (id a,id)}}
+    \item (DP.2) ----    
+    \ensuremath{\mathcal{D}^{+}\;(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathrel{=}\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f'})}   
+\end{itemize}
+\ensuremath{\Varid{saying}\;\Varid{that}\;\mathcal{\hat{D}}\;\Varid{a}\;\Varid{functor}\;\Varid{is}\;\Varid{equivalent}\;\Varid{to},\Varid{for}\;\Varid{all}\;\Varid{f}\;\Varid{e}\;\Varid{g}\;\Varid{functions}\;\mathbf{of}\;\Varid{correct}\;\Varid{types}\mathbin{:}}
+
+    \ensuremath{\Varid{id}\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{id})}
+    \ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathrel{=}\mathcal{D}\;(\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f}))}
+
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+
+Based on  (DP.1) e (DP.2) we'll rewrite the above into the following defenition:
+
+    \ensuremath{\Varid{id}\mathrel{=}\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow (\Varid{id}\;\Varid{a},\Varid{id}))}
+    \ensuremath{\Varid{bidDhat}\;\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f'}))}
+
+
+The first equasion has a trivial solution(define id of instance as \ensuremath{\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow (\Varid{id}\;\Varid{a},\Varid{id}))})
+
+To solve the secound we'll first solve a more general one:
+\ensuremath{\mathcal{D}\;\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{D}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\lambda \mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f'}))}
+, and this has an equivalently trivial solution in our instance.
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{Instance deduction}
+
+\begin{block}{ \ensuremath{\mathcal{\hat{D}}} definition for linear functions}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{linearD}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}s
+
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathrel{=}\Varid{linearD}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{Instance proof}
+
+In order to prove that the instance is correct we must observe if it follows laws (C.1) and (C.2).
+
+First we must make a concession: that we only use morfisms arising from \ensuremath{\mathcal{D}^{+}}(we can force this by transforming \ensuremath{\mathcal{D}} into an abstract type).
+If we do, then \ensuremath{\mathcal{D}^{+}} is a functor.
+
+
+\begin{block}{(C.1) proof}
+
+\ensuremath{\Varid{id}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}}
+\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;\Varid{id}\;(\Varid{specification}\;\mathbf{of}\;\mathcal{\hat{D}})}
+\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;(\Varid{id}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
+\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;\Varid{f}\mathbin{-}\Varid{cathegorical}\;\Varid{law}}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Instance proof}
+
+\begin{block}{(C.2) proof}
+
+\ensuremath{\mathcal{\hat{D}}\;\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}(\mathcal{\hat{D}}\;\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f})}
+\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
+\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;(\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f}))\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
+\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;((\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{g})\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathbin{-}\Varid{categorical}\;\Varid{law}}
+\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;(\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{g})\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
+\ensuremath{\mathrel{=}(\mathcal{\hat{D}}\;\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{g})\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
+
+\end{block}
+
+\begin{alertblock}{Note}
+This proofs don't require anything from \ensuremath{\mathcal{D}\;\Varid{and}\;\mathcal{\hat{D}}} aside from functor laws.
+As such, all other instances of categories created from a functor won't require further proofs.
+
+\end{alertblock}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Monoidal categories and functors}
+
+Generalized parallel composition will be defined using a monoidal category:
+
+
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}(\Varid{x})\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a}\;\Varid{x}\;\Varid{b})\;\text{\tt 'k'}\;(\Varid{c}\;\Varid{x}\;\Varid{d})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{f}\;\Varid{x}\;\Varid{g}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
+\end{columns}
+
+
+\begin{block}{Monoidal Functor definition}
+
+A monoidal functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
+\begin{itemize}
+    \item F is a functor
+    \item F (f \ensuremath{\mathbin{\$\char92 }\Varid{times}\mathbin{\$}} g) = F f \ensuremath{\mathbin{\$\char92 }\Varid{times}\mathbin{\$}} F g
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+\begin{frame}{Instance deduction}
+
+From corollary 2.1 we can deduce that:
+\ensuremath{\mathcal{D}^{+}\;(\Varid{f}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\Varid{g})\mathrel{=}\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}(\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\Varid{g'})}
+
+Defining F from \ensuremath{\mathcal{\hat{D}}} leaves us with the following definition:
+
+\ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{f})\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{g})\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;(\Varid{f}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\Varid{g}))}
+
+Using the same method as before, we replace \ensuremath{\mathcal{D}^{+}} with it's definition and generalize the condition:
+
+\ensuremath{\mathcal{D}\;\Varid{f}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}(\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\Varid{g'}))}
+
+and this is enouth for our new instance.
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{f}\;\Varid{x}\;\mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\;\Varid{x}\;\Varid{g'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{Cartesian categories and functors}
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Cartesean}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
+\begin{column}{0.4\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesean}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{a},\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
+\end{columns}
+
+
+\begin{block}
+
+A cartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
+
+\begin{itemize}
+    \item F is a monoidal functor
+    \item F exl = exl
+    \item F exp = exp
+    \item F dup = dup
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{Instance deduction}
+
+From corollary 3.1 and from exl,exr and dup beeing linear function we can deduce that:
+
+\ensuremath{\mathcal{D}^{+}\;\Varid{exl}\lambda \Varid{p}\rightarrow (\Varid{exl}\;\Varid{p},\Varid{exl})}
+\ensuremath{\mathcal{D}^{+}\;\Varid{exr}\lambda \Varid{p}\rightarrow (\Varid{exr}\;\Varid{p},\Varid{exr})}
+\ensuremath{\mathcal{D}^{+}\;\Varid{dup}\lambda \Varid{p}\rightarrow (\Varid{dup}\;\Varid{a},\Varid{dup})}
+
+
+With this in mind we'll deduce the instance:
+    exl = \ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{exl})}
+    exr = \ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{exr})}
+    dup = \ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{dup})}
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction} 
+
+Replacing \ensuremath{\mathcal{D}^{+}} with it's definition and remembering linearD we can obtain:
+
+exl = linearD exl
+exr = linearD exr
+dup = linearD dup
+
+and we can directly convert this into a new instance:
+
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\Varid{linearD}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\Varid{linearD}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\Varid{linearD}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Cocartesian category}
+
+This type of categories are the dual of the cartesian categories.
+
+\begin{block}{Note}
+In this paper coproducts are categorical products, i.e., biproducts
+\end{block}
+
+\begin{block}{Definition}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}\mathbin{:}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inl}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inr}\mathbin{::}\Varid{b'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Cocartesian functors}
+
+\begin{block}{Cocartesian functor definition}
+
+A cocartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
+\begin{itemize}
+    \item F is a functor
+    \item F inl = inl
+    \item F inr = inr
+    \item F jam = jam
+\end{itemize}
+\end{block}
+\end{frame}
+
+
+
+\end{document}
+
+

@@ -6,6 +6,7 @@
 *.toc
 *.bbl
 *.blg
+*.ptb
 Nelson/Ustmry.fd
 Nelson/stmaryrd.sty
 

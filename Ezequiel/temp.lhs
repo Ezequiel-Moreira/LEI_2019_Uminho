@@ -129,20 +129,6 @@ instance Cartesian (->+) where
 
 
 
-\section{Nelson}
-
-\begin{frame}{titulo}
-\end{frame}
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -311,25 +297,18 @@ To solve the secound we'll first solve a more general one:
 
 \begin{frame}{Instance deduction}
 
-
 \begin{block}{ |bigDhat| definition for linear functions}
 \begin{code}
-
 linearD :: (a -> b) -> bigD a b
 linearD f = bigD(\a -> (f a,f))
-
 \end{code}
-\end{block}
-
-
+\end{block}s
 
 \begin{block}{Categorical instance we've deduced}
 \begin{code}
-
 instance Category bigD where
     id = linearD id
     bigD g . bigD f = bigD( \a -> let{(b,f') = f a;(c,g') = g b} in (c,g' . f'))
-
 \end{code}
 \end{block}
 \end{frame}
@@ -351,6 +330,7 @@ If we do, then |bigDplus| is a functor.
 |= bigDhat id $\circ$ bigDhat f - functor law for id (specification of bigDhat)|
 |= bigDhat (id $\circ$ f) - functor law for ($\circ$)|
 |= bigDhat f - cathegorical law|
+\end{block}
 
 \end{frame}
 
@@ -539,13 +519,13 @@ This type of categories are the dual of the cartesian categories.
 In this paper coproducts are categorical products, i.e., biproducts
 \end{block}
 
-\begin{block}
+\begin{block}{Definition}
 \begin{code}
 
 class Category k => Cocartesian k where:
-    inl :: a 'k' (a,b)
-    inr :: b 'k' (a,b)
-    jam :: (a,a) 'k' a
+    inl :: a'k'(a,b)
+    inr :: b'k'(a,b)
+    jam :: (a,a)'k'a
 
 \end{code}
 \end{block}
