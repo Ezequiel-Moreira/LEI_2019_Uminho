@@ -321,62 +321,6 @@
 
 \begin{document}
 
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}(\Varid{f}\;\Varid{x}\;\Varid{g})\;(\Varid{a},\Varid{b})\mathrel{=}(\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}(\Varid{f}\mathrel{=}\bot ){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-
-\begin{slide}{Instance of \ensuremath{\rightarrow^+ }}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;\Varid{a}\rightarrow^+ \Varid{b}\mathrel{=}\Conid{AddFun}\;(\Varid{a}\rightarrow \Varid{b}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\mathbf{type}\;\Conid{Obj}\;(\rightarrow^+ )\mathrel{=}\Conid{Additive}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{id}\mathrel{=}\Conid{AddFun}\;\Varid{id}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Conid{AddFun}\;\Varid{g}\mathbin{\circ}\Conid{AddFun}\;\Varid{f}\mathrel{=}\Conid{AddFun}\;(\Varid{g}\mathbin{\circ}\Varid{f}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Conid{AddFun}\;\Varid{f}\mathbin{×}\Conid{AddFun}\;\Varid{g}\mathrel{=}\Conid{AddFun}\;(\Varid{f}\mathbin{×}\Varid{g}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{exl}\mathrel{=}\Conid{AddFun}\;\Varid{exl}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{exr}\mathrel{=}\Conid{AddFun}\;\Varid{exr}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{dup}\mathrel{=}\Conid{AddFun}\;\Varid{dup}{}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-\end{slide}
-
-\begin{slide}{Fork and Join}
-    \begin{itemize}
-        \item
-            \ensuremath{ \bigtriangledown \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{d})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;(\Varid{c}\mathbin{×}\Varid{d}))}
-        \item
-            \ensuremath{ \bigtriangleup \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{c}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{d}\;\text{\tt 'k'}\;\Varid{a})\rightarrow ((\Varid{c}\mathbin{+}\Varid{d})\;\text{\tt 'k'}\;\Varid{a})}
-    \end{itemize}
-\end{slide}
-
 \begin{frame}
   \titlepage
 \end{frame}
@@ -385,31 +329,7 @@
   \tableofcontents
 \end{frame}
 
-% - Exactly two or three sections (other than the summary).
-% - At *most* three subsections per section.
-% - Talk about 30s to 2min per frame. So there should be between about
-%   15 and 30 frames, all told.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Ezequiel}
 
 
 \section{Categorias}
@@ -454,8 +374,8 @@ with 2 basic operations(identity and composition) of morfisms, and 2 laws:
     \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
-\begin{block}
-Note: for this paper, objects are data types and morfisms are functions
+\begin{block}{Note}
+For this paper, objects are data types and morfisms are functions
 \end{block}
 
 \begin{columns}
@@ -500,14 +420,14 @@ Note: for this paper, objects are data types and morfisms are functions
 
 A functor F between 2 categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
 \begin{itemize}
-    \item given any object \ensuremath{\Varid{t}\lambda \mathbf{in}\;\mathcal{U}} there exists a object \ensuremath{\Conid{F}\;\Varid{t}\lambda \mathbf{in}\;\mathcal{V}}
-    \item given any morphism \ensuremath{\Varid{m}\mathbin{::}\Varid{a}\rightarrow \Varid{b}\lambda \mathbf{in}\;\mathcal{U}} there exists a morphism \ensuremath{\Conid{F}\;\Varid{m}\mathbin{::}\Conid{F}\;\Varid{a}\rightarrow \Conid{F}\;\Varid{b}\lambda \mathbf{in}\;\mathcal{V}}
-    \item \ensuremath{\Conid{F}\;\Varid{id}\;(\lambda \mathbf{in}\;\mathcal{U})\mathrel{=}\Varid{id}\;(\lambda \mathbf{in}\;\mathcal{V})} 
-    \item \ensuremath{\Conid{F}\;(\Varid{f}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{g})\mathrel{=}\Conid{F}\;\Varid{f}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Conid{F}\;\Varid{g}}
+    \item given any object t $\in$ \ensuremath{\mathcal{U}} there exists a object F t $\in$ \ensuremath{\mathcal{V}}
+    \item given any morphism m :: a \ensuremath{\rightarrow } b $\in$ \ensuremath{\mathcal{U}} there exists a morphism F m :: F a \ensuremath{\rightarrow } F b $\in$ \ensuremath{\mathcal{V}}
+    \item F id ($\in$ \ensuremath{\mathcal{U}}) = id ($\in$ \ensuremath{\mathcal{V}})
+    \item F (f $\circ$ g) = F f $\circ$ F g
 \end{itemize}
 
 \begin{block}{Note}
-Given this papers category properties(objects are data types) we have that functors map types to themselfs
+Given this papers category properties(objects are data types) we have that functors map types to themselvs
 \end{block}
 
 \end{frame}
@@ -518,7 +438,7 @@ Given this papers category properties(objects are data types) we have that funct
 
 Let's start by defining a new data type:
 
-\ensuremath{\mathbf{newtype}\;\mathcal{D}\;\Varid{a}\;\Varid{b}\mathrel{=}\mathcal{D}\;(\Varid{a}\rightarrow \Varid{b}\;\Varid{x}\;(\Varid{a}\mathbin{\$\char92 }\Varid{multimap}\mathbin{\$}\Varid{b}))}
+newtype \ensuremath{\mathcal{D}} a b = \ensuremath{\mathcal{D}} (a \ensuremath{\rightarrow } b $\times$ (a $\multimap$ b))
 
 and adapting \ensuremath{\mathcal{D}^{+}} to use it:
 
@@ -533,7 +453,7 @@ and adapting \ensuremath{\mathcal{D}^{+}} to use it:
 \end{hscode}\resethooks
 \end{block}
 
-Our objective is to deduce an instance of Category for \ensuremath{\mathcal{D}\;\mathbf{where}\;\mathcal{\hat{D}}} is a functor.
+Our objective is to deduce an instance of Category for \ensuremath{\mathcal{D}} where \ensuremath{\mathcal{\hat{D}}} is a functor.
 
 \end{frame}
 
@@ -545,14 +465,14 @@ Our objective is to deduce an instance of Category for \ensuremath{\mathcal{D}\;
 Using corollaries 3.1 and 1.1 we deduce that
 
 \begin{itemize}
-    \item (DP.1) \ensuremath{\mbox{\onelinecomment  bigDplus id = $\lambda$ a -> (id a,id)}}
-    \item (DP.2) ----    
-    \ensuremath{\mathcal{D}^{+}\;(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathrel{=}\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f'})}   
+    \item (DP.1) - \ensuremath{\mathcal{D}^{+}} id = $\lambda$ a -> (id a,id)
+    \item (DP.2) -    
+    \ensuremath{\mathcal{D}^{+}}(g $\circ$ f) = $\lambda$ a -> let{(b,f') = \ensuremath{\mathcal{D}^{+}} f a; (c,g') = \ensuremath{\mathcal{D}^{+}} g b } in (c,g' $\circ$ f')
 \end{itemize}
-\ensuremath{\Varid{saying}\;\Varid{that}\;\mathcal{\hat{D}}\;\Varid{a}\;\Varid{functor}\;\Varid{is}\;\Varid{equivalent}\;\Varid{to},\Varid{for}\;\Varid{all}\;\Varid{f}\;\Varid{e}\;\Varid{g}\;\Varid{functions}\;\mathbf{of}\;\Varid{correct}\;\Varid{types}\mathbin{:}}
+saying that \ensuremath{\mathcal{\hat{D}}} a functor is equivalent to, for all f e g functions of apropriate types:
 
     \ensuremath{\Varid{id}\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{id})}
-    \ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathrel{=}\mathcal{D}\;(\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f}))}
+    \ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f = \ensuremath{\mathcal{\hat{D}}}  (g $\circ$ f) = \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{\hat{D}}} (g $\circ$ f))
 
 
 \end{frame}
@@ -561,16 +481,19 @@ Using corollaries 3.1 and 1.1 we deduce that
 
 \begin{frame}{Instance deduction}
 
-Based on  (DP.1) e (DP.2) we'll rewrite the above into the following defenition:
+Based on  (DP.1) e (DP.2) we'll rewrite the above into the following definition:
 
-    \ensuremath{\Varid{id}\mathrel{=}\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow (\Varid{id}\;\Varid{a},\Varid{id}))}
-    \ensuremath{\Varid{bidDhat}\;\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f'}))}
+id = \ensuremath{\mathcal{D}} ($\lambda$ a -> (id a,id))
+
+\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f = \ensuremath{\mathcal{D}} ($\lambda$ a -> let{(b,f') = \ensuremath{\mathcal{D}^{+}} f a; (c,g') = \ensuremath{\mathcal{D}^{+}} g b} in (c,g' $\circ$ f'))
 
 
-The first equasion has a trivial solution(define id of instance as \ensuremath{\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow (\Varid{id}\;\Varid{a},\Varid{id}))})
+The first equasion has a trivial solution(define id of instance as \ensuremath{\mathcal{D}}($\lambda$ a -> (id a,id)))
 
 To solve the secound we'll first solve a more general one:
-\ensuremath{\mathcal{D}\;\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{D}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}\Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\lambda \mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f'}))}
+
+\ensuremath{\mathcal{D}} g $\circ$ \ensuremath{\mathcal{D}} f = \ensuremath{\mathcal{D}}($\lambda$ a -> let{(b,f') = f a; (c,g') = g b } in(c,g' $\circ$ f'))
+
 , and this has an equivalently trivial solution in our instance.
 
 \end{frame}
@@ -590,7 +513,8 @@ To solve the secound we'll first solve a more general one:
 \>[B]{}\Varid{linearD}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
-\end{block}s
+\end{block}
+
 
 \begin{block}{Categorical instance we've deduced}
 \begin{hscode}\SaveRestoreHook
@@ -603,7 +527,10 @@ To solve the secound we'll first solve a more general one:
 \>[5]{}\Varid{id}\mathrel{=}\Varid{linearD}\;\Varid{id}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'})){}\<[E]%
+\>[5]{}\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -622,10 +549,13 @@ If we do, then \ensuremath{\mathcal{D}^{+}} is a functor.
 
 \begin{block}{(C.1) proof}
 
-\ensuremath{\Varid{id}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}}
-\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;\Varid{id}\;(\Varid{specification}\;\mathbf{of}\;\mathcal{\hat{D}})}
-\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;(\Varid{id}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
-\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;\Varid{f}\mathbin{-}\Varid{cathegorical}\;\Varid{law}}
+id $\circ$ \ensuremath{\mathcal{\hat{D}}}
+
+= \ensuremath{\mathcal{\hat{D}}} id $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for id (specification of \ensuremath{\mathcal{\hat{D}}})
+
+= \ensuremath{\mathcal{\hat{D}}} (id $\circ$ f) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} f - cathegorical law
 \end{block}
 
 \end{frame}
@@ -635,12 +565,17 @@ If we do, then \ensuremath{\mathcal{D}^{+}} is a functor.
 
 \begin{block}{(C.2) proof}
 
-\ensuremath{\mathcal{\hat{D}}\;\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}(\mathcal{\hat{D}}\;\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f})}
-\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
-\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;(\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}(\Varid{g}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f}))\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
-\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;((\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{g})\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{f})\mathbin{-}\Varid{categorical}\;\Varid{law}}
-\ensuremath{\mathrel{=}\mathcal{\hat{D}}\;(\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\Varid{g})\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
-\ensuremath{\mathrel{=}(\mathcal{\hat{D}}\;\Varid{h}\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{g})\mathbin{\$\char92 }\Varid{circ}\mathbin{\$}\mathcal{\hat{D}}\;\Varid{f}\mathbin{-}\Varid{functor}\;\Varid{law}\;\Varid{for}\;(\mathbin{\$\char92 }\Varid{circ}\mathbin{\$})}
+\ensuremath{\mathcal{\hat{D}}} h $\circ$ (\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f)
+
+= \ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} (g $\circ$ f) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} ((h $\circ$ g) $\circ$ f) - categorical law
+
+= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for ($\circ$)
+
+= (\ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for ($\circ$)
 
 \end{block}
 
@@ -660,8 +595,6 @@ As such, all other instances of categories created from a functor won't require 
 Generalized parallel composition will be defined using a monoidal category:
 
 
-\begin{columns}
-\begin{column}{0.5\textwidth}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -672,8 +605,7 @@ Generalized parallel composition will be defined using a monoidal category:
 \>[5]{}(\Varid{x})\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a}\;\Varid{x}\;\Varid{b})\;\text{\tt 'k'}\;(\Varid{c}\;\Varid{x}\;\Varid{d})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
-\end{column}
-\begin{column}{0.4\textwidth}
+
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -684,8 +616,7 @@ Generalized parallel composition will be defined using a monoidal category:
 \>[5]{}\Varid{f}\;\Varid{x}\;\Varid{g}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
-\end{column}
-\end{columns}
+
 
 
 \begin{block}{Monoidal Functor definition}
@@ -693,7 +624,7 @@ Generalized parallel composition will be defined using a monoidal category:
 A monoidal functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
 \begin{itemize}
     \item F is a functor
-    \item F (f \ensuremath{\mathbin{\$\char92 }\Varid{times}\mathbin{\$}} g) = F f \ensuremath{\mathbin{\$\char92 }\Varid{times}\mathbin{\$}} F g
+    \item F (f $\times$ g) = F f $\times$ F g
 \end{itemize}
 \end{block}
 \end{frame}
@@ -702,15 +633,20 @@ A monoidal functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\m
 \begin{frame}{Instance deduction}
 
 From corollary 2.1 we can deduce that:
-\ensuremath{\mathcal{D}^{+}\;(\Varid{f}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\Varid{g})\mathrel{=}\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}(\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\Varid{g'})}
+
+\ensuremath{\mathcal{D}^{+}} (f $\times$ g) =
+
+$\lambda$ (a,b) -> let{(c,f')=\ensuremath{\mathcal{D}^{+}} f a;(d,g')= \ensuremath{\mathcal{D}^{+}} g b} in ((c,d),f' $\times$ g')
 
 Defining F from \ensuremath{\mathcal{\hat{D}}} leaves us with the following definition:
 
-\ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{f})\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{g})\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;(\Varid{f}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\Varid{g}))}
+\ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} f) $\times$ \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} g) = \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} (f $\times$ g))
 
 Using the same method as before, we replace \ensuremath{\mathcal{D}^{+}} with it's definition and generalize the condition:
 
-\ensuremath{\mathcal{D}\;\Varid{f}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\mathbin{\$\char92 }\Varid{lambda}\mathbin{\$}(\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\mathbin{\$\char92 }\Varid{times}\mathbin{\$}\Varid{g'}))}
+\ensuremath{\mathcal{D}} f $\times$ \ensuremath{\mathcal{D}} g =
+
+\ensuremath{\mathcal{D}} ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))
 
 and this is enouth for our new instance.
 \end{frame}
@@ -722,11 +658,15 @@ and this is enouth for our new instance.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{38}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\mathcal{D}\;\Varid{f}\;\Varid{x}\;\mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\;\Varid{x}\;\Varid{g'})){}\<[E]%
+\>[5]{}\mathcal{D}\;\Varid{f}\;\Varid{x}\;\mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\\
+\>[5]{}\hsindent{33}{}\<[38]%
+\>[38]{}\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\;\Varid{x}\;\Varid{g'})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -736,8 +676,6 @@ and this is enouth for our new instance.
 
 
 \begin{frame}{Cartesian categories and functors}
-\begin{columns}
-\begin{column}{0.5\textwidth}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -754,8 +692,7 @@ and this is enouth for our new instance.
 \>[5]{}\Varid{dup}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
-\end{column}
-\begin{column}{0.4\textwidth}
+
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -772,8 +709,7 @@ and this is enouth for our new instance.
 \>[5]{}\Varid{dup}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{a},\Varid{a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
-\end{column}
-\end{columns}
+
 
 
 \begin{block}
@@ -796,15 +732,20 @@ A cartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\
 
 From corollary 3.1 and from exl,exr and dup beeing linear function we can deduce that:
 
-\ensuremath{\mathcal{D}^{+}\;\Varid{exl}\lambda \Varid{p}\rightarrow (\Varid{exl}\;\Varid{p},\Varid{exl})}
-\ensuremath{\mathcal{D}^{+}\;\Varid{exr}\lambda \Varid{p}\rightarrow (\Varid{exr}\;\Varid{p},\Varid{exr})}
-\ensuremath{\mathcal{D}^{+}\;\Varid{dup}\lambda \Varid{p}\rightarrow (\Varid{dup}\;\Varid{a},\Varid{dup})}
+\ensuremath{\mathcal{D}^{+}} exl = \ensuremath{\lambda \Varid{p}\rightarrow } (exl p,exl)
+
+\ensuremath{\mathcal{D}^{+}} exr = \ensuremath{\lambda \Varid{p}\rightarrow } (exr p,exr)
+
+\ensuremath{\mathcal{D}^{+}} dup = \ensuremath{\lambda \Varid{p}\rightarrow } (dup a,dup)
 
 
 With this in mind we'll deduce the instance:
-    exl = \ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{exl})}
-    exr = \ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{exr})}
-    dup = \ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{dup})}
+
+exl = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} exl)
+
+exr = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} exr)
+
+dup = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} dup)
 
 \end{frame}
 
@@ -815,8 +756,11 @@ With this in mind we'll deduce the instance:
 Replacing \ensuremath{\mathcal{D}^{+}} with it's definition and remembering linearD we can obtain:
 
 exl = linearD exl
+
 exr = linearD exr
+
 dup = linearD dup
+
 
 and we can directly convert this into a new instance:
 

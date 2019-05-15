@@ -73,44 +73,6 @@
 
 \begin{document}
 
-\begin{code}
-
-(f x g)(a,b) = (f a,g b)
-
-(f = undefined)
-\end{code}
-
-
-\begin{slide}{Instance of |->+|}
-\begin{code}
-
-
-newtype a ->+ b=AddFun(a->b)
-
-instance Category (->+) where
-   type Obj (->+) = Additive
-   id = AddFun id
-   AddFun g . AddFun f = AddFun (g . f )
-
-instance Monoidal (->+) where
-   AddFun f × AddFun g = AddFun (f × g)
-
-instance Cartesian (->+) where
-   exl = AddFun exl
-   exr = AddFun exr
-   dup = AddFun dup
-\end{code}
-\end{slide}
-
-\begin{slide}{Fork and Join}
-    \begin{itemize}
-        \item
-            |fork :: Cartesian k => (a 'k' c) -> (a 'k' d) -> (a 'k' (c × d))|
-        \item
-            |join :: Cartesian k => (c 'k' a) -> (d 'k' a) -> ((c + d) 'k' a)|
-    \end{itemize}
-\end{slide}
-
 \begin{frame}
   \titlepage
 \end{frame}
@@ -119,31 +81,7 @@ instance Cartesian (->+) where
   \tableofcontents
 \end{frame}
 
-% - Exactly two or three sections (other than the summary).
-% - At *most* three subsections per section.
-% - Talk about 30s to 2min per frame. So there should be between about
-%   15 and 30 frames, all told.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\section{Ezequiel}
 
 
 \section{Categorias}
@@ -188,16 +126,16 @@ with 2 basic operations(identity and composition) of morfisms, and 2 laws:
     \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
-\begin{block}
-Note: for this paper, objects are data types and morfisms are functions
+\begin{block}{Note}
+For this paper, objects are data types and morfisms are functions
 \end{block}
 
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{code}
 class Category k where
-    id :: (a'k'a)
-    (.) :: (b'k'c) -> (a'k'b) -> (a'k'c)
+    id::(a'k'a)
+    (.)::(b'k'c)->(a'k'b)->(a'k'c)
 \end{code}
 \end{column}
 
@@ -218,14 +156,14 @@ instance Category (->) where
 
 A functor F between 2 categories |bigU and bigV| is such that:
 \begin{itemize}
-    \item given any object |t \in bigU| there exists a object |F t \in bigV|
-    \item given any morphism |m :: a -> b \in bigU| there exists a morphism |F m :: F a -> F b \in bigV|
-    \item |F id (\in bigU) = id (\in bigV)| 
-    \item |F (f $\circ$ g) = F f $\circ$ F g|
+    \item given any object t $\in$ |bigU| there exists a object F t $\in$ |bigV|
+    \item given any morphism m :: a |->| b $\in$ |bigU| there exists a morphism F m :: F a |->| F b $\in$ |bigV|
+    \item F id ($\in$ |bigU|) = id ($\in$ |bigV|)
+    \item F (f $\circ$ g) = F f $\circ$ F g
 \end{itemize}
 
 \begin{block}{Note}
-Given this papers category properties(objects are data types) we have that functors map types to themselfs
+Given this papers category properties(objects are data types) we have that functors map types to themselvs
 \end{block}
 
 \end{frame}
@@ -236,7 +174,7 @@ Given this papers category properties(objects are data types) we have that funct
 
 Let's start by defining a new data type:
 
-|newtype bigD a b = bigD (a -> b x (a $\multimap$ b))|
+newtype |bigD| a b = |bigD| (a |->| b $\times$ (a $\multimap$ b))
 
 and adapting |bigDplus| to use it:
 
@@ -249,7 +187,7 @@ bigDhat f = bigD(bigDplus f)
 \end{code}
 \end{block}
 
-Our objective is to deduce an instance of Category for |bigD where bigDhat| is a functor.
+Our objective is to deduce an instance of Category for |bigD| where |bigDhat| is a functor.
 
 \end{frame}
 
@@ -261,14 +199,14 @@ Our objective is to deduce an instance of Category for |bigD where bigDhat| is a
 Using corollaries 3.1 and 1.1 we deduce that
 
 \begin{itemize}
-    \item (DP.1) |---- bigDplus id = $\lambda$ a -> (id a,id)|
-    \item (DP.2) ----    
-    |bigDplus(g $\circ$ f) = $\lambda$ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b } in (c,g' $\circ$ f')|   
+    \item (DP.1) - |bigDplus| id = $\lambda$ a -> (id a,id)
+    \item (DP.2) -    
+    |bigDplus|(g $\circ$ f) = $\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b } in (c,g' $\circ$ f')
 \end{itemize}
-|saying that bigDhat a functor is equivalent to, for all f e g functions of correct types:|
+saying that |bigDhat| a functor is equivalent to, for all f e g functions of apropriate types:
 
     |id = bigDhat id = bigD (bigDplus id)|
-    |bigDhat g $\circ$ bigDhat f = bigDhat  (g $\circ$ f) = bigD (bigDhat (g $\circ$ f))|
+    |bigDhat| g $\circ$ |bigDhat| f = |bigDhat|  (g $\circ$ f) = |bigD| (|bigDhat| (g $\circ$ f))
 
 
 \end{frame}
@@ -277,16 +215,19 @@ Using corollaries 3.1 and 1.1 we deduce that
 
 \begin{frame}{Instance deduction}
 
-Based on  (DP.1) e (DP.2) we'll rewrite the above into the following defenition:
+Based on  (DP.1) e (DP.2) we'll rewrite the above into the following definition:
 
-    |id = bigD ($\lambda$ a -> (id a,id))|
-    |bidDhat g $\circ$ bigDhat f = bigD ($\lambda$ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' $\circ$ f'))|
+id = |bigD| ($\lambda$ a -> (id a,id))
+
+|bigDhat| g $\circ$ |bigDhat| f = |bigD| ($\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b} in (c,g' $\circ$ f'))
 
 
-The first equasion has a trivial solution(define id of instance as |bigD($\lambda$ a -> (id a,id))|)
+The first equasion has a trivial solution(define id of instance as |bigD|($\lambda$ a -> (id a,id)))
 
 To solve the secound we'll first solve a more general one:
-|bigD g $\circ$ bigD f = bigD($\lambda$ a -> let{(b,f') = f a; (c,g') = g b \} in(c,g' $\circ$ f'))|
+
+|bigD| g $\circ$ |bigD| f = |bigD|($\lambda$ a -> let{(b,f') = f a; (c,g') = g b } in(c,g' $\circ$ f'))
+
 , and this has an equivalently trivial solution in our instance.
 
 \end{frame}
@@ -302,13 +243,15 @@ To solve the secound we'll first solve a more general one:
 linearD :: (a -> b) -> bigD a b
 linearD f = bigD(\a -> (f a,f))
 \end{code}
-\end{block}s
+\end{block}
+
 
 \begin{block}{Categorical instance we've deduced}
 \begin{code}
 instance Category bigD where
     id = linearD id
-    bigD g . bigD f = bigD( \a -> let{(b,f') = f a;(c,g') = g b} in (c,g' . f'))
+    bigD g . bigD f = 
+    bigD( \a -> let{(b,f') = f a;(c,g') = g b} in (c,g' . f'))
 \end{code}
 \end{block}
 \end{frame}
@@ -326,10 +269,13 @@ If we do, then |bigDplus| is a functor.
 
 \begin{block}{(C.1) proof}
 
-|id $\circ$ bigDhat|
-|= bigDhat id $\circ$ bigDhat f - functor law for id (specification of bigDhat)|
-|= bigDhat (id $\circ$ f) - functor law for ($\circ$)|
-|= bigDhat f - cathegorical law|
+id $\circ$ |bigDhat|
+
+= |bigDhat| id $\circ$ |bigDhat| f - functor law for id (specification of |bigDhat|)
+
+= |bigDhat| (id $\circ$ f) - functor law for ($\circ$)
+
+= |bigDhat| f - cathegorical law
 \end{block}
 
 \end{frame}
@@ -339,12 +285,17 @@ If we do, then |bigDplus| is a functor.
 
 \begin{block}{(C.2) proof}
 
-|bigDhat h $\circ$ (bigDhat g $\circ$ bigDhat f)|
-|= bigDhat h $\circ$ bigDhat (g $\circ$ f) - functor law for ($\circ$)|
-|= bigDhat (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)|
-|= bigDhat ((h $\circ$ g) $\circ$ f) - categorical law|
-|= bigDhat (h $\circ$ g) $\circ$ bigDhat f - functor law for ($\circ$)|
-|= (bigDhat h $\circ$ bigDhat g) $\circ$ bigDhat f - functor law for ($\circ$)|
+|bigDhat| h $\circ$ (|bigDhat| g $\circ$ |bigDhat| f)
+
+= |bigDhat| h $\circ$ |bigDhat| (g $\circ$ f) - functor law for ($\circ$)
+
+= |bigDhat| (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)
+
+= |bigDhat| ((h $\circ$ g) $\circ$ f) - categorical law
+
+= |bigDhat| (h $\circ$ g) $\circ$ |bigDhat| f - functor law for ($\circ$)
+
+= (|bigDhat| h $\circ$ |bigDhat| g) $\circ$ |bigDhat| f - functor law for ($\circ$)
 
 \end{block}
 
@@ -364,8 +315,6 @@ As such, all other instances of categories created from a functor won't require 
 Generalized parallel composition will be defined using a monoidal category:
 
 
-\begin{columns}
-\begin{column}{0.5\textwidth}
 \begin{code}
 
 
@@ -373,16 +322,14 @@ class Category k => Monoidal k where
     (x) :: (a 'k' c) -> (b 'k' d) -> ((a x b) 'k' (c x d)) 
 
 \end{code}
-\end{column}
-\begin{column}{0.4\textwidth}
+
 \begin{code}
 
 instance Monoidal (->) where
     f x g = \(a,b) -> (f a,g b)
 
 \end{code}
-\end{column}
-\end{columns}
+
 
 
 \begin{block}{Monoidal Functor definition}
@@ -390,7 +337,7 @@ instance Monoidal (->) where
 A monoidal functor F between categories |bigU and bigV| is such that:
 \begin{itemize}
     \item F is a functor
-    \item F (f |$\times$| g) = F f |$\times$| F g
+    \item F (f $\times$ g) = F f $\times$ F g
 \end{itemize}
 \end{block}
 \end{frame}
@@ -399,15 +346,20 @@ A monoidal functor F between categories |bigU and bigV| is such that:
 \begin{frame}{Instance deduction}
 
 From corollary 2.1 we can deduce that:
-|bigDplus (f $\times$ g) = $\lambda$ (a,b) -> let{(c,f')=bigDplus f a;(d,g')= bigDplus g b} in ((c,d),f' $\times$ g')|
+
+|bigDplus| (f $\times$ g) =
+
+$\lambda$ (a,b) -> let{(c,f')=|bigDplus| f a;(d,g')= |bigDplus| g b} in ((c,d),f' $\times$ g')
 
 Defining F from |bigDhat| leaves us with the following definition:
 
-|bigD (bigDplus f) $\times$ bigD (bigDplus g) = bigD (bigDplus (f $\times$ g))|
+|bigD| (|bigDplus| f) $\times$ |bigD| (|bigDplus| g) = |bigD| (|bigDplus| (f $\times$ g))
 
 Using the same method as before, we replace |bigDplus| with it's definition and generalize the condition:
 
-|bigD f $\times$ bigD g = bigD ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))|
+|bigD| f $\times$ |bigD| g =
+
+|bigD| ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))
 
 and this is enouth for our new instance.
 \end{frame}
@@ -419,7 +371,8 @@ and this is enouth for our new instance.
 \begin{code}
 
 instance Monoidal bigD where
-    bigD f x bigD g = bigD(\(a,b) -> let{(c,f') = f a;(d,g') = g b} in ((c,d),f' x g'))
+    bigD f x bigD g = bigD(\(a,b) -> let{(c,f') = f a;(d,g') = g b} 
+                                     in ((c,d),f' x g'))
 
 \end{code}
 \end{block}
@@ -429,8 +382,6 @@ instance Monoidal bigD where
 
 
 \begin{frame}{Cartesian categories and functors}
-\begin{columns}
-\begin{column}{0.5\textwidth}
 \begin{code}
 
 class Monoidal k => Cartesean k where
@@ -439,8 +390,7 @@ class Monoidal k => Cartesean k where
     dup :: a'k'(a,a)
 
 \end{code}
-\end{column}
-\begin{column}{0.4\textwidth}
+
 \begin{code}
 
 instance Cartesean (->) where
@@ -449,8 +399,7 @@ instance Cartesean (->) where
     dup = \a -> (a,a)
 
 \end{code}
-\end{column}
-\end{columns}
+
 
 
 \begin{block}
@@ -473,15 +422,20 @@ A cartesian functor F between categories |bigU and bigV| is such that:
 
 From corollary 3.1 and from exl,exr and dup beeing linear function we can deduce that:
 
-|bigDplus exl \p -> (exl p,exl)|
-|bigDplus exr \p -> (exr p,exr)|
-|bigDplus dup \p -> (dup a,dup)|
+|bigDplus| exl = |\p ->| (exl p,exl)
+
+|bigDplus| exr = |\p ->| (exr p,exr)
+
+|bigDplus| dup = |\p ->| (dup a,dup)
 
 
 With this in mind we'll deduce the instance:
-    exl = |bigD(bigDplus exl)|
-    exr = |bigD(bigDplus exr)|
-    dup = |bigD(bigDplus dup)|
+
+exl = |bigD|(|bigDplus| exl)
+
+exr = |bigD|(|bigDplus| exr)
+
+dup = |bigD|(|bigDplus| dup)
 
 \end{frame}
 
@@ -492,8 +446,11 @@ With this in mind we'll deduce the instance:
 Replacing |bigDplus| with it's definition and remembering linearD we can obtain:
 
 exl = linearD exl
+
 exr = linearD exr
+
 dup = linearD dup
+
 
 and we can directly convert this into a new instance:
 
