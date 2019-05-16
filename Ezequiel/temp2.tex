@@ -341,12 +341,13 @@
 
 \begin{frame}{Converting morfisms}
 
-Given a category k we can represent its morfisms using the intent to left-compose with another morfism:
+Given a category k we can represent its morfisms the following way:
 
-f :: a'k'b becomes ($\circ$ f) :: (b'k'r) \ensuremath{\rightarrow } (a'k'r) where r is any object of k.
+\begin{block}{Left-Compose functions}
+f :: a'k'b \ensuremath{\Rightarrow} ($\circ$ f) :: (b'k'r) \ensuremath{\rightarrow } (a'k'r) where r is any object of k.
+\end{block}
+
 If h is the morfism we'll compose with f then h is the continuation of f.
-
-Creating a category based around this functor will give us our generalized RAD algorithm.
 \end{frame}
 
 
@@ -354,17 +355,16 @@ Creating a category based around this functor will give us our generalized RAD a
 
 \begin{frame}{Instance deduction}
 
-We'll begin by creating a new data type:
-
+\begin{block}{Defining new type}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\mathbf{newtype}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b'k'r})\rightarrow (\Varid{a'k'r})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+\end{block}
 
-
-And then defining a functor from it:
+\begin{block}{Functor derived from type}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -373,9 +373,7 @@ And then defining a functor from it:
 \>[B]{}\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
-
-
-With this we can derive new categorical instances:
+\end{block}
 
 \end{frame}
 
@@ -435,10 +433,11 @@ With this we can derive new categorical instances:
 
 Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
 
-A vector space A over a scalar field has A $\multimap$ s as it's dual(i.e., the linear maps of the udnerlaying field of A are it's dual).
+A vector space A over a scalar field has A $\multimap$ s as its dual.
 
 Each linear map in A $\multimap$ s can be represented in the form of dot u for some u :: A where
 
+\begin{block}{Definition and instanciation}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -447,12 +446,16 @@ Each linear map in A $\multimap$ s can be represented in the form of dot u for s
 \\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;\Conid{HasDot}\;(\Conid{IR})\;\Conid{IR}\;\mathbf{where}\;\Varid{dot}\mathrel{=}\Varid{scale}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b})\Rightarrow\Conid{HasDot}\;(\Conid{S})\;(\Varid{a}\;\Varid{x}\;\Varid{b}){}\<[E]%
-\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Rightarrow\Conid{HasDot}\;(\Conid{S})\;(\Varid{a}\;\Varid{x}\;\Varid{b}){}\<[E]%
+\\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{dot}\;(\Varid{u},\Varid{v})\mathrel{=}\Varid{dot}\;\Varid{u}\; \bigtriangledown \;\Varid{dot}\;\Varid{v}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+\end{block}
 
 \end{frame}
 
@@ -460,17 +463,16 @@ Each linear map in A $\multimap$ s can be represented in the form of dot u for s
 
 \begin{frame}{Instance deduction}
 
-Since $Cont_{k}^{r}$ works for any type/object r we can use it with the scalar field s.
-
 The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) -> (a $\multimap$ s) which is isomorfic to (a -> b).
-With this in mind we can call this representation as the dual/opposite of k:
 
+\begin{block}{Type definition for duality}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[B]{}\mathbf{newtype}\;\Conid{Dual}\;(\Conid{K})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b'k'a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+\end{block}
 
 \end{frame}
 
@@ -479,9 +481,10 @@ With this in mind we can call this representation as the dual/opposite of k:
 
 \begin{frame}{Instance deduction}
 
-With this construction all we need to do to create dual representations of linear maps is to
-convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor that we'll now derive:
+All we need to do to create dual representations of linear maps is to
+convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor:
 
+\begin{block}{Functor definition}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -506,11 +509,10 @@ where
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}((\Varid{b}\mathbin{-}\Varid{o}\;\Varid{s})\rightarrow (\Varid{a}\mathbin{-}\Varid{o}\;\Varid{s}))\rightarrow (\Varid{b}\mathbin{-}\Varid{o}\;\Varid{a}){}\<[E]%
 \\
-\>[B]{}\Varid{onDot}\;\Varid{f}\mathrel{=}\Varid{dot}\mathbin{\uparrow}\{\mskip1.5mu \text{\tt \char34 -1\char34}\mskip1.5mu\}\mathbin{\circ}\Varid{f}\mathbin{\circ}\Varid{dot}{}\<[E]%
+\>[B]{}\Varid{onDot}\;\Varid{f}\mathrel{=}\Varid{dot}\mathbin{\char94 -}\mathrm{1}\mathbin{\circ}\Varid{f}\mathbin{\circ}\Varid{dot}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
-
-Given this we can now derive our new categorical instances
+\end{block}
 
 \end{frame}
 
@@ -575,24 +577,16 @@ Given this we can now derive our new categorical instances
 
 
 
-
-
-
-
-
-
-
-
-
-
 \section{Foward-Mode Automatic Differentiation(FAD)}
 
 \begin{frame}{Fowards-mode Automatic Differentiation(FAD)}
 
 We can use the same deductions we've done in Cont and Dual to derive a category with full right-side association, thus creating a generized FAD algorithm.
+
 This algorithm is far more apropriated for low dimention domains.
 
 
+\begin{block}{Type definition and functor from type}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -603,22 +597,12 @@ This algorithm is far more apropriated for low dimention domains.
 \>[B]{}\Varid{begin}\;\Varid{f}\mathrel{=}\Conid{Begin}\;(\Varid{f}\mathbin{\circ}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+\end{block}
 
 We can derive categorical instances from the functor above and we can choose r to be the scalar field s, noting that s $\multimap$ a is isomorfic to a.
 
 
 \end{frame}
-
-
-
-
-
-
-
-
-
-
-
 
 
 

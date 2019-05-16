@@ -93,12 +93,13 @@
 
 \begin{frame}{Converting morfisms}
 
-Given a category k we can represent its morfisms using the intent to left-compose with another morfism:
+Given a category k we can represent its morfisms the following way:
 
-f :: a'k'b becomes ($\circ$ f) :: (b'k'r) |->| (a'k'r) where r is any object of k.
+\begin{block}{Left-Compose functions}
+f :: a'k'b |=>| ($\circ$ f) :: (b'k'r) |->| (a'k'r) where r is any object of k.
+\end{block}
+
 If h is the morfism we'll compose with f then h is the continuation of f.
-
-Creating a category based around this functor will give us our generalized RAD algorithm.
 \end{frame}
 
 
@@ -106,21 +107,18 @@ Creating a category based around this functor will give us our generalized RAD a
 
 \begin{frame}{Instance deduction}
 
-We'll begin by creating a new data type:
-
+\begin{block}{Defining new type}
 \begin{code}
 newtype Cont(k,r) a b = Cont((b'k'r) -> (a'k'r))
 \end{code}
+\end{block}
 
-
-And then defining a functor from it:
+\begin{block}{Functor derived from type}
 \begin{code}
 cont :: Category k => (a 'k' b) -> Cont(k,r) a b
 cont f = Cont(. f)
 \end{code}
-
-
-With this we can derive new categorical instances:
+\end{block}
 
 \end{frame}
 
@@ -163,19 +161,21 @@ instance Scalable k a => Scalable Cont(k,r) a where
 
 Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
 
-A vector space A over a scalar field has A $\multimap$ s as its dual(i.e., the linear maps of the underlaying field of A are its dual).
+A vector space A over a scalar field has A $\multimap$ s as its dual.
 
 Each linear map in A $\multimap$ s can be represented in the form of dot u for some u :: A where
 
+\begin{block}{Definition and instanciation}
 \begin{code}
 class HasDot(S) u where dot :: u -> (u -o s)
 
 instance HasDot(IR) IR where dot = scale 
 
-instance (HasDot(S) a,HasDot(S) b) => HasDot(S) (a x b) 
-
+instance (HasDot(S) a,HasDot(S) b) 
+  => HasDot(S) (a x b) 
   where dot(u,v) = dot u fork dot v
 \end{code}
+\end{block}
 
 \end{frame}
 
@@ -183,14 +183,13 @@ instance (HasDot(S) a,HasDot(S) b) => HasDot(S) (a x b)
 
 \begin{frame}{Instance deduction}
 
-Since $Cont_{k}^{r}$ works for any type/object r we can use it with the scalar field s.
-
 The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) -> (a $\multimap$ s) which is isomorfic to (a -> b).
-With this in mind we can call this representation as the dual/opposite of k:
 
+\begin{block}{Type definition for duality}
 \begin{code}
 newtype Dual(K) a b = Dual(b'k'a)
 \end{code}
+\end{block}
 
 \end{frame}
 
@@ -199,9 +198,10 @@ newtype Dual(K) a b = Dual(b'k'a)
 
 \begin{frame}{Instance deduction}
 
-With this construction all we need to do to create dual representations of linear maps is to
-convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor that we'll now derive:
+All we need to do to create dual representations of linear maps is to
+convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor:
 
+\begin{block}{Functor definition}
 \begin{code}
 asDual :: (HasDot(S) a,HasDot(S) b) => 
   ((b -o s) -> (a -o s)) -> (b -o a)
@@ -213,10 +213,9 @@ where
 \begin{code}
 onDot :: (HasDot(S) a,HasDot(S) b) => 
   ((b -o s) -> (a -o s)) -> (b -o a)
-onDot f = dot^{"-1"} . f . dot
+onDot f = dot^-1 . f . dot
 \end{code}
-
-Given this we can now derive our new categorical instances
+\end{block}
 
 \end{frame}
 
@@ -263,47 +262,28 @@ instance Scalable k => Scalable Dual(k) where
 
 
 
-
-
-
-
-
-
-
-
-
-
 \section{Foward-Mode Automatic Differentiation(FAD)}
 
 \begin{frame}{Fowards-mode Automatic Differentiation(FAD)}
 
 We can use the same deductions we've done in Cont and Dual to derive a category with full right-side association, thus creating a generized FAD algorithm.
+
 This algorithm is far more apropriated for low dimention domains.
 
 
+\begin{block}{Type definition and functor from type}
 \begin{code}
-
 newtype Begin(k,r) a b = Begin((r'k'a) -> (r'k'b))
 
 begin :: Category k => (a 'k' b) -> Begin(k,r) a b
 begin f = Begin(f .)
 \end{code}
+\end{block}
 
 We can derive categorical instances from the functor above and we can choose r to be the scalar field s, noting that s $\multimap$ a is isomorfic to a.
 
 
 \end{frame}
-
-
-
-
-
-
-
-
-
-
-
 
 
 
