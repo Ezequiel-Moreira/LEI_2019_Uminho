@@ -19,9 +19,18 @@
 
 %---------- lhs2tex ---------------------------------
 %include polycode.fmt
+%format -> = "\rightarrow "
 %format ->+ = "\rightarrow^+ "
-%format join = " \nabla "
 %format fork = " \Delta "
+%format join = " \nabla "
+%format bigD = "\mathcal{D}"
+%format bigDplus = "\mathcal{D}^{+}"
+%format bigDhat = "\mathcal{\hat{D}}"
+%format bigU = "\mathcal{U}"
+%format bigV = "\mathcal{V}"
+%format => = "\Rightarrow"
+%format bigDk = "\mathcal{D}_k"
+%format >< = " \times "
 %----------------------------------------------------
 
 \newenvironment{slide}[1]{\begin{frame}\frametitle{#1}}{\end{frame}}
@@ -65,33 +74,6 @@
 
 
 \begin{document}
-\begin{slide}{Instance of |->+|}
-\begin{code}
-newtype a ->+ b=AddFun(a->b)
-
-instance Category (->+) where
-   type Obj (->+) = Additive
-   id = AddFun id
-   AddFun g . AddFun f = AddFun (g . f )
-
-instance Monoidal (->+) where
-   AddFun f × AddFun g = AddFun (f × g)
-
-instance Cartesian (->+) where
-   exl = AddFun exl
-   exr = AddFun exr
-   dup = AddFun dup
-\end{code}
-\end{slide}
-
-\begin{slide}{Fork and Join}
-    \begin{itemize}
-        \item
-            |fork :: Cartesian k => (a 'k' c) -> (a 'k' d) -> (a 'k' (c × d))|
-        \item
-            |join :: Cartesian k => (c 'k' a) -> (d 'k' a) -> ((c + d) 'k' a)|
-    \end{itemize}
-\end{slide}
 
 \begin{frame}
   \titlepage
@@ -113,7 +95,7 @@ instance Cartesian (->+) where
 
 
 
-\section{Categorias}
+\section{Categories}
 
 \begin{frame}{Uma curta introdução}
 \begin{itemize}
@@ -550,111 +532,127 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 
 \end{frame}
 
-
-\section{Fork e Join}
-\begin{frame}{Fork e Join}
+\section{Fork and Join}
+\begin{slide}{Fork and Join}
     \begin{itemize}
         \item
-            $(\bigtriangleup)$ :: Cartesian k $\Rightarrow$ (a 'k' c) $\to$ (a 'k' d) $\to$ (a 'k' (c $\times$ d))
+            |fork :: Cartesian k => (a 'k' c) -> (a 'k' d) -> (a 'k' (c >< d))|
         \item
-            $(\bigtriangledown)$ :: Cartesian k $\Rightarrow$ (c 'k' a) $\to$ (d 'k' a) $\to$ ((c $\times$ d) 'k' a)
+            |join :: Cartesian k => (c 'k' a) -> (d 'k' a) -> ((c >< d) 'k' a)|
     \end{itemize}
-\end{frame}
-\begin{frame}{instancia de $\to^+$}
-    \textbf{newtype} a $\to^+$ b = AddFun (a → b)\\
-    \vspace{2mm} 
-    \textbf{instance} Category ($\to^+$) \textbf{where}\\
-        \hspace{1cm}type Obj ($\to^+$) = Additive\\
-        \hspace{1cm}id = AddFun id\\
-        \hspace{1cm}AddFun g $\circ$ AddFun f = AddFun (g $\circ$ f )\\
-    \vspace{2mm} 
-    \textbf{instance} Monoidal ($\to^+$) \textbf{where}\\
-        \hspace{1cm}AddFun f × AddFun g = AddFun (f × g)\\
-    \vspace{2mm} 
-    \textbf{instance} Cartesian ($\to^+$) \textbf{where}\\
-        \hspace{1cm}exl = AddFun exl\\
-        \hspace{1cm}exr = AddFun exr\\
-        \hspace{1cm}dup = AddFun dup\\
-\end{frame}
-\begin{frame}{instancia de $\to^+$}
-    \textbf{instance} Cocartesian ($\to^+$) \textbf{where}\\
-        \hspace{1cm} inl = AddFun inlF\\
-        \hspace{1cm} inr = AddFun inrF\\
-        \hspace{1cm} jam = AddFun jamF\\
-    \vspace{2mm} 
-    inlF :: Additive b ⇒ a → a × b\\ 
-    inrF :: Additive a ⇒ b → a × b\\
-    jamF :: Additive a ⇒ a × a → a\\
-    \vspace{2mm} 
-    inlF = $\lambda$a → (a, 0)    \\ 
-    inrF = $\lambda$b → (0, b)    \\
-    jamF = $\lambda$(a, b) → a + b\\ 
-\end{frame}
+\end{slide}
+
+\begin{slide}{Instance of |->+|}
+\begin{code}
+newtype a ->+ b=AddFun(a->b)
+
+instance Category (->+) where
+   type Obj (->+) = Additive
+   id = AddFun id
+   AddFun g . AddFun f = AddFun (g . f )
+
+instance Monoidal (->+) where
+   AddFun f >< AddFun g = AddFun (f >< g)
+
+instance Cartesian (->+) where
+   exl = AddFun exl
+   exr = AddFun exr
+   dup = AddFun dup
+\end{code}
+\end{slide}
+
+\begin{slide}{Instance of |->+|}
+\begin{code}
+instance Cocartesian (->+) where
+    inl = AddFun inlF
+    inr = AddFun inrF
+    jam = AddFun jamF
+
+inlF :: Additive b => a -> a >< b
+inrF :: Additive a => b -> a >< b
+jamF :: Additive a => a >< a -> a
+
+inlF = \a -> (a, 0)
+inrF = \b -> (0, b)
+jamF = \(a, b) -> a + b
+
+\end{code}
+\end{slide}
 
 \section{Operacoes Numericas}
-\begin{frame}{definição de NumCat}
-    \textbf{class} NumCat k a \textbf{where}\\
-        \hspace{1cm}negateC :: a ‘k‘ a\\
-        \hspace{1cm}addC :: (a × a) ‘k‘ a\\
-        \hspace{1cm}mulC :: (a × a) ‘k‘ a\\
-        \hspace{1cm}...\\
-    \vspace{2mm} 
-    \textbf{instance} Num a ⇒ NumCat (→) a \textbf{where}\\
-        \hspace{1cm}negateC = negate\\
-        \hspace{1cm}addC = uncurry (+)\\
-        \hspace{1cm}mulC = uncurry (·)\\
-        \hspace{1cm}...\\
-\end{frame}
+\begin{slide}{NumCat definition}
+\begin{code}
+    class NumCat k a where
+        negateC :: a ‘k‘ a
+        addC :: (a × a) ‘k‘ a
+        mulC :: (a × a) ‘k‘ a
+        ...
+     
+    instance Num a => NumCat (->) a where
+        negateC = negate
+        addC = uncurry (+)
+        mulC = uncurry (*)
+        ...
+\end{code}
+\end{slide}
+
 \begin{frame}
-    D (negate u) = negate (D u)\\
-    D (u + v) = D u + D v\\
-    D (u · v) = u · D v + v · D u\\
+    |bigD (negate u) = negate (bigD u)|\\
+    |bigD (u + v) = bigD u + bigD v|\\
+    |bigD (u * v) = u * bigD v + v * bigD u|\\
     \begin{itemize}
         \item
-            Impreciso na natureza de u e v.
+            Imprecise on the nature of u and v.
         \item
-            Algo mais preciso seria defenir a diferenciação das operações em si.
+            A precise and simpler definition would be to differentiate the operations themselves.
     \end{itemize}
 \end{frame}
+
 \begin{frame}
-    \textbf{class} Scalable k a \textbf{where}\\
-        \hspace{1cm}scale :: a → (a ‘k‘ a)\\
-    \vspace{2mm} 
-    \textbf{instance} Num a ⇒ Scalable ($\to^+$) a \textbf{where}\\
-        \hspace{1cm}scale a = AddFun ($\lambda$da → a · da)\\
-    \vspace{5mm} 
-    \textbf{instance} NumCat D \textbf{where}\\
-        \hspace{1cm}negateC = linearD negateC\\
-        \hspace{1cm}addC = linearD addC\\
-        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
+\begin{code}
+    class Scalable k a where
+        scale :: a -> (a ‘k‘ a)
+     
+    instance Num a => Scalable (->+) a where
+        scale a = AddFun (\da -> a * da)
+
+    instance NumCat D where
+        negateC = linearD negateC
+        addC = linearD addC
+        mulC = D (\(a, b) -> (a * b, scale b join scale a))
+\end{code}
 \end{frame}
 
 \section{Generalizing Automatic Differentiation}
 \begin{frame}{Generalizing Automatic Differentiation}
-    newtype $D_k$ a b = D (a → b × (a ‘k‘ b))\\
-    \vspace{2mm} 
-    linearD :: (a → b) → (a ‘k‘ b) → $D_k$ a b\\
-    linearD f f'= D ($\lambda$a → (f a, f'))\\
-    \vspace{2mm} 
-    \textbf{instance} Category k ⇒ Category $D_k$ \textbf{where}\\
-        \hspace{1cm}type Obj $D_k$ = Additive ∧ Obj k ...\\
-    \vspace{2mm} 
-    \textbf{instance} Monoidal k ⇒ Monoidal $D_k$ \textbf{where} ...\\
-    \vspace{2mm} 
-    \textbf{instance} Cartesian k ⇒ Cartesian $D_k$ \textbf{where} ...\\
-    \vspace{2mm} 
-    \textbf{instance} Cocartesian k ⇒ Cocartesian $D_k$ \textbf{where}\\
-        \hspace{1cm}inl = linearD inlF inl\\
-        \hspace{1cm}inr = linearD inrF inr\\
-        \hspace{1cm}jam = linearD jamF jam\\
-    \vspace{2mm} 
+\begin{code}
+    newtype D k a b = D (a -> b >< (a ‘k‘ b))
+
+    linearD :: (a -> b) -> (a ‘k‘ b) -> D k a b
+    linearD f f'= D (\a -> (f a, f'))
+
+    instance Category k => Category (D k) where
+        type Obj (D k) = Additive ∧ Obj k ...
+     
+    instance Monoidal k => Monoidal (D k) where ...
+     
+    instance Cartesian k => Cartesian (D k) where ...
+     
+    instance Cocartesian k => Cocartesian (D k) where
+        inl = linearD inlF inl
+        inr = linearD inrF inr
+        jam = linearD jamF jam
+     
+\end{code}
 \end{frame}
 
 \begin{frame}
-    \textbf{instance} Scalable k s ⇒ NumCat $D_k$ s \textbf{where}\\
-        \hspace{1cm}negateC = linearD negateC negateC\\
-        \hspace{1cm}addC = linearD addC addC\\
-        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
+\begin{code}
+    instance Scalable k s ⇒ NumCat (D k) s where
+        negateC = linearD negateC negateC
+        addC = linearD addC addC
+        mulC = D (\(a, b) -> (a * b, scale b join scale a))
+\end{code}
 \end{frame}
 
 \section{Exemplos}
@@ -664,6 +662,7 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \section{Generalizar}
 \begin{frame}{Generalizar}
 \end{frame}
+
 
 %============================EXEMPLO==========================
 %\section{Introduction}

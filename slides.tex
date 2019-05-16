@@ -320,51 +320,6 @@
 
 
 \begin{document}
-\begin{slide}{Instance of \ensuremath{\rightarrow^+ }}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;\Varid{a}\rightarrow^+ \Varid{b}\mathrel{=}\Conid{AddFun}\;(\Varid{a}\to \Varid{b}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\mathbf{type}\;\Conid{Obj}\;(\rightarrow^+ )\mathrel{=}\Conid{Additive}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{id}\mathrel{=}\Conid{AddFun}\;\Varid{id}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Conid{AddFun}\;\Varid{g}\mathbin{\circ}\Conid{AddFun}\;\Varid{f}\mathrel{=}\Conid{AddFun}\;(\Varid{g}\mathbin{\circ}\Varid{f}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Conid{AddFun}\;\Varid{f}\mathbin{×}\Conid{AddFun}\;\Varid{g}\mathrel{=}\Conid{AddFun}\;(\Varid{f}\mathbin{×}\Varid{g}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{exl}\mathrel{=}\Conid{AddFun}\;\Varid{exl}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{exr}\mathrel{=}\Conid{AddFun}\;\Varid{exr}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{dup}\mathrel{=}\Conid{AddFun}\;\Varid{dup}{}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-\end{slide}
-
-\begin{slide}{Fork and Join}
-    \begin{itemize}
-        \item
-            \ensuremath{ \bigtriangledown \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\to (\Varid{a}\;\text{\tt 'k'}\;\Varid{d})\to (\Varid{a}\;\text{\tt 'k'}\;(\Varid{c}\mathbin{×}\Varid{d}))}
-        \item
-            \ensuremath{ \bigtriangleup \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow (\Varid{c}\;\text{\tt 'k'}\;\Varid{a})\to (\Varid{d}\;\text{\tt 'k'}\;\Varid{a})\to ((\Varid{c}\mathbin{+}\Varid{d})\;\text{\tt 'k'}\;\Varid{a})}
-    \end{itemize}
-\end{slide}
 
 \begin{frame}
   \titlepage
@@ -386,7 +341,7 @@
 
 
 
-\section{Categorias}
+\section{Categories}
 
 \begin{frame}{Uma curta introdução}
 \begin{itemize}
@@ -823,111 +778,218 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 
 \end{frame}
 
-
-\section{Fork e Join}
-\begin{frame}{Fork e Join}
+\section{Fork and Join}
+\begin{slide}{Fork and Join}
     \begin{itemize}
         \item
-            $(\bigtriangleup)$ :: Cartesian k $\Rightarrow$ (a 'k' c) $\to$ (a 'k' d) $\to$ (a 'k' (c $\times$ d))
+            \ensuremath{ \Delta \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{d})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d}))}
         \item
-            $(\bigtriangledown)$ :: Cartesian k $\Rightarrow$ (c 'k' a) $\to$ (d 'k' a) $\to$ ((c $\times$ d) 'k' a)
+            \ensuremath{ \nabla \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{c}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{d}\;\text{\tt 'k'}\;\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\;\text{\tt 'k'}\;\Varid{a})}
     \end{itemize}
-\end{frame}
-\begin{frame}{instancia de $\to^+$}
-    \textbf{newtype} a $\to^+$ b = AddFun (a → b)\\
-    \vspace{2mm} 
-    \textbf{instance} Category ($\to^+$) \textbf{where}\\
-        \hspace{1cm}type Obj ($\to^+$) = Additive\\
-        \hspace{1cm}id = AddFun id\\
-        \hspace{1cm}AddFun g $\circ$ AddFun f = AddFun (g $\circ$ f )\\
-    \vspace{2mm} 
-    \textbf{instance} Monoidal ($\to^+$) \textbf{where}\\
-        \hspace{1cm}AddFun f × AddFun g = AddFun (f × g)\\
-    \vspace{2mm} 
-    \textbf{instance} Cartesian ($\to^+$) \textbf{where}\\
-        \hspace{1cm}exl = AddFun exl\\
-        \hspace{1cm}exr = AddFun exr\\
-        \hspace{1cm}dup = AddFun dup\\
-\end{frame}
-\begin{frame}{instancia de $\to^+$}
-    \textbf{instance} Cocartesian ($\to^+$) \textbf{where}\\
-        \hspace{1cm} inl = AddFun inlF\\
-        \hspace{1cm} inr = AddFun inrF\\
-        \hspace{1cm} jam = AddFun jamF\\
-    \vspace{2mm} 
-    inlF :: Additive b ⇒ a → a × b\\ 
-    inrF :: Additive a ⇒ b → a × b\\
-    jamF :: Additive a ⇒ a × a → a\\
-    \vspace{2mm} 
-    inlF = $\lambda$a → (a, 0)    \\ 
-    inrF = $\lambda$b → (0, b)    \\
-    jamF = $\lambda$(a, b) → a + b\\ 
-\end{frame}
+\end{slide}
+
+\begin{slide}{Instance of \ensuremath{\rightarrow^+ }}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{newtype}\;\Varid{a}\rightarrow^+ \Varid{b}\mathrel{=}\Conid{AddFun}\;(\Varid{a}\rightarrow \Varid{b}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\mathbf{type}\;\Conid{Obj}\;(\rightarrow^+ )\mathrel{=}\Conid{Additive}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{id}\mathrel{=}\Conid{AddFun}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Conid{AddFun}\;\Varid{g}\mathbin{\circ}\Conid{AddFun}\;\Varid{f}\mathrel{=}\Conid{AddFun}\;(\Varid{g}\mathbin{\circ}\Varid{f}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Conid{AddFun}\;\Varid{f} \times \Conid{AddFun}\;\Varid{g}\mathrel{=}\Conid{AddFun}\;(\Varid{f} \times \Varid{g}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{exl}\mathrel{=}\Conid{AddFun}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{exr}\mathrel{=}\Conid{AddFun}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{dup}\mathrel{=}\Conid{AddFun}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{slide}
+
+\begin{slide}{Instance of \ensuremath{\rightarrow^+ }}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inl}\mathrel{=}\Conid{AddFun}\;\Varid{inlF}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inr}\mathrel{=}\Conid{AddFun}\;\Varid{inrF}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{jam}\mathrel{=}\Conid{AddFun}\;\Varid{jamF}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{inlF}\mathbin{::}\Conid{Additive}\;\Varid{b}\Rightarrow\Varid{a}\rightarrow \Varid{a} \times \Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{inrF}\mathbin{::}\Conid{Additive}\;\Varid{a}\Rightarrow\Varid{b}\rightarrow \Varid{a} \times \Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{jamF}\mathbin{::}\Conid{Additive}\;\Varid{a}\Rightarrow\Varid{a} \times \Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{inlF}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{a},\mathrm{0}){}\<[E]%
+\\
+\>[B]{}\Varid{inrF}\mathrel{=}\lambda \Varid{b}\rightarrow (\mathrm{0},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\Varid{jamF}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{a}\mathbin{+}\Varid{b}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{slide}
 
 \section{Operacoes Numericas}
-\begin{frame}{definição de NumCat}
-    \textbf{class} NumCat k a \textbf{where}\\
-        \hspace{1cm}negateC :: a ‘k‘ a\\
-        \hspace{1cm}addC :: (a × a) ‘k‘ a\\
-        \hspace{1cm}mulC :: (a × a) ‘k‘ a\\
-        \hspace{1cm}...\\
-    \vspace{2mm} 
-    \textbf{instance} Num a ⇒ NumCat (→) a \textbf{where}\\
-        \hspace{1cm}negateC = negate\\
-        \hspace{1cm}addC = uncurry (+)\\
-        \hspace{1cm}mulC = uncurry (·)\\
-        \hspace{1cm}...\\
-\end{frame}
+\begin{slide}{NumCat definition}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{NumCat}\;\Varid{k}\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{negateC}\mathbin{::}\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{addC}\mathbin{::}(\Varid{a}\mathbin{×}\Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{mulC}\mathbin{::}(\Varid{a}\mathbin{×}\Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbin{...}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Num}\;\Varid{a}\Rightarrow\Conid{NumCat}\;(\rightarrow )\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{negateC}\mathrel{=}\Varid{negate}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{addC}\mathrel{=}\Varid{uncurry}\;(\mathbin{+}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{mulC}\mathrel{=}\Varid{uncurry}\;(\mathbin{*}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbin{...}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{slide}
+
 \begin{frame}
-    D (negate u) = negate (D u)\\
-    D (u + v) = D u + D v\\
-    D (u · v) = u · D v + v · D u\\
+    \ensuremath{\mathcal{D}\;(\Varid{negate}\;\Varid{u})\mathrel{=}\Varid{negate}\;(\mathcal{D}\;\Varid{u})}\\
+    \ensuremath{\mathcal{D}\;(\Varid{u}\mathbin{+}\Varid{v})\mathrel{=}\mathcal{D}\;\Varid{u}\mathbin{+}\mathcal{D}\;\Varid{v}}\\
+    \ensuremath{\mathcal{D}\;(\Varid{u}\mathbin{*}\Varid{v})\mathrel{=}\Varid{u}\mathbin{*}\mathcal{D}\;\Varid{v}\mathbin{+}\Varid{v}\mathbin{*}\mathcal{D}\;\Varid{u}}\\
     \begin{itemize}
         \item
-            Impreciso na natureza de u e v.
+            Imprecise on the nature of u and v.
         \item
-            Algo mais preciso seria defenir a diferenciação das operações em si.
+            A precise and simpler definition would be to differentiate the operations themselves.
     \end{itemize}
 \end{frame}
+
 \begin{frame}
-    \textbf{class} Scalable k a \textbf{where}\\
-        \hspace{1cm}scale :: a → (a ‘k‘ a)\\
-    \vspace{2mm} 
-    \textbf{instance} Num a ⇒ Scalable ($\to^+$) a \textbf{where}\\
-        \hspace{1cm}scale a = AddFun ($\lambda$da → a · da)\\
-    \vspace{5mm} 
-    \textbf{instance} NumCat D \textbf{where}\\
-        \hspace{1cm}negateC = linearD negateC\\
-        \hspace{1cm}addC = linearD addC\\
-        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{scale}\mathbin{::}\Varid{a}\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Num}\;\Varid{a}\Rightarrow\Conid{Scalable}\;(\rightarrow^+ )\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{scale}\;\Varid{a}\mathrel{=}\Conid{AddFun}\;(\lambda \Varid{da}\rightarrow \Varid{a}\mathbin{*}\Varid{da}){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{NumCat}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{negateC}\mathrel{=}\Varid{linearD}\;\Varid{negateC}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{addC}\mathrel{=}\Varid{linearD}\;\Varid{addC}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{mulC}\mathrel{=}\Conid{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{a}\mathbin{*}\Varid{b},\Varid{scale}\;\Varid{b}\; \nabla \;\Varid{scale}\;\Varid{a})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{frame}
 
 \section{Generalizing Automatic Differentiation}
 \begin{frame}{Generalizing Automatic Differentiation}
-    newtype $D_k$ a b = D (a → b × (a ‘k‘ b))\\
-    \vspace{2mm} 
-    linearD :: (a → b) → (a ‘k‘ b) → $D_k$ a b\\
-    linearD f f'= D ($\lambda$a → (f a, f'))\\
-    \vspace{2mm} 
-    \textbf{instance} Category k ⇒ Category $D_k$ \textbf{where}\\
-        \hspace{1cm}type Obj $D_k$ = Additive ∧ Obj k ...\\
-    \vspace{2mm} 
-    \textbf{instance} Monoidal k ⇒ Monoidal $D_k$ \textbf{where} ...\\
-    \vspace{2mm} 
-    \textbf{instance} Cartesian k ⇒ Cartesian $D_k$ \textbf{where} ...\\
-    \vspace{2mm} 
-    \textbf{instance} Cocartesian k ⇒ Cocartesian $D_k$ \textbf{where}\\
-        \hspace{1cm}inl = linearD inlF inl\\
-        \hspace{1cm}inr = linearD inrF inr\\
-        \hspace{1cm}jam = linearD jamF jam\\
-    \vspace{2mm} 
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{newtype}\;\Conid{D}\;\Varid{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})\rightarrow \Conid{D}\;\Varid{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[5]{}\Varid{linearD}\;\Varid{f}\;\Varid{f'}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f'})){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;(\Conid{D}\;\Varid{k})\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbf{type}\;\Conid{Obj}\;(\Conid{D}\;\Varid{k})\mathrel{=}\Conid{Additive}\mathbin{∧}\Conid{Obj}\;\Varid{k}\mathbin{...}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;(\Conid{D}\;\Varid{k})\;\mathbf{where}\mathbin{...}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;(\Conid{D}\;\Varid{k})\;\mathbf{where}\mathbin{...}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;(\Conid{D}\;\Varid{k})\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{inl}\mathrel{=}\Varid{linearD}\;\Varid{inlF}\;\Varid{inl}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{inr}\mathrel{=}\Varid{linearD}\;\Varid{inrF}\;\Varid{inr}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{jam}\mathrel{=}\Varid{linearD}\;\Varid{jamF}\;\Varid{jam}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{frame}
 
 \begin{frame}
-    \textbf{instance} Scalable k s ⇒ NumCat $D_k$ s \textbf{where}\\
-        \hspace{1cm}negateC = linearD negateC negateC\\
-        \hspace{1cm}addC = linearD addC addC\\
-        \hspace{1cm}mulC = D ($\lambda$(a, b) → (a · b, scale b $\bigtriangledown$ scale a))\\
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{s}\mathbin{⇒}\Conid{NumCat}\;(\Conid{D}\;\Varid{k})\;\Varid{s}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{negateC}\mathrel{=}\Varid{linearD}\;\Varid{negateC}\;\Varid{negateC}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{addC}\mathrel{=}\Varid{linearD}\;\Varid{addC}\;\Varid{addC}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{mulC}\mathrel{=}\Conid{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{a}\mathbin{*}\Varid{b},\Varid{scale}\;\Varid{b}\; \nabla \;\Varid{scale}\;\Varid{a})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{frame}
 
 \section{Exemplos}
@@ -937,6 +999,7 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \section{Generalizar}
 \begin{frame}{Generalizar}
 \end{frame}
+
 
 %============================EXEMPLO==========================
 %\section{Introduction}
