@@ -932,8 +932,48 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
 \>[9]{}\Varid{mulC}\mathrel{=}\Conid{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{a}\mathbin{*}\Varid{b},\Varid{scale}\;\Varid{b}\; \nabla \;\Varid{scale}\;\Varid{a})){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{FloatingCat}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{sinC}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{sin}\;\Varid{a},\Varid{scale}\;(\Varid{cos}\;\Varid{a}))){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{cosC}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{cos}\;\Varid{a},\Varid{scale}\;(\mathbin{-}\Varid{sin}\;\Varid{a}))){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{expC}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\Varid{e}\mathrel{=}\Varid{exp}\;\Varid{a}\;\mathbf{in}\;(\Varid{e},\Varid{scale}\;\Varid{e})){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbin{...}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+\end{frame}
+
+\section{Examples}
+\begin{frame}{Examples}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\Varid{sqr}\mathbin{::}\Conid{Num}\;\Varid{a}\Rightarrow\Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[5]{}\Varid{sqr}\;\Varid{a}\mathrel{=}\Varid{a}\mathbin{*}\Varid{a}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\Varid{magSqr}\mathbin{::}\Conid{Num}\;\Varid{a}\Rightarrow\Varid{a} \times \Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[5]{}\Varid{magSqr}\;(\Varid{a},\Varid{b})\mathrel{=}\Varid{sqr}\;\Varid{a}\mathbin{+}\Varid{sqr}\;\Varid{b}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\Varid{cosSinProd}\mathbin{::}\Conid{Floating}\;\Varid{a}\Rightarrow\Varid{a} \times \Varid{a}\rightarrow \Varid{a} \times \Varid{a}{}\<[E]%
+\\
+\>[5]{}\Varid{cosSinProd}\;(\Varid{x},\Varid{y})\mathrel{=}(\Varid{cos}\;\Varid{z},\Varid{sin}\;\Varid{z})\;\mathbf{where}\;\Varid{z}\mathrel{=}\Varid{x}\mathbin{*}\Varid{y}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{block}{With a compiler plugin we can obtain}
+\ensuremath{\Varid{sqr}\mathrel{=}\Varid{mulC}\; \circ \;(\Varid{id}\; \Delta \;\Varid{id})}\\
+\ensuremath{\Varid{magSqr}\mathrel{=}\Varid{addC}\; \circ \;(\Varid{mulC}\; \circ \;(\Varid{exl}\; \Delta \;\Varid{exl})\; \Delta \;\Varid{mulC}\; \circ \;(\Varid{exr}\; \Delta \;\Varid{exr}))}\\
+\ensuremath{\Varid{cosSinProd}\mathrel{=}(\Varid{cosC}\; \Delta \;\Varid{sinC})\; \circ \;\Varid{mulC}}\\
+\end{block} 
 \end{frame}
 
 \section{Generalizing Automatic Differentiation}
@@ -943,22 +983,22 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[5]{}\mathbf{newtype}\;\Conid{D}\;\Varid{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})){}\<[E]%
+\>[5]{}\mathbf{newtype}\; D_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})){}\<[E]%
 \\[\blanklineskip]%
-\>[5]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})\rightarrow \Conid{D}\;\Varid{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[5]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})\rightarrow  D_k \;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
 \>[5]{}\Varid{linearD}\;\Varid{f}\;\Varid{f'}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f'})){}\<[E]%
 \\[\blanklineskip]%
-\>[5]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;(\Conid{D}\;\Varid{k})\;\mathbf{where}{}\<[E]%
+\>[5]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\; D_k \;\mathbf{where}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\mathbf{type}\;\Conid{Obj}\;(\Conid{D}\;\Varid{k})\mathrel{=}\Conid{Additive}\mathbin{∧}\Conid{Obj}\;\Varid{k}\mathbin{...}{}\<[E]%
+\>[9]{}\mathbf{type}\;\Conid{Obj}\; D_k \mathrel{=}\Conid{Additive}\mathbin{∧}\Conid{Obj}\;\Varid{k}\mathbin{...}{}\<[E]%
 \\[\blanklineskip]%
-\>[5]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;(\Conid{D}\;\Varid{k})\;\mathbf{where}\mathbin{...}{}\<[E]%
+\>[5]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\; D_k \;\mathbf{where}\mathbin{...}{}\<[E]%
 \\[\blanklineskip]%
-\>[5]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;(\Conid{D}\;\Varid{k})\;\mathbf{where}\mathbin{...}{}\<[E]%
+\>[5]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\; D_k \;\mathbf{where}\mathbin{...}{}\<[E]%
 \\[\blanklineskip]%
-\>[5]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;(\Conid{D}\;\Varid{k})\;\mathbf{where}{}\<[E]%
+\>[5]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\; D_k \;\mathbf{where}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
 \>[9]{}\Varid{inl}\mathrel{=}\Varid{linearD}\;\Varid{inlF}\;\Varid{inl}{}\<[E]%
@@ -978,7 +1018,7 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[5]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{s}\mathbin{⇒}\Conid{NumCat}\;(\Conid{D}\;\Varid{k})\;\Varid{s}\;\mathbf{where}{}\<[E]%
+\>[5]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{s}\mathbin{⇒}\Conid{NumCat}\; D_k \;\Varid{s}\;\mathbf{where}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
 \>[9]{}\Varid{negateC}\mathrel{=}\Varid{linearD}\;\Varid{negateC}\;\Varid{negateC}{}\<[E]%
@@ -992,13 +1032,37 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \end{hscode}\resethooks
 \end{frame}
 
-\section{Exemplos}
-\begin{frame}{Exemplos}
+\begin{frame}
+\begin{itemize}
+\item
+Practical applications often involves high-dimensional spaces.
+\item
+Binary products are a very inefficient and unwieldy way of encoding high-dimensional spaces.
+\item
+A practical alternative is to consider n-ary products as representable functors(?)
+\end{itemize}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{crossI}\mathbin{::}\Varid{h}\;(\Varid{a}\;\Varid{k}\;\Varid{b})\rightarrow (\Varid{h}\;\Varid{a}\;\Varid{k}\;\Varid{h}\;\Varid{b}){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Zip}\;\Varid{h}\Rightarrow\Conid{MonoidalI}\;(\rightarrow )\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{crossI}\mathrel{=}\Varid{zipWith}\;\Varid{id}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
 \end{frame}
 
-\section{Generalizar}
-\begin{frame}{Generalizar}
-\end{frame}
+
+% Start of the second part !!
+
 
 
 %============================EXEMPLO==========================

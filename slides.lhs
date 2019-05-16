@@ -28,8 +28,9 @@
 %format bigDhat = "\mathcal{\hat{D}}"
 %format bigU = "\mathcal{U}"
 %format bigV = "\mathcal{V}"
+%format o = " \circ "
 %format => = "\Rightarrow"
-%format bigDk = "\mathcal{D}_k"
+%format Dk = " D_k "
 %format >< = " \times "
 %----------------------------------------------------
 
@@ -620,25 +621,51 @@ jamF = \(a, b) -> a + b
         negateC = linearD negateC
         addC = linearD addC
         mulC = D (\(a, b) -> (a * b, scale b join scale a))
+
+    instance FloatingCat D where
+        sinC = D(\a -> (sin a, scale (cos a)))
+        cosC = D(\a -> (cos a, scale (-sin a)))
+        expC = D(\a -> let e=exp a in (e, scale e))
+        ...
+        
 \end{code}
+\end{frame}
+
+\section{Examples}
+\begin{frame}{Examples}
+\begin{code}
+    sqr :: Num a => a -> a
+    sqr a = a*a
+
+    magSqr :: Num a => a >< a -> a
+    magSqr (a, b) = sqr a + sqr b
+
+    cosSinProd :: Floating a => a >< a -> a >< a
+    cosSinProd (x, y) = (cos z, sin z) where z=x*y
+\end{code}
+\begin{block}{With a compiler plugin we can obtain}
+|sqr = mulC o (id fork id)|\\
+|magSqr = addC o (mulC o (exl fork exl) fork mulC o (exr fork exr))|\\
+|cosSinProd = (cosC fork sinC) o mulC|\\
+\end{block} 
 \end{frame}
 
 \section{Generalizing Automatic Differentiation}
 \begin{frame}{Generalizing Automatic Differentiation}
 \begin{code}
-    newtype D k a b = D (a -> b >< (a ‘k‘ b))
+    newtype Dk a b = D (a -> b >< (a ‘k‘ b))
 
-    linearD :: (a -> b) -> (a ‘k‘ b) -> D k a b
+    linearD :: (a -> b) -> (a ‘k‘ b) -> Dk a b
     linearD f f'= D (\a -> (f a, f'))
 
-    instance Category k => Category (D k) where
-        type Obj (D k) = Additive ∧ Obj k ...
+    instance Category k => Category Dk where
+        type Obj Dk = Additive ∧ Obj k ...
      
-    instance Monoidal k => Monoidal (D k) where ...
+    instance Monoidal k => Monoidal Dk where ...
      
-    instance Cartesian k => Cartesian (D k) where ...
+    instance Cartesian k => Cartesian Dk where ...
      
-    instance Cocartesian k => Cocartesian (D k) where
+    instance Cocartesian k => Cocartesian Dk where
         inl = linearD inlF inl
         inr = linearD inrF inr
         jam = linearD jamF jam
@@ -648,20 +675,35 @@ jamF = \(a, b) -> a + b
 
 \begin{frame}
 \begin{code}
-    instance Scalable k s ⇒ NumCat (D k) s where
+    instance Scalable k s ⇒ NumCat Dk s where
         negateC = linearD negateC negateC
         addC = linearD addC addC
         mulC = D (\(a, b) -> (a * b, scale b join scale a))
 \end{code}
 \end{frame}
 
-\section{Exemplos}
-\begin{frame}{Exemplos}
+\begin{frame}
+\begin{itemize}
+\item
+Practical applications often involves high-dimensional spaces.
+\item
+Binary products are a very inefficient and unwieldy way of encoding high-dimensional spaces.
+\item
+A practical alternative is to consider n-ary products as representable functors(?)
+\end{itemize}
+\begin{code}
+    class Category k => MonoidalI k h where
+        crossI :: h(a k b) -> (h a k h b)
+
+    instance Zip h => MonoidalI (->) h where
+        crossI = zipWith id
+\end{code}
+
 \end{frame}
 
-\section{Generalizar}
-\begin{frame}{Generalizar}
-\end{frame}
+
+% Start of the second part !!
+
 
 
 %============================EXEMPLO==========================
