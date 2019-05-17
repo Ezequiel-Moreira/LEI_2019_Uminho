@@ -671,8 +671,8 @@ jamF = \(a, b) -> a + b
         jam = linearD jamF jam
      
 \end{code}
-\end{frame}
 
+\end{frame}
 \begin{frame}
 \begin{code}
     instance Scalable k s ⇒ NumCat Dk s where
@@ -682,6 +682,8 @@ jamF = \(a, b) -> a + b
 \end{code}
 \end{frame}
 
+% Part 2
+\section{Scaling Up}
 \begin{frame}
 \begin{itemize}
 \item
@@ -693,7 +695,7 @@ A practical alternative is to consider n-ary products as representable functors(
 \end{itemize}
 \begin{code}
     class Category k => MonoidalI k h where
-        crossI :: h(a k b) -> (h a k h b)
+        crossI :: h(a ‘k‘ b) -> (h a ‘k‘ h b)
 
     instance Zip h => MonoidalI (->) h where
         crossI = zipWith id
@@ -701,9 +703,40 @@ A practical alternative is to consider n-ary products as representable functors(
 
 \end{frame}
 
+\begin{frame}
+\begin{code}
+    class MonoidalI k h => CartesianI k h where
+        exI     :: h (h a ‘k‘ a)
+        replI   :: a ‘k‘ h a
 
-% Start of the second part !!
+    class (Representable h, Zip h, Pointed h) => 
+            CartesianI (->) h where
+        exI = tabulate (flip index)
+        replI = point
+\end{code}
+\begin{itemize}
+\item
+    The following is not the class the author was thinking
+\end{itemize}
+\begin{code} 
+    class Representable h where
+        type Rep h :: *
+        tabulate :: (Rep h -> a) -> h a
+        index    :: h a -> Rep h -> a
+    
+\end{code}
+\end{frame}
 
+\begin{frame}
+\begin{code}
+    class MonoidalI k h => CocartesianI k h where
+        inI :: h (a ‘k‘ h a)
+        jamI :: h a ‘k‘ a
+
+    
+    
+\end{code}
+\end{frame}
 
 
 %============================EXEMPLO==========================

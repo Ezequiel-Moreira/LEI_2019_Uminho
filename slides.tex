@@ -1010,8 +1010,8 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \>[9]{}\Varid{jam}\mathrel{=}\Varid{linearD}\;\Varid{jamF}\;\Varid{jam}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
-\end{frame}
 
+\end{frame}
 \begin{frame}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -1032,6 +1032,8 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \end{hscode}\resethooks
 \end{frame}
 
+% Part 2
+\section{Scaling Up}
 \begin{frame}
 \begin{itemize}
 \item
@@ -1049,7 +1051,7 @@ A practical alternative is to consider n-ary products as representable functors(
 \>[5]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{crossI}\mathbin{::}\Varid{h}\;(\Varid{a}\;\Varid{k}\;\Varid{b})\rightarrow (\Varid{h}\;\Varid{a}\;\Varid{k}\;\Varid{h}\;\Varid{b}){}\<[E]%
+\>[9]{}\Varid{crossI}\mathbin{::}\Varid{h}\;(\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})\rightarrow (\Varid{h}\;\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{h}\;\Varid{b}){}\<[E]%
 \\[\blanklineskip]%
 \>[5]{}\mathbf{instance}\;\Conid{Zip}\;\Varid{h}\Rightarrow\Conid{MonoidalI}\;(\rightarrow )\;\Varid{h}\;\mathbf{where}{}\<[E]%
 \\
@@ -1060,9 +1062,77 @@ A practical alternative is to consider n-ary products as representable functors(
 
 \end{frame}
 
+\begin{frame}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{17}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\Rightarrow\Conid{CartesianI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{exI}{}\<[17]%
+\>[17]{}\mathbin{::}\Varid{h}\;(\Varid{h}\;\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{replI}{}\<[17]%
+\>[17]{}\mathbin{::}\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{h}\;\Varid{a}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{class}\;(\Conid{Representable}\;\Varid{h},\Conid{Zip}\;\Varid{h},\Conid{Pointed}\;\Varid{h})\Rightarrow{}\<[E]%
+\\
+\>[5]{}\hsindent{8}{}\<[13]%
+\>[13]{}\Conid{CartesianI}\;(\rightarrow )\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{exI}\mathrel{=}\Varid{tabulate}\;(\Varid{flip}\;\Varid{index}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{replI}\mathrel{=}\Varid{point}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\begin{itemize}
+\item
+    The following is not the class the author was thinking
+\end{itemize}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{18}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{Representable}\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbf{type}\;\Conid{Rep}\;\Varid{h}\mathbin{::}\mathbin{*}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{tabulate}\mathbin{::}(\Conid{Rep}\;\Varid{h}\rightarrow \Varid{a})\rightarrow \Varid{h}\;\Varid{a}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{index}{}\<[18]%
+\>[18]{}\mathbin{::}\Varid{h}\;\Varid{a}\rightarrow \Conid{Rep}\;\Varid{h}\rightarrow \Varid{a}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{frame}
 
-% Start of the second part !!
-
+\begin{frame}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\Rightarrow\Conid{CocartesianI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{inI}\mathbin{::}\Varid{h}\;(\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{h}\;\Varid{a}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{jamI}\mathbin{::}\Varid{h}\;\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{frame}
 
 
 %============================EXEMPLO==========================
