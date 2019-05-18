@@ -585,8 +585,8 @@ jamF = \(a, b) -> a + b
 \begin{code}
     class NumCat k a where
         negateC :: a ‘k‘ a
-        addC :: (a × a) ‘k‘ a
-        mulC :: (a × a) ‘k‘ a
+        addC :: (a >< a) ‘k‘ a
+        mulC :: (a >< a) ‘k‘ a
         ...
      
     instance Num a => NumCat (->) a where
@@ -733,11 +733,26 @@ A practical alternative is to consider n-ary products as representable functors(
         inI :: h (a ‘k‘ h a)
         jamI :: h a ‘k‘ a
 
-    
-    
+    instance (MonoidalI k h, Zip h) => MonoidalI Dk h where
+        crossI fs = D ((id >< crossI) o unzip o crossI (fmap unD fs))
+
+    instance (CocartesianI (->) h, CartesianI k h, Zip h) =>
+            CartesianI Dk h where
+        exl = linearD exl exl
+        replI = zipWith linearD replI replI
+
+    instance (CocartesianI k h, Zip h) => CocartesianI Dk h where
+        inI = zipWith linearD  inIF inl 
+        jamI = linearD sum jamI    
+ 
 \end{code}
 \end{frame}
 
+\section{Related Work and conlusion}
+\begin{frame}
+ola
+\end{frame}
+%fim
 
 %============================EXEMPLO==========================
 %\section{Introduction}

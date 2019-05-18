@@ -869,10 +869,10 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \>[9]{}\Varid{negateC}\mathbin{::}\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{addC}\mathbin{::}(\Varid{a}\mathbin{×}\Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\>[9]{}\Varid{addC}\mathbin{::}(\Varid{a} \times \Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{mulC}\mathbin{::}(\Varid{a}\mathbin{×}\Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\>[9]{}\Varid{mulC}\mathbin{::}(\Varid{a} \times \Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
 \>[9]{}\mathbin{...}{}\<[E]%
@@ -1122,6 +1122,8 @@ A practical alternative is to consider n-ary products as representable functors(
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{32}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
 \>[5]{}\mathbf{class}\;\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\Rightarrow\Conid{CocartesianI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
 \\
@@ -1130,10 +1132,40 @@ A practical alternative is to consider n-ary products as representable functors(
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
 \>[9]{}\Varid{jamI}\mathbin{::}\Varid{h}\;\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{MonoidalI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow\Conid{MonoidalI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{crossI}\;\Varid{fs}\mathrel{=}\Conid{D}\;((\Varid{id} \times \Varid{crossI})\; \circ \;\Varid{unzip}\; \circ \;\Varid{crossI}\;(\Varid{fmap}\;\Varid{unD}\;\Varid{fs})){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{CocartesianI}\;(\rightarrow )\;\Varid{h},\Conid{CartesianI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow{}\<[E]%
+\\
+\>[5]{}\hsindent{8}{}\<[13]%
+\>[13]{}\Conid{CartesianI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{exl}\mathrel{=}\Varid{linearD}\;\Varid{exl}\;\Varid{exl}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{replI}\mathrel{=}\Varid{zipWith}\;\Varid{linearD}\;\Varid{replI}\;\Varid{replI}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{CocartesianI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow\Conid{CocartesianI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{inI}\mathrel{=}\Varid{zipWith}\;\Varid{linearD}\;{}\<[32]%
+\>[32]{}\Varid{inIF}\;\Varid{inl}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{jamI}\mathrel{=}\Varid{linearD}\;\Varid{sum}\;\Varid{jamI}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{frame}
 
+\section{Related Work and conlusion}
+\begin{frame}
+ola
+\end{frame}
+%fim
 
 %============================EXEMPLO==========================
 %\section{Introduction}
