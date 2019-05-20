@@ -2,7 +2,7 @@
 
 \mode<presentation>
 {
-  \usetheme{Warsaw}
+  \usetheme{JuanLesPins}
 
   \setbeamercovered{transparent}
 }
@@ -16,6 +16,7 @@
 \usepackage[T1]{fontenc}
 % Note that the encoding and the font should match. If T1
 % does not look nice, try deleting the line with the fontenc.
+\usepackage[all]{xy}
 
 %---------- lhs2tex ---------------------------------
 %include polycode.fmt
@@ -580,7 +581,7 @@ jamF = \(a, b) -> a + b
 \end{code}
 \end{slide}
 
-\section{Operacoes Numericas}
+\section{Numeric operations}
 \begin{slide}{NumCat definition}
 \begin{code}
     class NumCat k a where
@@ -631,7 +632,6 @@ jamF = \(a, b) -> a + b
 \end{code}
 \end{frame}
 
-\section{Examples}
 \begin{frame}{Examples}
 \begin{code}
     sqr :: Num a => a -> a
@@ -762,9 +762,69 @@ A practical alternative is to consider n-ary products as representable functors(
 \end{itemize}
 \end{frame}
 
-
-
 %fim
+
+% %format (der (f)) = "{\cal D}^+ " f
+% %format (DS (a) (b) (c)) = "{" c "}\times " b "^{" a "}"
+% 
+% |der() : (A->B) -> DS A B B|
+% 
+% \begin{eqnarray*}
+% \xymatrix@@C=4em{
+%   C
+% &
+%   B
+%       \ar[l]_-{|g|}
+% &
+%   A
+%       \ar[l]_-{|f|}
+% \\
+%   |DS A B ((DS B C C))|
+%       \ar[d]_-{|mu|}
+% &
+%   |DS A B B|
+%       \ar[l]_-{|der g >< id|}
+% &
+%   |A|
+%       \ar[l]_-{|der f|}
+%       \ar[dll]^-{|der((g.f))|}
+% \\
+%   |DS A C C|
+% }
+% \end{eqnarray*}
+% \begin{spec}
+% mu :: (DS A B ((DS B C D))) -> (DS A C D)
+% mu = (id >< (uncurry (.))) . assocr
+% \end{spec}
+% 
+% \begin{eqnarray*}
+% \xymatrix@@C=4em{
+%   C
+% &
+%   B
+%       \ar[l]_-{|g|}
+% &
+%   A
+%       \ar[l]_-{|f|}
+% \\
+%   |DS A B ((DS B C C))|
+%       \ar[d]_-{|mu|}
+% &
+%   |DS A B B|
+%       \ar[l]_-{|der g >< id|}
+%       \ar@@{..}[d]
+% &
+%   |A|
+%       \ar[l]_-{|der f|}
+%                 \ar@@/^3pc/[lld]^-{|der((g.f))|}
+% \\
+%   |DS A C C|
+% &
+%   |B|
+%       \ar[l]_-{|der g|}
+% }
+% \end{eqnarray*}
+
 
 %============================EXEMPLO==========================
 %\section{Introduction}
