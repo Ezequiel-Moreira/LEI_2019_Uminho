@@ -18,6 +18,20 @@
 % does not look nice, try deleting the line with the fontenc.
 \usepackage[all]{xy}
 
+\newtheorem{teor}{Theorem}[section]
+\newtheorem{coro}{Corollary}[section]
+\theoremstyle{definition}
+\newtheorem{defi}{Definition}[section]
+\theoremstyle{definition}
+\newtheorem{exemplo}{example}[section]
+\theoremstyle{theorem}
+\newtheorem{propo}{Proposicion}[section]
+\newtheorem{nota}{Note}[section]
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
 %---------- lhs2tex ---------------------------------
 %% ODER: format ==         = "\mathrel{==}"
 %% ODER: format /=         = "\neq "
@@ -326,7 +340,7 @@
   \titlepage
 \end{frame}
 
-\begin{frame}{Indice}
+\begin{frame}{Index}
   \tableofcontents
 \end{frame}
 
@@ -335,37 +349,222 @@
 % - Talk about 30s to 2min per frame. So there should be between about
 %   15 and 30 frames, all told.
 
-\section{Nelson}
+%Ne1
 
-\begin{frame}{titulo}
+\begin{frame}
+\frametitle{Definition of Derivative}
+\vspace{5mm}
+
+\begin{defi}
+		Let $f:\R \to \R$ be a function. The derivative of $f$ at point $x \in \R$ is defined the following way:
+	\begin{align*}
+	\textit{$f $$'$ $(x)$} = \ \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon}
+	\end{align*}
+\end{defi}
+\vspace{5mm}
+\pause
+This definition will also work with functions of types $\C \hspace{0.5mm}\to \C$ and $\R\hspace{0.6mm} \to \R^{n}$.
+
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Definition of Derivative}
+\vspace{10mm}
+For functions $F$ of types $\R^{m}\hspace{-0.3mm} \to \R$ and $\R^{m}\hspace{-0.3mm}\to \R^{n}$ (with $n>1$), we need a different definition.
+\pause
+\vspace{1mm}
+    \begin{itemize}
+    \item  For functions of type $\R^{m}\hspace{-0.3mm} \to \R$, it is necessary the introduction of the notion of parcial derivatives, $\frac{\partial F}{\partial x_{j}}\hspace{0.3mm}$, with $j \in$ \{$1,...,m$\}.
+    
+    \pause
+    \vspace{3mm}
+    \item For functions of type $\R^{m}\hspace{-0.3mm}\to \R^{n}$ (with $n>1$), apart from the use of parcial derivatives, it is necessary the use of Jacobian matrices $\mathbf{J}_{i,j} =\frac{\partial F_{i}}{\partial x_{j}}$, where $i \in$ \{$1,...,n$\} and $F_{i}$ is a function $\R^{m}\hspace{-0.3mm}\to \R$.
+    \end{itemize} 
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Generalization and Chain Rule}
+\vspace{15mm}
+Let $\mathbf{A}$ and $\mathbf{B}$ be two Jacobian matrices. 
+
+The chain rule in $\R^{m}\hspace{-0.3mm}\to \R^{n}$ is:
+\begin{align*}
+(\mathbf{A} \cdotp \mathbf{B})_{i,j}= \sum_{k=1}^{m} \mathbf{A}_{i,k} \cdotp \mathbf{B}_{k,j}
+\end{align*}
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Generalization and Chain Rule}
+\vspace{15mm}
+Assuming that the notion of derivates that we need matches with a linear map, where it is accepted the chain rule previously seen, we will define a new generalization:
+\pause
+
+\begin{align*}
+\hspace{-2mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon} - \textit{$f $$'$ $(x)$} = 0 \hspace{0.5mm} 
+\Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f $$'$ $(x)$}}{\varepsilon} = 0 \\
+& 
+\hspace{-5.9cm}  \Leftrightarrow  
+\lim_{\varepsilon \to 0} 
+\frac{
+\norm{ \textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f'(x)$} } 
+}{
+\norm{ \varepsilon }
+} 
+= 0
+\end{align*}
+
+\end{frame}
+%%%
+\begin{frame}
+\begin{center}
+	\frametitle{Derivate as a linear map} 
+\end{center}
+\begin{defi}
+	Let $f::a \to b$ be a function, where $a$ and $b$ are vetorial spaces that share a common underlying field. The first derivate definition is the following:
+	\begin{align*} 
+	\mathcal{D} :: (a \to b) \to (a \to (a \multimap b))
+	\end{align*}
+	If we differentiate two times vezes, we have:
+	\begin{align*} 
+	 \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a \multimap a \multimap b ))
+	\end{align*}
+\end{defi}
 \end{frame}
 
+\begin{frame}
+\frametitle{Rules for Differentiation - Sequential Composition}
+\vspace{15mm}
+\begin{teor}
+	
+	Let $f:: a \to b$ and $g:: b \to c$ be two functions. Then the derivative of the composition of $f$ e $g$ is:
+	\begin{align*}
+	\mathcal{D} \ (g \circ f ) \ a= \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.6mm} \circ \hspace{0.6mm} \mathcal{D} \hspace{0.6mm} f \ a
+	\end{align*}
+\end{teor}
+\end{frame}
+\begin{frame}
+\frametitle{Rules for Differentiation - Sequential Composition}
+\vspace{10mm}
+Unfortunately the previous theorem isn't a efficient recipe for composition, and now we will introduce a second derivate definition:
+\begin{align*}
+\mathcal{D}_{0}^{+} :: (a \to b) \to ((a \to b) \times (a \to (a \multimap b))) \\
+& \hspace{-6.18cm} \mathcal{D}_{0}^{+} \hspace{0.5mm} f =(f,\hspace{0.2mm} \mathcal{D} f)
+\end{align*}
+\pause
 
+With this, the chain rule will have the following expression:
 
+$\mathcal{D}_{0}^{+} \hspace{0.5mm} (g \circ f) $ =
+
+$= (g \circ f,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} (g \circ f) \hspace{0.5mm})$ \hspace{3.17cm} (definition of $\mathcal{D}_{0}^{+}$)
+
+$= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.5mm} \circ \hspace{0.5mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )$ \hspace{1.5mm} (theorem and definition of $g \circ f$)
+\end{frame}
+\begin{frame}
+\frametitle{Rules for Differentiation - Sequential Composition} 
+\vspace{9mm}
+Having in mind optimizations, we introduce the third and last derivate definition:
+\begin{align*}
+\mathcal{D}^{+} :: (a \to b) \to (a \to (b \times (a \multimap b))) \\
+& \hspace{-5cm}\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )
+\end{align*}
+\pause
+
+As $\times$ has more priority than $\to$ e $\multimap$, we can rewrite $\mathcal{D}^{+} $ as:
+\begin{align*}
+\mathcal{D}^{+} :: (a \to b) \to (a \to b \times (a \multimap b))  \\
+& \hspace{-5cm}\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )
+\end{align*}
+\end{frame}
+\begin{frame}
+\frametitle{Rules for Differentiation - Sequential Composition} 
+\vspace{15mm}
+\begin{coro}
+	$\mathcal{D}^{+}$ is efficiently compositional in relation to $(\circ)$, that is, in Haskell:
+	\begin{align*}
+	 \mathcal{D}^{+} \hspace{0.5mm} (g \circ f) \hspace{0.9mm} a = \textbf{let} \hspace{0.5mm} \{(b,\hspace{0.2mm} f') = \mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a; \hspace{0.5mm} (c,\hspace{0.2mm} g')=\mathcal{D}^{+} \hspace{0.5mm} g \hspace{0.9mm} b \} \hspace{1mm} \textbf{in} \hspace{1mm} (c,\hspace{0.2mm} g' \circ f') 
+	\end{align*}
+\end{coro}
+\end{frame}
+\begin{frame}
+\frametitle{Rules for Differentiation - Parallel Composition} 
+\vspace{10mm}
+Another important way of combining functions is the operation cross, that combines two functions in parallel:
+\begin{align*}
+(\boldsymbol{\times}) :: (a \to c) \to (b \to d) \to (a \times b \to c \times d) \\
+& \hspace{-6.23cm}f \boldsymbol{\times} g = \lambda(a,\hspace{0.5mm} b) \to (f \hspace{0.5mm} a,\hspace{0.2mm} g \hspace{0.5mm} b) 
+\end{align*}
+\pause
+\begin{teor}	
+	Let $f :: a \to c$ and $g :: b \to d$ be two function. Then the cross rule is the following:
+	\begin{align*}
+	\mathcal{D} \hspace{0.5mm} (f \boldsymbol{\times} g) \hspace{0.5mm} (a,\hspace{0.2mm} b) = \mathcal{D} \hspace{0.5mm} f \hspace{0.9mm} a \boldsymbol{\times} \mathcal{D} \hspace{0.5mm} g \hspace{0.9mm} b
+	\end{align*}
+\end{teor}
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Rules for Differentiation - Parallel Composition} 
+\vspace{15mm}
+\begin{coro}
+	The function $\mathcal{D}^{+}$ is compositional in relation to $(\boldsymbol{\times})$
+	\begin{align*}
+	 \mathcal{D}^{+} \hspace{0.5mm} (f \boldsymbol{\times} g) \hspace{0.9mm} (a,\hspace{0.2mm} b) = \textbf{let} \hspace{0.5mm} \{(c,\hspace{0.2mm} f') = \mathcal{D}^{+} \hspace{0.3mm} f \hspace{0.7mm} a; \hspace{0.5mm} (d,\hspace{0.2mm} g')=\mathcal{D}^{+} \hspace{0.3mm} g \hspace{0.7mm} b \} \hspace{0.8mm} \textbf{in} \hspace{0.8mm}  ((c,\hspace{0.2mm} d), \hspace{0.2mm} f' \boldsymbol{\times} g') 
+	\end{align*}
+\end{coro}
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Derivative e Linear Functions} 
+\vspace{5mm}
+\begin{defi}
+	A function $f$ is said to be linear when preserves addition and scalar multiplication.
+	\vspace{2mm}
+	
+	\hspace{5mm} $f(a + a')= f \hspace{0.5mm} a + f \hspace{0.5mm} a'$
+	
+	\vspace{1mm}
+	\hspace{5mm} $f(s \cdot a)= s \cdot f \hspace{0.5mm} a$
+
+\end{defi}
+\pause
+\vspace{4mm}
+\begin{teor}
+	For all linear functions $f$, $\mathcal{D} \hspace{0.5mm} f \hspace{0.9mm} a = f $.
+\end{teor}
+\pause
+\vspace{2mm}
+\begin{coro}
+	For all linear functions  $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
+
+\end{coro}
+\end{frame}
+
+%Ez1
 \section{Categories}
 
-\begin{frame}{Uma curta introdução}
+\begin{frame}{A short introdution}
 \begin{itemize}
- \item<1-> Queremos calcular $\mathcal{D}^{+}$.
- \item<2-> Problema: $\mathcal{D}$ não é computável.
- \item<3-> Solução: observar corolários apresentados e implementar recorrendo a categorias.
+ \item<1-> We want to calculate \ensuremath{\mathcal{D}}.
+ \item<2-> However, \ensuremath{\mathcal{D}} is not computable.
+ \item<3-> Solution: reimplement corollaries using category theory
 \end{itemize}
 
 \end{frame}
 
 
 
-\begin{frame}{Uma curta introdução}
+\begin{frame}{A short introdution}
 
-    \begin{block}{Corolário 1.1}
+    \begin{block}{Corollary 1.1}
     NOTA: adicionar definição do corolário 1.1 aqui
     \end{block}
     
-    \begin{block}{Corolário 2.1}
+    \begin{block}{Corollary 2.1}
     NOTA: adicionar definição do corolário 2.1 aqui
     \end{block}
     
-    \begin{block}{Corolário 3.1}
+    \begin{block}{Corollary 3.1}
     NOTA: adicionar definição do corolário 3.1 aqui
     \end{block}
  
@@ -373,345 +572,400 @@
 
 
 
-\begin{frame}{Categorias clássicas}
 
-Uma categoria é um conjunto de objetos(conjuntos e tipos) e de morfismos(operações entre objetos), tendo definidas 2 operações básicas, identidade e composição de morfismos, e 2 leis:
+\begin{frame}{Categories}
+
+A category is a collection of objects(sets and types) and morphisms(operation between objects),
+with 2 basic operations(identity and composition) of morfisms, and 2 laws:
 
 \begin{itemize}
-    \item<1-> (C.1) ---- $id \circ f = id \circ f = f$ 
-    \item<2-> (C.2) ---- $f \circ (g \circ h) = (f \circ g) \circ h$
+    \item (C.1)  $id \circ f = id \circ f = f$
+    \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
-
-\begin{block}
-
-Para os efeitos deste papel, objetos são tipos de dados e morfismos são funções
-
+\begin{block}{Note}
+For this paper, objects are data types and morfisms are functions
 \end{block}
-
-\begin{block}
 
 \begin{columns}
- 
-\column{0.5\textwidth}
-class \textit{Category k} where
+\begin{column}{0.5\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathbin{::}(\Varid{a'k'a}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b'k'c})\rightarrow (\Varid{a'k'b})\rightarrow (\Varid{a'k'c}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
 
-\hspace{0.2cm}id :: (a'k'a)
-    
-\hspace{0.2cm}($\circ$) :: (b'k'c) → (a'k'b) → (a'k'c)
- 
-\column{0.5\textwidth}
-instance \textit{Category (→)} where
-
-\hspace{0.2cm}id = $\lambda$a → a 
-
-\hspace{0.2cm}$g \circ f = \lambda$a → g (f a)  
-
+\begin{column}{0.5\textwidth}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathrel{=}\lambda \Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{g}\mathbin{\circ}\Varid{f}\mathrel{=}\lambda \Varid{a}\rightarrow \Varid{g}\;(\Varid{f}\;\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{column}
 \end{columns}
-
-\end{block}
-
 \end{frame}
 
 
 
 
-\begin{frame}{Functores clássicos}
+\begin{frame}{Functors}
 
-
-Um functor \textit{F} entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+A functor F between 2 categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
 \begin{itemize}
-    \item para qualquer objeto t $\in \mathcal{U}$ temos que \textit{F} t $\in \mathcal{V}$
-    \item para qualquer morfismo m :: a → b $\in \mathcal{U}$ temos que \textit{F} m :: \textit{F} a → \textit{F} b $\in \mathcal{V}$
-    \item \textit{F} id ($\in \mathcal{U}$) = id ($\in \mathcal{V}$)
-    \item \textit{F} ($f \circ g$) = \textit{F} f $\circ$ \textit{F} g
+    \item given any object t $\in$ \ensuremath{\mathcal{U}} there exists an object F t $\in$ \ensuremath{\mathcal{V}}
+    \item given any morphism m :: a \ensuremath{\rightarrow } b $\in$ \ensuremath{\mathcal{U}} there exists a morphism F m :: F a \ensuremath{\rightarrow } F b $\in$ \ensuremath{\mathcal{V}}
+    \item F id ($\in$ \ensuremath{\mathcal{U}}) = id ($\in$ \ensuremath{\mathcal{V}})
+    \item F (f $\circ$ g) = F f $\circ$ F g
 \end{itemize}
 
-
-\begin{block}{Nota}
-Devido à definição de categoria deste papel(objetos são tipos de dados) os functores mapeiam tipos neles próprios.
+\begin{block}{Note}
+Given this papers category properties(objects are data types) functors map types to themselves
 \end{block}
 
 \end{frame}
 
-\begin{frame}{Objetivo}
 
-Começamos por definir um novo tipo de dados:
 
-newtype $\mathcal{D}$ a b = $\mathcal{D}$($a → b \times (a \multimap b)$)
+\begin{frame}{Objective}
 
-Depois adaptamos $\mathcal{D}^{+}$ para usar este tipo de dados:
+Let's start by defining a new data type:
 
-\begin{block}{Definição adaptada}
+newtype \ensuremath{\mathcal{D}} a b = \ensuremath{\mathcal{D}} (a \ensuremath{\rightarrow } b $\times$ (a $\multimap$ b))
 
-$\mathcal{\hat{D}}$ :: (a → b) → $\mathcal{D}$ a b
+,and adapting \ensuremath{\mathcal{D}^{+}} to use it:
 
-$\mathcal{\hat{D}}$ f = $\mathcal{D}$($\mathcal{D}^{+}$ f)
-
+\begin{block}{Adapted definition}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathcal{\hat{D}}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{block}
 
-O nosso objetivo é a dedução de uma instância de categoria para $\mathcal{D}$ onde $\mathcal{\hat{D}}$ seja functor.
-
+Our objective is to deduce an instance of a Category for \ensuremath{\mathcal{D}} where \ensuremath{\mathcal{\hat{D}}} is a functor.
 
 \end{frame}
 
 
 
-\begin{frame}{Dedução da instância}
 
-Recordando os corolários 3.1 e 1.1 deduzimos que
-\begin{itemize}
-    \item (DP.1) ---- $\mathcal{D}^{+} id$ = $\lambda$a → (id a,id)
-    \item (DP.2) ----
-    
-    $\mathcal{D}^{+}(g \circ f)$ = $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$)   
-\end{itemize}
+\begin{frame}{Instance deduction}
 
-$\mathcal{\hat{D}}$ ser functor é equivalente a dizer que, para todas as funções f e g de tipos apropriados:
+Before deducing our instance we must first note that using corollaries 3.1 and 1.1 we can determine that
 
 \begin{itemize}
-    \item id = $\mathcal{\hat{D}}$ id = $\mathcal{D} (\mathcal{D}^{+} id)$
-    \item $\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f = $\mathcal{\hat{D}}$  (g $\circ$ f) = $\mathcal{D} (\mathcal{D}^{+} (g \circ f))$
+    \item (DP.1) \ensuremath{\mathcal{D}^{+}} id = $\lambda$ a -> (id a,id)
+    \item (DP.2)    
+    \ensuremath{\mathcal{D}^{+}}(g $\circ$ f) = $\lambda$ a -> let{(b,f') = \ensuremath{\mathcal{D}^{+}} f a; (c,g') = \ensuremath{\mathcal{D}^{+}} g b } 
+        in (c,g' $\circ$ f')
 \end{itemize}
 
-\end{frame}
+Saying that \ensuremath{\mathcal{\hat{D}}} is a functor is equivalent to, for all f and g functions of apropriate types:
 
+    \ensuremath{\Varid{id}\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{id})}
 
-\begin{frame}{Dedução da instância}
-
-Com base em (DP.1) e (DP.2) podemos reescrever como sendo:
-\begin{itemize}
-    \item id = $\mathcal{D} (\lambda$a → (id a,id))
-    \item $\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f = $\mathcal{D}$ ( $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$) )
-\end{itemize}
-
-Resolver a primeira equação é trivial(definir id da instância como sendo $\mathcal{D} (\lambda$a → (id a,id))).
-
-
-A segunda equação será resolvida resolvendo uma condição mais geral:
-$\mathcal{D} g \circ \mathcal{D} f$ = $\mathcal{D}$($\lambda a → let\{(b,f')$ = f a; $(c,g')$ = g b \} in $(c,g' \circ f'$)), cuja solução é igualmente trivial.
-
-
-\end{frame}
-
-\begin{frame}{Dedução da instância}
-
-
-\begin{block}{Definição de $\mathcal{\hat{D}}$ para funções lineares}
-linearD :: (a → b) → $\mathcal{D}$ a b
-
-linearD f = $\mathcal{D}$($\lambda$a → (f a,f))
-\end{block}
-
-\begin{block}{Instância da categoria que deduzimos}
-
-instance \textit{Category $\mathcal{D}$} where
-
-\hspace{0.2cm}id = linearD id
-
-\hspace{0.2cm}$\mathcal{D} g \circ \mathcal{D} f$ = $\mathcal{D}$($\lambda a → let\{(b,f')$ = f a; $(c,g')$ = g b \} in $(c,g' \circ f'$))
-
-\end{block}
+    \ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f = \ensuremath{\mathcal{\hat{D}}}  (g $\circ$ f) = \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{\hat{D}}} (g $\circ$ f))
 
 
 \end{frame}
 
 
 
-\begin{frame}{Prova da instância}
+\begin{frame}{Instance deduction}
 
-Antes de continuarmos devemos verificar se esta instância obedece às leis (C.1) e (C.2).
+Based on  (DP.1) and (DP.2) we'll rewrite the above into the following definition:
 
-Se considerarmos apenas morfismos $\hat{f}$ :: $\mathcal{D}$ a b tal que $\hat{f}$ = $\mathcal{D}^{+}$ f para f :: a → b(o que podemos garantir se transformarmos $\mathcal{D}$ a b em tipo abstrato) podemos garantir que $\mathcal{D}^{+}$ é functor.
+id = \ensuremath{\mathcal{D}} ($\lambda$ a -> (id a,id))
+
+\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f = \ensuremath{\mathcal{D}} ($\lambda$ a -> let{(b,f') = \ensuremath{\mathcal{D}^{+}} f a; (c,g') = \ensuremath{\mathcal{D}^{+}} g b} in (c,g' $\circ$ f'))
 
 
-\begin{block}{Prova de (C.1)}
+The first equation shown above has a trivial solution(define id of instance as \ensuremath{\mathcal{D}}($\lambda$ a -> (id a,id)))
 
-id $\circ \mathcal{\hat{D}}$ 
+To solve the second we'll first solve a more general one:
 
-=  $\mathcal{\hat{D}} id \circ \mathcal{\hat{D}}$ f -lei functor de id (especificação de $\mathcal{\hat{D}}$)
+\ensuremath{\mathcal{D}} g $\circ$ \ensuremath{\mathcal{D}} f = \ensuremath{\mathcal{D}}($\lambda$ a -> let{(b,f') = f a; (c,g') = g b } in(c,g' $\circ$ f'))
 
-= $\mathcal{\hat{D}}$ (id $\circ$ f) - lei functor para ($\circ$)
-
-= $\mathcal{\hat{D}}$ f - lei de categoria
-\end{block}
-
+This condition also leads us to a trivial solution inside our instance.
 
 \end{frame}
 
-\begin{frame}{Prova da instância}
 
-\begin{block}{Prova de (C.2)}
 
-$\mathcal{\hat{D}}$ h $\circ$ ($\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f)
 
-= $\mathcal{\hat{D}}$ h $\circ$ $\mathcal{\hat{D}}$ (g $\circ$ f) - lei functor para ($\circ$)
 
-= $\mathcal{\hat{D}}$ (h $\circ$ (g $\circ$ f)) - lei functor para ($\circ$)
+\begin{frame}{Instance deduction}
 
-= $\mathcal{\hat{D}}$ ((h $\circ$ g) $\circ$ f) - lei de categoria
+\begin{block}{ \ensuremath{\mathcal{\hat{D}}} definition for linear functions}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{linearD}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
 
-= $\mathcal{\hat{D}}$ (h $\circ$ g) $\circ$ $\mathcal{\hat{D}}$  f - lei functor para ($\circ$)
 
-= ($\mathcal{\hat{D}}$ h $\circ$ $\mathcal{\hat{D}}$ g) $\circ$ $\mathcal{\hat{D}}$ f - lei functor para ($\circ$)
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathrel{=}\Varid{linearD}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{Instance proof}
+
+In order to prove that the instance is correct we must check if it follows laws (C.1) and (C.2).
+
+First we must make a concession: that we only use morfisms arising from \ensuremath{\mathcal{D}^{+}}(we can force this by transforming \ensuremath{\mathcal{D}} into an abstract type).
+If we do, then \ensuremath{\mathcal{D}^{+}} is a functor.
+
+
+\begin{block}{(C.1) proof}
+
+id $\circ$ \ensuremath{\mathcal{\hat{D}}}
+
+= \ensuremath{\mathcal{\hat{D}}} id $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for id (specification of \ensuremath{\mathcal{\hat{D}}})
+
+= \ensuremath{\mathcal{\hat{D}}} (id $\circ$ f) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} f - categorical law
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Instance proof}
+
+\begin{block}{(C.2) proof}
+
+\ensuremath{\mathcal{\hat{D}}} h $\circ$ (\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f)
+
+= \ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} (g $\circ$ f) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)
+
+= \ensuremath{\mathcal{\hat{D}}} ((h $\circ$ g) $\circ$ f) - categorical law
+
+= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for ($\circ$)
+
+= (\ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for ($\circ$)
 
 \end{block}
 
-\begin{alertblock}{Nota}
-Estas provas não requerem nada de $\mathcal{D}$ e $\mathcal{\hat{D}}$ para além das leis do functor, logo nas próximas instâncias deduzidas de um functor não precisamos de voltar a realizar estas provas.
+\begin{alertblock}{Note}
+This proofs don't require anything from \ensuremath{\mathcal{D}\;\Varid{and}\;\mathcal{\hat{D}}} aside from functor laws.
+As such, all other instances of categories created from a functor won't require further proving like this onr did.
 
 \end{alertblock}
-
 \end{frame}
 
 
 
 
-\begin{frame}{Categorias e functores monoidais}
 
-A versão generalizada da composição paralela será definida através de uma categoria monoidal:
+\begin{frame}{Monoidal categories and functors}
 
-\begin{block}
-
-
-\begin{columns}
- 
-\column{0.5\textwidth}
-class \textit{Category k} $\Rightarrow$ \textit{Monoidal k} where
-
-\hspace{0.2cm}($\times$)::(a'k'c)→(b'k'd)→((a$\times$b)'k'(c$\times$d))
- 
-\column{0.4\textwidth}
-instance \textit{Monoidal (→)} where
-
-\hspace{0.2cm}$f \times g= \lambda$(a,b)→(f a,g b)  
-
-\end{columns}
-
-\end{block}
+Generalized parallel composition shall be defined using a monoidal category:
 
 
-\begin{block}{Definição de functor monoidal}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}(\Varid{x})\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a}\;\Varid{x}\;\Varid{b})\;\text{\tt 'k'}\;(\Varid{c}\;\Varid{x}\;\Varid{d})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 
-Um functor \textit{F} monoidal entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{f}\;\Varid{x}\;\Varid{g}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+
+
+\begin{block}{Monoidal Functor definition}
+
+A monoidal functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
 \begin{itemize}
-    \item \textit{F} é functor clássico
-    \item \textit{F} (f $\times$ g) = \textit{F} f $\times$ \textit{F} g
+    \item F is a functor
+    \item F (f $\times$ g) = F f $\times$ F g
 \end{itemize}
-
 \end{block}
+\end{frame}
 
+
+\begin{frame}{Instance deduction}
+
+From corollary 2.1 we can deduce that:
+
+\ensuremath{\mathcal{D}^{+}} (f $\times$ g) = $\lambda$ (a,b) -> let{(c,f')=\ensuremath{\mathcal{D}^{+}} f a;(d,g')= \ensuremath{\mathcal{D}^{+}} g b} 
+
+    in ((c,d),f' $\times$ g')
+
+Deriving F from \ensuremath{\mathcal{\hat{D}}} leaves us with the following definition:
+
+\ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} f) $\times$ \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} g) = \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} (f $\times$ g))
+
+Using the same method as before, we replace \ensuremath{\mathcal{D}^{+}} with it's definition and generalize the condition:
+
+\ensuremath{\mathcal{D}} f $\times$ \ensuremath{\mathcal{D}} g =
+
+\ensuremath{\mathcal{D}} ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))
+
+and this is enough for our new instance.
 \end{frame}
 
 
 
-\begin{frame}{Dedução da instância}
-
-A partir do corolário 2.1 deduzimos que:
-
-$\mathcal{D}^{+}$ (f $\times$ g) = $\lambda$(a,b) → let\{(c,f' )= $\mathcal{D}^{+}$ f a; (d,g') = $\mathcal{D}^{+}$ g b \} in ((c,d),f'$\times$g')
-
-Se definirmos o functor F a partir de $\mathcal{\hat{D}}$ chegamos à seguinte condição:
-
-$\mathcal{D}$($\mathcal{D}^{+}$ f) $\times$ $\mathcal{D}$($\mathcal{D}^{+}$ g) = $\mathcal{D}$($\mathcal{D}^{+}$ (f $\times$ g))
-
-Substituindo e fortalecendo-a obtemos:
-
-$\mathcal{D}$ f $\times$ $\mathcal{D}$ g = $\mathcal{D}$($\lambda$(a,b) → let\{(c,f') = f a; (d,g') =  g b \} in ((c,d),f'$\times$g'))
-
-e esta condição é suficiente para obtermos a nossa instância.
-
-\end{frame}
-
-
-\begin{frame}{Dedução da instância}
-
-\begin{block}{Instância da categoria que deduzimos}
-
-instance \textit{Monoidal $\mathcal{D}$} where
-
-\hspace{0.2cm}$\mathcal{D}$ f $\times$ $\mathcal{D}$ g = $\mathcal{D}$($\lambda$(a,b) → let\{(c,f') = f a; (d,g') =  g b \} in ((c,d),f'$\times$g'))
-
+\begin{frame}{Instance deduction}
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{38}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{f}\;\Varid{x}\;\mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\\
+\>[5]{}\hsindent{33}{}\<[38]%
+\>[38]{}\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\;\Varid{x}\;\Varid{g'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{block}
-
 \end{frame}
 
 
 
-\begin{frame}{Categorias e funtores cartesianas}
+
+\begin{frame}{Cartesian categories and functors}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{a},\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+
 
 \begin{block}
 
-\begin{columns}
- 
-\column{0.5\textwidth}
-class \textit{Monoidal k} $\Rightarrow$ \textit{Cartesean k} where
+A cartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
 
-\hspace{0.2cm}exl :: (a$\times$b)'k'a
-
-\hspace{0.2cm}exr :: (a$\times$b)'k'b
-
-\hspace{0.2cm}dup :: a'k'(a$\times$a)
- 
-\column{0.4\textwidth}
-instance \textit{Cartesean (→)} where
-
-\hspace{0.2cm}exl = $\lambda$(a,b) → a
-
-\hspace{0.2cm}exr = $\lambda$(a,b) → b
-
-\hspace{0.2cm}dup = $\lambda$a → (a,a)
-
-\end{columns}
-
-\end{block}
-
-
-\begin{block}
-
-
-Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
 \begin{itemize}
-    \item \textit{F} é functor monoidal
-    \item \textit{F} exl = exl
-    \item \textit{F} exp = exp
-    \item \textit{F} dup = dup
+    \item F is a monoidal functor
+    \item F exl = exl
+    \item F exp = exp
+    \item F dup = dup
 \end{itemize}
-
-
 \end{block}
-
-
 \end{frame}
 
 
 
 
-\begin{frame}{Dedução da instância}
+\begin{frame}{Instance deduction}
 
-Pelo corolário 3.1 e pelo facto que exl,exr e dup são linerares deduzimos que:
+From corollary 3.1 and from exl,exr and dup being linear functions we can deduce that:
 
-$\mathcal{D}^{+}$ exl $\lambda$p → (exp p, exl)
+\ensuremath{\mathcal{D}^{+}} exl = \ensuremath{\lambda \Varid{p}\rightarrow } (exl p,exl)
 
-$\mathcal{D}^{+}$ exr $\lambda$p → (exr p, exr)
+\ensuremath{\mathcal{D}^{+}} exr = \ensuremath{\lambda \Varid{p}\rightarrow } (exr p,exr)
 
-$\mathcal{D}^{+}$ dup $\lambda$a → (dup a, dup)
+\ensuremath{\mathcal{D}^{+}} dup = \ensuremath{\lambda \Varid{p}\rightarrow } (dup a,dup)
 
-Após esta dedução podemos continuar a determinar a instância:
 
-exl = $\mathcal{D}$($\mathcal{D}^{+}$ exl)
+With this in mind we can arrive at our instance:
 
-exr = $\mathcal{D}$($\mathcal{D}^{+}$ exr)
+exl = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} exl)
 
-dup = $\mathcal{D}$($\mathcal{D}^{+}$ dup)
+exr = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} exr)
+
+dup = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} dup)
 
 \end{frame}
 
 
 
-\begin{frame}{Dedução da instância} 
+\begin{frame}{Instance deduction} 
 
-Substituindo e usando a definição de linearD obtemos:
+Replacing \ensuremath{\mathcal{D}^{+}} with it's definition and remembering linearD's definition we can obtain:
 
 exl = linearD exl
 
@@ -719,66 +973,76 @@ exr = linearD exr
 
 dup = linearD dup
 
-E podemos converter a dedução acima diretamente em instância:
 
-\begin{block}{Instância da categoria que deduzimos}
+and  convert this directly into a new instance:
 
-instance \textit{Cartesian $\mathcal{D}$} where
-
-\hspace{0.2cm}exl = linearD exl
-
-\hspace{0.2cm}exr = linearD exr
-
-\hspace{0.2cm}dup = linearD dup
-
+\begin{block}{Categorical instance we've deduced}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\Varid{linearD}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\Varid{linearD}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\Varid{linearD}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{block}
-
 \end{frame}
 
 
 
-\begin{frame}{Categorias cocartesianas}
+\begin{frame}{Cocartesian category}
 
-São o dual das categorias cartesianas.
-\begin{block}{Nota}
-Neste papel os coprodutos correspondem aos produtos das categorias, i.e., categorias de biprodutos.
+This type of categories is the dual of the cartesian type of categories.
+
+\begin{block}{Note}
+In this paper coproducts are categorical products, i.e., biproducts
 \end{block}
 
-\begin{block}
-
-class \textit{Category k} $\Rightarrow$ \textit{Cocartesian k} where:
-
-\hspace{0.2cm}inl :: a'k'(a$\times$b)
-
-\hspace{0.2cm}inlr:: b'k'(a$\times$b)
-
-\hspace{0.2cm}jam :: (a$\times$a)'k'a
-
+\begin{block}{Definition}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}\mathbin{:}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inl}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inr}\mathbin{::}\Varid{b'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{block}
-
-
 \end{frame}
 
 
-\begin{frame}{Functores cocartesianos}
 
-\begin{block}{Definição de functor cocartesiano}
+\begin{frame}{Cocartesian functors}
 
+\begin{block}{Cocartesian functor definition}
 
-Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+A cocartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
 \begin{itemize}
-    \item \textit{F} é functor 
-    \item \textit{F} inl = inl
-    \item \textit{F} inr = inr
-    \item \textit{F} jam = jam
+    \item F is a functor
+    \item F inl = inl
+    \item F inr = inr
+    \item F jam = jam
 \end{itemize}
-
-
 \end{block}
-
-
 \end{frame}
 
+%Ar1
 \section{Fork and Join}
 \begin{slide}{Fork and Join}
     \begin{itemize}
@@ -1032,7 +1296,336 @@ Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ 
 \end{hscode}\resethooks
 \end{frame}
 
-% Part 2
+%Ne2
+
+\begin{frame}{Matrices}
+\vspace{10mm}
+There exists three, non-exclusive, possibilities for a nonempty matrix $W$:
+\vspace{1mm}
+\begin{itemize}
+	\item width $W$ = height $W$ = $1$;
+	\vspace{1.5mm}
+	\item W is the horizontal juxtaposition of two matrices $U$ e $V$,\\
+	 where height $W$ = height $U$ = height $V$ and\\
+	 width $W$ = width $U$ $+$ width $V$;
+	 \vspace{1.5mm}
+	\item W is the vertical juxtaposition of two matrices $U$ e $V$,\\
+	 where width $W$ = width $U$ = width $V$ and\\ 
+	 height $W$ = height $U$ $+$ height $V$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Extracting a Data Representation}
+\vspace{15mm}
+
+%In addition to what we have used so far, we also need a Data Representation. 
+In machine learning, a Gradient-based optimization works by searching for local
+minima in the domain of a differentiable function $f :: a \to s$. Each step in the search is in the direction opposite of the gradient of $f$, which is a vector form of $\mathcal{D} f$.
+
+\pause
+\vspace{5mm}
+Given a linear map  $f' :: U \multimap V$ represented as a function, it is possible to extract a Jacobian
+matrix by applying $f$ to every vector in a basis of $U$.
+
+\end{frame}
+
+\begin{frame}{Generalized Matrices}
+\vspace{18mm}
+Given a scalar field $s$, a free vector space has the form $p \to s$ for some $p$, where the
+cardinality of $p$ is the dimension of the vector space and there exists a finite number of values for $p$.
+
+\pause
+
+\vspace{5mm}
+
+In particular, we can represent vector spaces over a given field as a representable functor, i.e., a functor F such that $\exists p$ $\forall s$ $F$ $s$ $\cong$ $p \to s$.
+\end{frame}
+
+%Ez2
+\section{Reverse-Mode Automatic Differentiation(RAD)}
+
+
+\begin{frame}{A short introdution}
+
+\begin{itemize}
+    \item<1-> In chapter 4 we've derived an AD algorithm that was generalized in figure 6 of the document
+    \item<2-> With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
+    \item<3-> We want to obtain generalized FAD and RAD algorithms 
+    \item<4-> How do we describe this in Categorical notation?
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Converting morfisms}
+
+Given a category k we can represent its morfisms the following way:
+
+\begin{block}{Left-Compose functions}
+f :: a'k'b \ensuremath{\Rightarrow} ($\circ$ f) :: (b'k'r) \ensuremath{\rightarrow } (a'k'r) where r is any object of k.
+\end{block}
+
+If h is the morfism we'll compose with f then h is the continuation of f.
+\end{frame}
+
+
+
+
+\begin{frame}{Instance deduction}
+
+\begin{block}{Defining new type}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{newtype}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b'k'r})\rightarrow (\Varid{a'k'r})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+\begin{block}{Functor derived from type}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow \Conid{Cont}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{id}\mathrel{=}\Conid{Cont}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Conid{Cont}\;\Varid{g}\mathbin{\circ}\Conid{Cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Conid{Conf}\;\Varid{f}\;\Varid{x}\;\Conid{Cont}\;\Varid{g}\mathrel{=}\Conid{Cont}\;( \nabla \mathbin{\circ}(\Varid{f}\;\Varid{x}\;\Varid{g})\mathbin{\circ}\Varid{unjoin}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{exl}\mathrel{=}\Conid{Cont}\;( \nabla \mathbin{\circ}\Varid{inl});\Varid{exr}\mathrel{=}\Conid{Cont}\;( \nabla \mathbin{\circ}\Varid{inr}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{dup}\mathrel{=}\Conid{Cont}\;(\Varid{jam}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{inl}\mathrel{=}\Conid{Cont}\;(\Varid{exl}\mathbin{\circ}\Varid{unjoin});\Varid{inr}\mathrel{=}\Conid{Cont}\;(\Varid{exr}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{jam}\mathrel{=}\Conid{Cont}\;( \nabla \mathbin{\circ}\Varid{dup}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\Rightarrow\Conid{Scalable}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Cont}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{frame}
+
+
+
+
+
+
+
+\section{Gradient and Duality}
+
+\begin{frame}{A short introdution}
+
+Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
+
+A vector space A over a scalar field has A $\multimap$ s as its dual.
+
+Each linear map in A $\multimap$ s can be represented in the form of dot u for some u :: A where
+
+\begin{block}{Definition and instanciation}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{HasDot}\;(\Conid{S})\;\Varid{u}\;\mathbf{where}\;\Varid{dot}\mathbin{::}\Varid{u}\rightarrow (\Varid{u}\mathbin{-} \circ \;\Varid{s}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{HasDot}\;(\Conid{IR})\;\Conid{IR}\;\mathbf{where}\;\Varid{dot}\mathrel{=}\Varid{scale}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Rightarrow\Conid{HasDot}\;(\Conid{S})\;(\Varid{a}\;\Varid{x}\;\Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{dot}\;(\Varid{u},\Varid{v})\mathrel{=}\Varid{dot}\;\Varid{u}\; \Delta \;\Varid{dot}\;\Varid{v}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+
+The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) -> (a $\multimap$ s) which is isomorfic to (a -> b).
+
+\begin{block}{Type definition for duality}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{newtype}\;\Conid{Dual}\;(\Conid{K})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b'k'a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Instance deduction}
+
+All we need to do to create dual representations of linear maps is to
+convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor:
+
+\begin{block}{Functor definition}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{asDual}\mathbin{::}(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b})\Rightarrow{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}((\Varid{b}\mathbin{-} \circ \;\Varid{s})\rightarrow (\Varid{a}\mathbin{-} \circ \;\Varid{s}))\rightarrow (\Varid{b}\mathbin{-} \circ \;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\Varid{asDual}\;(\Conid{Cont}\;\Varid{f})\mathrel{=}\Conid{Dual}\;(\Varid{onDot}\;\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+where
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{onDot}\mathbin{::}(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b})\Rightarrow{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}((\Varid{b}\mathbin{-} \circ \;\Varid{s})\rightarrow (\Varid{a}\mathbin{-} \circ \;\Varid{s}))\rightarrow (\Varid{b}\mathbin{-} \circ \;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\Varid{onDot}\;\Varid{f}\mathrel{=}\Varid{dot}\mathbin{\char94 -}\mathrm{1}\mathbin{\circ}\Varid{f}\mathbin{\circ}\Varid{dot}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{21}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{39}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;\Conid{Dual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{id}\mathrel{=}\Conid{Dual}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Conid{Dual}\;\Varid{g}\mathbin{\circ}\Conid{Dual}\;\Varid{f}\mathrel{=}\Conid{Dual}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Conid{Dual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Conid{Dual}\;\Varid{f}\;\Varid{x}\;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\;\Varid{x}\;\Varid{g}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Conid{Dual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{exl}\mathrel{=}\Conid{Dual}\;\Varid{inl};{}\<[21]%
+\>[21]{}\Varid{exr}\mathrel{=}\Conid{Dual}\;\Varid{inr};{}\<[39]%
+\>[39]{}\Varid{dup}\mathrel{=}\Conid{Dual}\;\Varid{jam}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{CocartesianDual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{inl}\mathrel{=}\Conid{Dual}\;\Varid{exl};\Varid{inr}\mathrel{=}\Conid{Dual}\;\Varid{exr};\Varid{jam}\mathrel{=}\Conid{Dual}\;\Varid{dup}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\Rightarrow\Conid{Scalable}\;\Conid{Dual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Dual}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{frame}
+
+
+
+\begin{frame}{Final notes}
+
+\begin{itemize}
+  \item \ensuremath{ \nabla \;\Varid{and}\; \Delta } mutually dualize 
+  
+  \ensuremath{(\Conid{Dual}\;\Varid{f}\; \nabla \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \Delta \;\Varid{g})\;\Varid{and}\;\Conid{Dual}\;\Varid{f}\; \Delta \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \nabla \;\Varid{g}))}
+  \item Using the definition from chapter 8 we can determine that the duality of a matrix corresponds to it's transposition
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+
+
+\section{Foward-Mode Automatic Differentiation(FAD)}
+
+\begin{frame}{Fowards-mode Automatic Differentiation(FAD)}
+
+We can use the same deductions we've done in Cont and Dual to derive a category with full right-side association, thus creating a generized FAD algorithm.
+
+This algorithm is far more apropriated for low dimention domains.
+
+
+\begin{block}{Type definition and functor from type}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{newtype}\;\Conid{Begin}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r'k'a})\rightarrow (\Varid{r'k'b})){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow \Conid{Begin}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{begin}\;\Varid{f}\mathrel{=}\Conid{Begin}\;(\Varid{f}\mathbin{\circ}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
+We can derive categorical instances from the functor above and we can choose r to be the scalar field s, noting that s $\multimap$ a is isomorfic to a.
+
+
+\end{frame}
+
+%Ar2
 \section{Scaling Up}
 \begin{frame}
 \begin{itemize}

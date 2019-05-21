@@ -18,6 +18,20 @@
 % does not look nice, try deleting the line with the fontenc.
 \usepackage[all]{xy}
 
+\newtheorem{teor}{Theorem}[section]
+\newtheorem{coro}{Corollary}[section]
+\theoremstyle{definition}
+\newtheorem{defi}{Definition}[section]
+\theoremstyle{definition}
+\newtheorem{exemplo}{example}[section]
+\theoremstyle{theorem}
+\newtheorem{propo}{Proposicion}[section]
+\newtheorem{nota}{Note}[section]
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
 %---------- lhs2tex ---------------------------------
 %include polycode.fmt
 %format -> = "\rightarrow "
@@ -81,7 +95,7 @@
   \titlepage
 \end{frame}
 
-\begin{frame}{Indice}
+\begin{frame}{Index}
   \tableofcontents
 \end{frame}
 
@@ -90,37 +104,222 @@
 % - Talk about 30s to 2min per frame. So there should be between about
 %   15 and 30 frames, all told.
 
-\section{Nelson}
+%Ne1
 
-\begin{frame}{titulo}
+\begin{frame}
+\frametitle{Definition of Derivative}
+\vspace{5mm}
+
+\begin{defi}
+		Let $f:\R \to \R$ be a function. The derivative of $f$ at point $x \in \R$ is defined the following way:
+	\begin{align*}
+	\textit{$f $$'$ $(x)$} = \ \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon}
+	\end{align*}
+\end{defi}
+\vspace{5mm}
+\pause
+This definition will also work with functions of types $\C \hspace{0.5mm}\to \C$ and $\R\hspace{0.6mm} \to \R^{n}$.
+
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Definition of Derivative}
+\vspace{10mm}
+For functions $F$ of types $\R^{m}\hspace{-0.3mm} \to \R$ and $\R^{m}\hspace{-0.3mm}\to \R^{n}$ (with $n>1$), we need a different definition.
+\pause
+\vspace{1mm}
+    \begin{itemize}
+    \item  For functions of type $\R^{m}\hspace{-0.3mm} \to \R$, it is necessary the introduction of the notion of parcial derivatives, $\frac{\partial F}{\partial x_{j}}\hspace{0.3mm}$, with $j \in$ \{$1,...,m$\}.
+    
+    \pause
+    \vspace{3mm}
+    \item For functions of type $\R^{m}\hspace{-0.3mm}\to \R^{n}$ (with $n>1$), apart from the use of parcial derivatives, it is necessary the use of Jacobian matrices $\mathbf{J}_{i,j} =\frac{\partial F_{i}}{\partial x_{j}}$, where $i \in$ \{$1,...,n$\} and $F_{i}$ is a function $\R^{m}\hspace{-0.3mm}\to \R$.
+    \end{itemize} 
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Generalization and Chain Rule}
+\vspace{15mm}
+Let $\mathbf{A}$ and $\mathbf{B}$ be two Jacobian matrices. 
+
+The chain rule in $\R^{m}\hspace{-0.3mm}\to \R^{n}$ is:
+\begin{align*}
+(\mathbf{A} \cdotp \mathbf{B})_{i,j}= \sum_{k=1}^{m} \mathbf{A}_{i,k} \cdotp \mathbf{B}_{k,j}
+\end{align*}
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Generalization and Chain Rule}
+\vspace{15mm}
+Assuming that the notion of derivates that we need matches with a linear map, where it is accepted the chain rule previously seen, we will define a new generalization:
+\pause
+
+\begin{align*}
+\hspace{-2mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon} - \textit{$f $$'$ $(x)$} = 0 \hspace{0.5mm} 
+\Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f $$'$ $(x)$}}{\varepsilon} = 0 \\
+& 
+\hspace{-5.9cm}  \Leftrightarrow  
+\lim_{\varepsilon \to 0} 
+\frac{
+\norm{ \textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f'(x)$} } 
+}{
+\norm{ \varepsilon }
+} 
+= 0
+\end{align*}
+
+\end{frame}
+%%%
+\begin{frame}
+\begin{center}
+	\frametitle{Derivate as a linear map} 
+\end{center}
+\begin{defi}
+	Let $f::a \to b$ be a function, where $a$ and $b$ are vetorial spaces that share a common underlying field. The first derivate definition is the following:
+	\begin{align*} 
+	\mathcal{D} :: (a \to b) \to (a \to (a \multimap b))
+	\end{align*}
+	If we differentiate two times vezes, we have:
+	\begin{align*} 
+	 \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a \multimap a \multimap b ))
+	\end{align*}
+\end{defi}
 \end{frame}
 
+\begin{frame}
+\frametitle{Rules for Differentiation - Sequential Composition}
+\vspace{15mm}
+\begin{teor}
+	
+	Let $f:: a \to b$ and $g:: b \to c$ be two functions. Then the derivative of the composition of $f$ e $g$ is:
+	\begin{align*}
+	\mathcal{D} \ (g \circ f ) \ a= \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.6mm} \circ \hspace{0.6mm} \mathcal{D} \hspace{0.6mm} f \ a
+	\end{align*}
+\end{teor}
+\end{frame}
+\begin{frame}
+\frametitle{Rules for Differentiation - Sequential Composition}
+\vspace{10mm}
+Unfortunately the previous theorem isn't a efficient recipe for composition, and now we will introduce a second derivate definition:
+\begin{align*}
+\mathcal{D}_{0}^{+} :: (a \to b) \to ((a \to b) \times (a \to (a \multimap b))) \\
+& \hspace{-6.18cm} \mathcal{D}_{0}^{+} \hspace{0.5mm} f =(f,\hspace{0.2mm} \mathcal{D} f)
+\end{align*}
+\pause
 
+With this, the chain rule will have the following expression:
 
+$\mathcal{D}_{0}^{+} \hspace{0.5mm} (g \circ f) $ =
+
+$= (g \circ f,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} (g \circ f) \hspace{0.5mm})$ \hspace{3.17cm} (definition of $\mathcal{D}_{0}^{+}$)
+
+$= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.5mm} \circ \hspace{0.5mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )$ \hspace{1.5mm} (theorem and definition of $g \circ f$)
+\end{frame}
+\begin{frame}
+\frametitle{Rules for Differentiation - Sequential Composition} 
+\vspace{9mm}
+Having in mind optimizations, we introduce the third and last derivate definition:
+\begin{align*}
+\mathcal{D}^{+} :: (a \to b) \to (a \to (b \times (a \multimap b))) \\
+& \hspace{-5cm}\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )
+\end{align*}
+\pause
+
+As $\times$ has more priority than $\to$ e $\multimap$, we can rewrite $\mathcal{D}^{+} $ as:
+\begin{align*}
+\mathcal{D}^{+} :: (a \to b) \to (a \to b \times (a \multimap b))  \\
+& \hspace{-5cm}\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )
+\end{align*}
+\end{frame}
+\begin{frame}
+\frametitle{Rules for Differentiation - Sequential Composition} 
+\vspace{15mm}
+\begin{coro}
+	$\mathcal{D}^{+}$ is efficiently compositional in relation to $(\circ)$, that is, in Haskell:
+	\begin{align*}
+	 \mathcal{D}^{+} \hspace{0.5mm} (g \circ f) \hspace{0.9mm} a = \textbf{let} \hspace{0.5mm} \{(b,\hspace{0.2mm} f') = \mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a; \hspace{0.5mm} (c,\hspace{0.2mm} g')=\mathcal{D}^{+} \hspace{0.5mm} g \hspace{0.9mm} b \} \hspace{1mm} \textbf{in} \hspace{1mm} (c,\hspace{0.2mm} g' \circ f') 
+	\end{align*}
+\end{coro}
+\end{frame}
+\begin{frame}
+\frametitle{Rules for Differentiation - Parallel Composition} 
+\vspace{10mm}
+Another important way of combining functions is the operation cross, that combines two functions in parallel:
+\begin{align*}
+(\boldsymbol{\times}) :: (a \to c) \to (b \to d) \to (a \times b \to c \times d) \\
+& \hspace{-6.23cm}f \boldsymbol{\times} g = \lambda(a,\hspace{0.5mm} b) \to (f \hspace{0.5mm} a,\hspace{0.2mm} g \hspace{0.5mm} b) 
+\end{align*}
+\pause
+\begin{teor}	
+	Let $f :: a \to c$ and $g :: b \to d$ be two function. Then the cross rule is the following:
+	\begin{align*}
+	\mathcal{D} \hspace{0.5mm} (f \boldsymbol{\times} g) \hspace{0.5mm} (a,\hspace{0.2mm} b) = \mathcal{D} \hspace{0.5mm} f \hspace{0.9mm} a \boldsymbol{\times} \mathcal{D} \hspace{0.5mm} g \hspace{0.9mm} b
+	\end{align*}
+\end{teor}
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Rules for Differentiation - Parallel Composition} 
+\vspace{15mm}
+\begin{coro}
+	The function $\mathcal{D}^{+}$ is compositional in relation to $(\boldsymbol{\times})$
+	\begin{align*}
+	 \mathcal{D}^{+} \hspace{0.5mm} (f \boldsymbol{\times} g) \hspace{0.9mm} (a,\hspace{0.2mm} b) = \textbf{let} \hspace{0.5mm} \{(c,\hspace{0.2mm} f') = \mathcal{D}^{+} \hspace{0.3mm} f \hspace{0.7mm} a; \hspace{0.5mm} (d,\hspace{0.2mm} g')=\mathcal{D}^{+} \hspace{0.3mm} g \hspace{0.7mm} b \} \hspace{0.8mm} \textbf{in} \hspace{0.8mm}  ((c,\hspace{0.2mm} d), \hspace{0.2mm} f' \boldsymbol{\times} g') 
+	\end{align*}
+\end{coro}
+\end{frame}
+%%%
+\begin{frame}
+\frametitle{Derivative e Linear Functions} 
+\vspace{5mm}
+\begin{defi}
+	A function $f$ is said to be linear when preserves addition and scalar multiplication.
+	\vspace{2mm}
+	
+	\hspace{5mm} $f(a + a')= f \hspace{0.5mm} a + f \hspace{0.5mm} a'$
+	
+	\vspace{1mm}
+	\hspace{5mm} $f(s \cdot a)= s \cdot f \hspace{0.5mm} a$
+
+\end{defi}
+\pause
+\vspace{4mm}
+\begin{teor}
+	For all linear functions $f$, $\mathcal{D} \hspace{0.5mm} f \hspace{0.9mm} a = f $.
+\end{teor}
+\pause
+\vspace{2mm}
+\begin{coro}
+	For all linear functions  $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
+
+\end{coro}
+\end{frame}
+
+%Ez1
 \section{Categories}
 
-\begin{frame}{Uma curta introdução}
+\begin{frame}{A short introdution}
 \begin{itemize}
- \item<1-> Queremos calcular $\mathcal{D}^{+}$.
- \item<2-> Problema: $\mathcal{D}$ não é computável.
- \item<3-> Solução: observar corolários apresentados e implementar recorrendo a categorias.
+ \item<1-> We want to calculate |bigD|.
+ \item<2-> However, |bigD| is not computable.
+ \item<3-> Solution: reimplement corollaries using category theory
 \end{itemize}
 
 \end{frame}
 
 
 
-\begin{frame}{Uma curta introdução}
+\begin{frame}{A short introdution}
 
-    \begin{block}{Corolário 1.1}
+    \begin{block}{Corollary 1.1}
     NOTA: adicionar definição do corolário 1.1 aqui
     \end{block}
     
-    \begin{block}{Corolário 2.1}
+    \begin{block}{Corollary 2.1}
     NOTA: adicionar definição do corolário 2.1 aqui
     \end{block}
     
-    \begin{block}{Corolário 3.1}
+    \begin{block}{Corollary 3.1}
     NOTA: adicionar definição do corolário 3.1 aqui
     \end{block}
  
@@ -128,345 +327,338 @@
 
 
 
-\begin{frame}{Categorias clássicas}
 
-Uma categoria é um conjunto de objetos(conjuntos e tipos) e de morfismos(operações entre objetos), tendo definidas 2 operações básicas, identidade e composição de morfismos, e 2 leis:
+\begin{frame}{Categories}
+
+A category is a collection of objects(sets and types) and morphisms(operation between objects),
+with 2 basic operations(identity and composition) of morfisms, and 2 laws:
 
 \begin{itemize}
-    \item<1-> (C.1) ---- $id \circ f = id \circ f = f$ 
-    \item<2-> (C.2) ---- $f \circ (g \circ h) = (f \circ g) \circ h$
+    \item (C.1)  $id \circ f = id \circ f = f$
+    \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
-
-\begin{block}
-
-Para os efeitos deste papel, objetos são tipos de dados e morfismos são funções
-
+\begin{block}{Note}
+For this paper, objects are data types and morfisms are functions
 \end{block}
-
-\begin{block}
 
 \begin{columns}
- 
-\column{0.5\textwidth}
-class \textit{Category k} where
+\begin{column}{0.5\textwidth}
+\begin{code}
+class Category k where
+    id::(a'k'a)
+    (.)::(b'k'c)->(a'k'b)->(a'k'c)
+\end{code}
+\end{column}
 
-\hspace{0.2cm}id :: (a'k'a)
-    
-\hspace{0.2cm}($\circ$) :: (b'k'c) → (a'k'b) → (a'k'c)
- 
-\column{0.5\textwidth}
-instance \textit{Category (→)} where
-
-\hspace{0.2cm}id = $\lambda$a → a 
-
-\hspace{0.2cm}$g \circ f = \lambda$a → g (f a)  
-
+\begin{column}{0.5\textwidth}
+\begin{code}
+instance Category (->) where
+    id = \a -> a 
+    g . f = \a -> g (f a)  
+\end{code}
+\end{column}
 \end{columns}
-
-\end{block}
-
 \end{frame}
 
 
 
 
-\begin{frame}{Functores clássicos}
+\begin{frame}{Functors}
 
-
-Um functor \textit{F} entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+A functor F between 2 categories |bigU and bigV| is such that:
 \begin{itemize}
-    \item para qualquer objeto t $\in \mathcal{U}$ temos que \textit{F} t $\in \mathcal{V}$
-    \item para qualquer morfismo m :: a → b $\in \mathcal{U}$ temos que \textit{F} m :: \textit{F} a → \textit{F} b $\in \mathcal{V}$
-    \item \textit{F} id ($\in \mathcal{U}$) = id ($\in \mathcal{V}$)
-    \item \textit{F} ($f \circ g$) = \textit{F} f $\circ$ \textit{F} g
+    \item given any object t $\in$ |bigU| there exists an object F t $\in$ |bigV|
+    \item given any morphism m :: a |->| b $\in$ |bigU| there exists a morphism F m :: F a |->| F b $\in$ |bigV|
+    \item F id ($\in$ |bigU|) = id ($\in$ |bigV|)
+    \item F (f $\circ$ g) = F f $\circ$ F g
 \end{itemize}
 
-
-\begin{block}{Nota}
-Devido à definição de categoria deste papel(objetos são tipos de dados) os functores mapeiam tipos neles próprios.
+\begin{block}{Note}
+Given this papers category properties(objects are data types) functors map types to themselves
 \end{block}
 
 \end{frame}
 
-\begin{frame}{Objetivo}
 
-Começamos por definir um novo tipo de dados:
 
-newtype $\mathcal{D}$ a b = $\mathcal{D}$($a → b \times (a \multimap b)$)
+\begin{frame}{Objective}
 
-Depois adaptamos $\mathcal{D}^{+}$ para usar este tipo de dados:
+Let's start by defining a new data type:
 
-\begin{block}{Definição adaptada}
+newtype |bigD| a b = |bigD| (a |->| b $\times$ (a $\multimap$ b))
 
-$\mathcal{\hat{D}}$ :: (a → b) → $\mathcal{D}$ a b
+,and adapting |bigDplus| to use it:
 
-$\mathcal{\hat{D}}$ f = $\mathcal{D}$($\mathcal{D}^{+}$ f)
+\begin{block}{Adapted definition}
+\begin{code}
 
+bigDhat :: (a -> b) -> bigD a b
+bigDhat f = bigD(bigDplus f)
+
+\end{code}
 \end{block}
 
-O nosso objetivo é a dedução de uma instância de categoria para $\mathcal{D}$ onde $\mathcal{\hat{D}}$ seja functor.
-
+Our objective is to deduce an instance of a Category for |bigD| where |bigDhat| is a functor.
 
 \end{frame}
 
 
 
-\begin{frame}{Dedução da instância}
 
-Recordando os corolários 3.1 e 1.1 deduzimos que
-\begin{itemize}
-    \item (DP.1) ---- $\mathcal{D}^{+} id$ = $\lambda$a → (id a,id)
-    \item (DP.2) ----
-    
-    $\mathcal{D}^{+}(g \circ f)$ = $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$)   
-\end{itemize}
+\begin{frame}{Instance deduction}
 
-$\mathcal{\hat{D}}$ ser functor é equivalente a dizer que, para todas as funções f e g de tipos apropriados:
+Before deducing our instance we must first note that using corollaries 3.1 and 1.1 we can determine that
 
 \begin{itemize}
-    \item id = $\mathcal{\hat{D}}$ id = $\mathcal{D} (\mathcal{D}^{+} id)$
-    \item $\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f = $\mathcal{\hat{D}}$  (g $\circ$ f) = $\mathcal{D} (\mathcal{D}^{+} (g \circ f))$
+    \item (DP.1) |bigDplus| id = $\lambda$ a -> (id a,id)
+    \item (DP.2)    
+    |bigDplus|(g $\circ$ f) = $\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b } 
+        in (c,g' $\circ$ f')
 \end{itemize}
 
-\end{frame}
+Saying that |bigDhat| is a functor is equivalent to, for all f and g functions of apropriate types:
 
+    |id = bigDhat id = bigD (bigDplus id)|
 
-\begin{frame}{Dedução da instância}
-
-Com base em (DP.1) e (DP.2) podemos reescrever como sendo:
-\begin{itemize}
-    \item id = $\mathcal{D} (\lambda$a → (id a,id))
-    \item $\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f = $\mathcal{D}$ ( $\lambda a → let\{(b,f')$ = $\mathcal{D}^{+}$ f a; $(c,g') = \mathcal{D}^{+}$ g b \} in $(c,g' \circ f'$) )
-\end{itemize}
-
-Resolver a primeira equação é trivial(definir id da instância como sendo $\mathcal{D} (\lambda$a → (id a,id))).
-
-
-A segunda equação será resolvida resolvendo uma condição mais geral:
-$\mathcal{D} g \circ \mathcal{D} f$ = $\mathcal{D}$($\lambda a → let\{(b,f')$ = f a; $(c,g')$ = g b \} in $(c,g' \circ f'$)), cuja solução é igualmente trivial.
-
-
-\end{frame}
-
-\begin{frame}{Dedução da instância}
-
-
-\begin{block}{Definição de $\mathcal{\hat{D}}$ para funções lineares}
-linearD :: (a → b) → $\mathcal{D}$ a b
-
-linearD f = $\mathcal{D}$($\lambda$a → (f a,f))
-\end{block}
-
-\begin{block}{Instância da categoria que deduzimos}
-
-instance \textit{Category $\mathcal{D}$} where
-
-\hspace{0.2cm}id = linearD id
-
-\hspace{0.2cm}$\mathcal{D} g \circ \mathcal{D} f$ = $\mathcal{D}$($\lambda a → let\{(b,f')$ = f a; $(c,g')$ = g b \} in $(c,g' \circ f'$))
-
-\end{block}
+    |bigDhat| g $\circ$ |bigDhat| f = |bigDhat|  (g $\circ$ f) = |bigD| (|bigDhat| (g $\circ$ f))
 
 
 \end{frame}
 
 
 
-\begin{frame}{Prova da instância}
+\begin{frame}{Instance deduction}
 
-Antes de continuarmos devemos verificar se esta instância obedece às leis (C.1) e (C.2).
+Based on  (DP.1) and (DP.2) we'll rewrite the above into the following definition:
 
-Se considerarmos apenas morfismos $\hat{f}$ :: $\mathcal{D}$ a b tal que $\hat{f}$ = $\mathcal{D}^{+}$ f para f :: a → b(o que podemos garantir se transformarmos $\mathcal{D}$ a b em tipo abstrato) podemos garantir que $\mathcal{D}^{+}$ é functor.
+id = |bigD| ($\lambda$ a -> (id a,id))
+
+|bigDhat| g $\circ$ |bigDhat| f = |bigD| ($\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b} in (c,g' $\circ$ f'))
 
 
-\begin{block}{Prova de (C.1)}
+The first equation shown above has a trivial solution(define id of instance as |bigD|($\lambda$ a -> (id a,id)))
 
-id $\circ \mathcal{\hat{D}}$ 
+To solve the second we'll first solve a more general one:
 
-=  $\mathcal{\hat{D}} id \circ \mathcal{\hat{D}}$ f -lei functor de id (especificação de $\mathcal{\hat{D}}$)
+|bigD| g $\circ$ |bigD| f = |bigD|($\lambda$ a -> let{(b,f') = f a; (c,g') = g b } in(c,g' $\circ$ f'))
 
-= $\mathcal{\hat{D}}$ (id $\circ$ f) - lei functor para ($\circ$)
-
-= $\mathcal{\hat{D}}$ f - lei de categoria
-\end{block}
-
+This condition also leads us to a trivial solution inside our instance.
 
 \end{frame}
 
-\begin{frame}{Prova da instância}
 
-\begin{block}{Prova de (C.2)}
 
-$\mathcal{\hat{D}}$ h $\circ$ ($\mathcal{\hat{D}}$ g $\circ$ $\mathcal{\hat{D}}$ f)
 
-= $\mathcal{\hat{D}}$ h $\circ$ $\mathcal{\hat{D}}$ (g $\circ$ f) - lei functor para ($\circ$)
 
-= $\mathcal{\hat{D}}$ (h $\circ$ (g $\circ$ f)) - lei functor para ($\circ$)
+\begin{frame}{Instance deduction}
 
-= $\mathcal{\hat{D}}$ ((h $\circ$ g) $\circ$ f) - lei de categoria
+\begin{block}{ |bigDhat| definition for linear functions}
+\begin{code}
+linearD :: (a -> b) -> bigD a b
+linearD f = bigD(\a -> (f a,f))
+\end{code}
+\end{block}
 
-= $\mathcal{\hat{D}}$ (h $\circ$ g) $\circ$ $\mathcal{\hat{D}}$  f - lei functor para ($\circ$)
 
-= ($\mathcal{\hat{D}}$ h $\circ$ $\mathcal{\hat{D}}$ g) $\circ$ $\mathcal{\hat{D}}$ f - lei functor para ($\circ$)
+\begin{block}{Categorical instance we've deduced}
+\begin{code}
+instance Category bigD where
+    id = linearD id
+    bigD g . bigD f = 
+    bigD( \a -> let{(b,f') = f a;(c,g') = g b} in (c,g' . f'))
+\end{code}
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{Instance proof}
+
+In order to prove that the instance is correct we must check if it follows laws (C.1) and (C.2).
+
+First we must make a concession: that we only use morfisms arising from |bigDplus|(we can force this by transforming |bigD| into an abstract type).
+If we do, then |bigDplus| is a functor.
+
+
+\begin{block}{(C.1) proof}
+
+id $\circ$ |bigDhat|
+
+= |bigDhat| id $\circ$ |bigDhat| f - functor law for id (specification of |bigDhat|)
+
+= |bigDhat| (id $\circ$ f) - functor law for ($\circ$)
+
+= |bigDhat| f - categorical law
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Instance proof}
+
+\begin{block}{(C.2) proof}
+
+|bigDhat| h $\circ$ (|bigDhat| g $\circ$ |bigDhat| f)
+
+= |bigDhat| h $\circ$ |bigDhat| (g $\circ$ f) - functor law for ($\circ$)
+
+= |bigDhat| (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)
+
+= |bigDhat| ((h $\circ$ g) $\circ$ f) - categorical law
+
+= |bigDhat| (h $\circ$ g) $\circ$ |bigDhat| f - functor law for ($\circ$)
+
+= (|bigDhat| h $\circ$ |bigDhat| g) $\circ$ |bigDhat| f - functor law for ($\circ$)
 
 \end{block}
 
-\begin{alertblock}{Nota}
-Estas provas não requerem nada de $\mathcal{D}$ e $\mathcal{\hat{D}}$ para além das leis do functor, logo nas próximas instâncias deduzidas de um functor não precisamos de voltar a realizar estas provas.
+\begin{alertblock}{Note}
+This proofs don't require anything from |bigD and bigDhat| aside from functor laws.
+As such, all other instances of categories created from a functor won't require further proving like this onr did.
 
 \end{alertblock}
-
 \end{frame}
 
 
 
 
-\begin{frame}{Categorias e functores monoidais}
 
-A versão generalizada da composição paralela será definida através de uma categoria monoidal:
+\begin{frame}{Monoidal categories and functors}
 
-\begin{block}
-
-
-\begin{columns}
- 
-\column{0.5\textwidth}
-class \textit{Category k} $\Rightarrow$ \textit{Monoidal k} where
-
-\hspace{0.2cm}($\times$)::(a'k'c)→(b'k'd)→((a$\times$b)'k'(c$\times$d))
- 
-\column{0.4\textwidth}
-instance \textit{Monoidal (→)} where
-
-\hspace{0.2cm}$f \times g= \lambda$(a,b)→(f a,g b)  
-
-\end{columns}
-
-\end{block}
+Generalized parallel composition shall be defined using a monoidal category:
 
 
-\begin{block}{Definição de functor monoidal}
+\begin{code}
 
-Um functor \textit{F} monoidal entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+
+class Category k => Monoidal k where
+    (x) :: (a 'k' c) -> (b 'k' d) -> ((a x b) 'k' (c x d)) 
+
+\end{code}
+
+\begin{code}
+
+instance Monoidal (->) where
+    f x g = \(a,b) -> (f a,g b)
+
+\end{code}
+
+
+
+\begin{block}{Monoidal Functor definition}
+
+A monoidal functor F between categories |bigU and bigV| is such that:
 \begin{itemize}
-    \item \textit{F} é functor clássico
-    \item \textit{F} (f $\times$ g) = \textit{F} f $\times$ \textit{F} g
+    \item F is a functor
+    \item F (f $\times$ g) = F f $\times$ F g
 \end{itemize}
-
 \end{block}
+\end{frame}
 
+
+\begin{frame}{Instance deduction}
+
+From corollary 2.1 we can deduce that:
+
+|bigDplus| (f $\times$ g) = $\lambda$ (a,b) -> let{(c,f')=|bigDplus| f a;(d,g')= |bigDplus| g b} 
+
+    in ((c,d),f' $\times$ g')
+
+Deriving F from |bigDhat| leaves us with the following definition:
+
+|bigD| (|bigDplus| f) $\times$ |bigD| (|bigDplus| g) = |bigD| (|bigDplus| (f $\times$ g))
+
+Using the same method as before, we replace |bigDplus| with it's definition and generalize the condition:
+
+|bigD| f $\times$ |bigD| g =
+
+|bigD| ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))
+
+and this is enough for our new instance.
 \end{frame}
 
 
 
-\begin{frame}{Dedução da instância}
+\begin{frame}{Instance deduction}
+\begin{block}{Categorical instance we've deduced}
+\begin{code}
 
-A partir do corolário 2.1 deduzimos que:
+instance Monoidal bigD where
+    bigD f x bigD g = bigD(\(a,b) -> let{(c,f') = f a;(d,g') = g b} 
+                                     in ((c,d),f' x g'))
 
-$\mathcal{D}^{+}$ (f $\times$ g) = $\lambda$(a,b) → let\{(c,f' )= $\mathcal{D}^{+}$ f a; (d,g') = $\mathcal{D}^{+}$ g b \} in ((c,d),f'$\times$g')
-
-Se definirmos o functor F a partir de $\mathcal{\hat{D}}$ chegamos à seguinte condição:
-
-$\mathcal{D}$($\mathcal{D}^{+}$ f) $\times$ $\mathcal{D}$($\mathcal{D}^{+}$ g) = $\mathcal{D}$($\mathcal{D}^{+}$ (f $\times$ g))
-
-Substituindo e fortalecendo-a obtemos:
-
-$\mathcal{D}$ f $\times$ $\mathcal{D}$ g = $\mathcal{D}$($\lambda$(a,b) → let\{(c,f') = f a; (d,g') =  g b \} in ((c,d),f'$\times$g'))
-
-e esta condição é suficiente para obtermos a nossa instância.
-
-\end{frame}
-
-
-\begin{frame}{Dedução da instância}
-
-\begin{block}{Instância da categoria que deduzimos}
-
-instance \textit{Monoidal $\mathcal{D}$} where
-
-\hspace{0.2cm}$\mathcal{D}$ f $\times$ $\mathcal{D}$ g = $\mathcal{D}$($\lambda$(a,b) → let\{(c,f') = f a; (d,g') =  g b \} in ((c,d),f'$\times$g'))
-
+\end{code}
 \end{block}
-
 \end{frame}
 
 
 
-\begin{frame}{Categorias e funtores cartesianas}
 
-\begin{block}
+\begin{frame}{Cartesian categories and functors}
+\begin{code}
 
-\begin{columns}
- 
-\column{0.5\textwidth}
-class \textit{Monoidal k} $\Rightarrow$ \textit{Cartesean k} where
+class Monoidal k => Cartesian k where
+    exl :: (a,b)'k'a
+    exr :: (a,b)'k'b
+    dup :: a'k'(a,a)
 
-\hspace{0.2cm}exl :: (a$\times$b)'k'a
+\end{code}
 
-\hspace{0.2cm}exr :: (a$\times$b)'k'b
+\begin{code}
 
-\hspace{0.2cm}dup :: a'k'(a$\times$a)
- 
-\column{0.4\textwidth}
-instance \textit{Cartesean (→)} where
+instance Cartesian (->) where
+    exl = \(a,b) -> a
+    exr = \(a,b) -> b
+    dup = \a -> (a,a)
 
-\hspace{0.2cm}exl = $\lambda$(a,b) → a
+\end{code}
 
-\hspace{0.2cm}exr = $\lambda$(a,b) → b
-
-\hspace{0.2cm}dup = $\lambda$a → (a,a)
-
-\end{columns}
-
-\end{block}
 
 
 \begin{block}
 
+A cartesian functor F between categories |bigU and bigV| is such that:
 
-Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
 \begin{itemize}
-    \item \textit{F} é functor monoidal
-    \item \textit{F} exl = exl
-    \item \textit{F} exp = exp
-    \item \textit{F} dup = dup
+    \item F is a monoidal functor
+    \item F exl = exl
+    \item F exp = exp
+    \item F dup = dup
 \end{itemize}
-
-
 \end{block}
-
-
 \end{frame}
 
 
 
 
-\begin{frame}{Dedução da instância}
+\begin{frame}{Instance deduction}
 
-Pelo corolário 3.1 e pelo facto que exl,exr e dup são linerares deduzimos que:
+From corollary 3.1 and from exl,exr and dup being linear functions we can deduce that:
 
-$\mathcal{D}^{+}$ exl $\lambda$p → (exp p, exl)
+|bigDplus| exl = |\p ->| (exl p,exl)
 
-$\mathcal{D}^{+}$ exr $\lambda$p → (exr p, exr)
+|bigDplus| exr = |\p ->| (exr p,exr)
 
-$\mathcal{D}^{+}$ dup $\lambda$a → (dup a, dup)
+|bigDplus| dup = |\p ->| (dup a,dup)
 
-Após esta dedução podemos continuar a determinar a instância:
 
-exl = $\mathcal{D}$($\mathcal{D}^{+}$ exl)
+With this in mind we can arrive at our instance:
 
-exr = $\mathcal{D}$($\mathcal{D}^{+}$ exr)
+exl = |bigD|(|bigDplus| exl)
 
-dup = $\mathcal{D}$($\mathcal{D}^{+}$ dup)
+exr = |bigD|(|bigDplus| exr)
+
+dup = |bigD|(|bigDplus| dup)
 
 \end{frame}
 
 
 
-\begin{frame}{Dedução da instância} 
+\begin{frame}{Instance deduction} 
 
-Substituindo e usando a definição de linearD obtemos:
+Replacing |bigDplus| with it's definition and remembering linearD's definition we can obtain:
 
 exl = linearD exl
 
@@ -474,66 +666,60 @@ exr = linearD exr
 
 dup = linearD dup
 
-E podemos converter a dedução acima diretamente em instância:
 
-\begin{block}{Instância da categoria que deduzimos}
+and  convert this directly into a new instance:
 
-instance \textit{Cartesian $\mathcal{D}$} where
+\begin{block}{Categorical instance we've deduced}
+\begin{code}
 
-\hspace{0.2cm}exl = linearD exl
+instance Cartesian D where
+    exl = linearD exl
+    exr = linearD exr
+    dup = linearD dup
 
-\hspace{0.2cm}exr = linearD exr
-
-\hspace{0.2cm}dup = linearD dup
-
+\end{code}
 \end{block}
-
 \end{frame}
 
 
 
-\begin{frame}{Categorias cocartesianas}
+\begin{frame}{Cocartesian category}
 
-São o dual das categorias cartesianas.
-\begin{block}{Nota}
-Neste papel os coprodutos correspondem aos produtos das categorias, i.e., categorias de biprodutos.
+This type of categories is the dual of the cartesian type of categories.
+
+\begin{block}{Note}
+In this paper coproducts are categorical products, i.e., biproducts
 \end{block}
 
-\begin{block}
+\begin{block}{Definition}
+\begin{code}
 
-class \textit{Category k} $\Rightarrow$ \textit{Cocartesian k} where:
+class Category k => Cocartesian k where:
+    inl :: a'k'(a,b)
+    inr :: b'k'(a,b)
+    jam :: (a,a)'k'a
 
-\hspace{0.2cm}inl :: a'k'(a$\times$b)
-
-\hspace{0.2cm}inlr:: b'k'(a$\times$b)
-
-\hspace{0.2cm}jam :: (a$\times$a)'k'a
-
+\end{code}
 \end{block}
-
-
 \end{frame}
 
 
-\begin{frame}{Functores cocartesianos}
 
-\begin{block}{Definição de functor cocartesiano}
+\begin{frame}{Cocartesian functors}
 
+\begin{block}{Cocartesian functor definition}
 
-Um functor \textit{F} cartesiano entre categorias $\mathcal{U}$ e $\mathcal{V}$ é tal que:
+A cocartesian functor F between categories |bigU and bigV| is such that:
 \begin{itemize}
-    \item \textit{F} é functor 
-    \item \textit{F} inl = inl
-    \item \textit{F} inr = inr
-    \item \textit{F} jam = jam
+    \item F is a functor
+    \item F inl = inl
+    \item F inr = inr
+    \item F jam = jam
 \end{itemize}
-
-
 \end{block}
-
-
 \end{frame}
 
+%Ar1
 \section{Fork and Join}
 \begin{slide}{Fork and Join}
     \begin{itemize}
@@ -682,7 +868,265 @@ jamF = \(a, b) -> a + b
 \end{code}
 \end{frame}
 
-% Part 2
+%Ne2
+
+\begin{frame}{Matrices}
+\vspace{10mm}
+There exists three, non-exclusive, possibilities for a nonempty matrix $W$:
+\vspace{1mm}
+\begin{itemize}
+	\item width $W$ = height $W$ = $1$;
+	\vspace{1.5mm}
+	\item W is the horizontal juxtaposition of two matrices $U$ e $V$,\\
+	 where height $W$ = height $U$ = height $V$ and\\
+	 width $W$ = width $U$ $+$ width $V$;
+	 \vspace{1.5mm}
+	\item W is the vertical juxtaposition of two matrices $U$ e $V$,\\
+	 where width $W$ = width $U$ = width $V$ and\\ 
+	 height $W$ = height $U$ $+$ height $V$.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Extracting a Data Representation}
+\vspace{15mm}
+
+%In addition to what we have used so far, we also need a Data Representation. 
+In machine learning, a Gradient-based optimization works by searching for local
+minima in the domain of a differentiable function $f :: a \to s$. Each step in the search is in the direction opposite of the gradient of $f$, which is a vector form of $\mathcal{D} f$.
+
+\pause
+\vspace{5mm}
+Given a linear map  $f' :: U \multimap V$ represented as a function, it is possible to extract a Jacobian
+matrix by applying $f$ to every vector in a basis of $U$.
+
+\end{frame}
+
+\begin{frame}{Generalized Matrices}
+\vspace{18mm}
+Given a scalar field $s$, a free vector space has the form $p \to s$ for some $p$, where the
+cardinality of $p$ is the dimension of the vector space and there exists a finite number of values for $p$.
+
+\pause
+
+\vspace{5mm}
+
+In particular, we can represent vector spaces over a given field as a representable functor, i.e., a functor F such that $\exists p$ $\forall s$ $F$ $s$ $\cong$ $p \to s$.
+\end{frame}
+
+%Ez2
+\section{Reverse-Mode Automatic Differentiation(RAD)}
+
+
+\begin{frame}{A short introdution}
+
+\begin{itemize}
+    \item<1-> In chapter 4 we've derived an AD algorithm that was generalized in figure 6 of the document
+    \item<2-> With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
+    \item<3-> We want to obtain generalized FAD and RAD algorithms 
+    \item<4-> How do we describe this in Categorical notation?
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Converting morfisms}
+
+Given a category k we can represent its morfisms the following way:
+
+\begin{block}{Left-Compose functions}
+f :: a'k'b |=>| ($\circ$ f) :: (b'k'r) |->| (a'k'r) where r is any object of k.
+\end{block}
+
+If h is the morfism we'll compose with f then h is the continuation of f.
+\end{frame}
+
+
+
+
+\begin{frame}{Instance deduction}
+
+\begin{block}{Defining new type}
+\begin{code}
+newtype Cont(k,r) a b = Cont((b'k'r) -> (a'k'r))
+\end{code}
+\end{block}
+
+\begin{block}{Functor derived from type}
+\begin{code}
+cont :: Category k => (a 'k' b) -> Cont(k,r) a b
+cont f = Cont(. f)
+\end{code}
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+\begin{code}
+
+instance Category k => Category Cont(k,r)where
+  id = Cont id
+  Cont g . Cont f = Cont(f . g)
+
+instance Monoidal k => Monoidal Cont(k,r)where
+  Conf f x Cont g = Cont(join . (f x g) . unjoin)
+
+instance Cartesian k => Cartesian Cont(k,r) where
+  exl = Cont(join . inl) ; exr = Cont(join . inr) 
+  dup = Cont(jam . unjoin)
+
+instance Cocartesian k => Cocartesian Cont(k,r) where
+  inl = Cont(exl . unjoin) ; inr = Cont(exr . unjoin) 
+  jam = Cont(join . dup)
+
+instance Scalable k a => Scalable Cont(k,r) a where
+  scale s = Cont(scale s)
+
+
+\end{code}
+\end{frame}
+
+
+
+
+
+
+
+\section{Gradient and Duality}
+
+\begin{frame}{A short introdution}
+
+Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
+
+A vector space A over a scalar field has A $\multimap$ s as its dual.
+
+Each linear map in A $\multimap$ s can be represented in the form of dot u for some u :: A where
+
+\begin{block}{Definition and instanciation}
+\begin{code}
+class HasDot(S) u where dot :: u -> (u -o s)
+
+instance HasDot(IR) IR where dot = scale 
+
+instance (HasDot(S) a,HasDot(S) b) 
+  => HasDot(S) (a x b) 
+  where dot(u,v) = dot u fork dot v
+\end{code}
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+
+The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) -> (a $\multimap$ s) which is isomorfic to (a -> b).
+
+\begin{block}{Type definition for duality}
+\begin{code}
+newtype Dual(K) a b = Dual(b'k'a)
+\end{code}
+\end{block}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Instance deduction}
+
+All we need to do to create dual representations of linear maps is to
+convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor:
+
+\begin{block}{Functor definition}
+\begin{code}
+asDual :: (HasDot(S) a,HasDot(S) b) => 
+  ((b -o s) -> (a -o s)) -> (b -o a)
+asDual (Cont f) = Dual (onDot f)
+\end{code}
+
+where
+
+\begin{code}
+onDot :: (HasDot(S) a,HasDot(S) b) => 
+  ((b -o s) -> (a -o s)) -> (b -o a)
+onDot f = dot^-1 . f . dot
+\end{code}
+\end{block}
+
+\end{frame}
+
+
+
+\begin{frame}{Instance deduction}
+\begin{code}
+
+instance Category k => Category Dual(k) where
+  id = Dual id
+  Dual g . Dual f = Dual (f . g)
+
+instance Monoidal k => Monoidal Dual(k) where
+  Dual f x Dual g = Dual (f x g)
+
+instance Cartesian k => Cartesian Dual(k) where
+  exl = Dual inl ;  exr = Dual inr ;  dup = Dual jam
+
+instance Cocartesian k => CocartesianDual(k) where
+  inl = Dual exl ; inr = Dual exr ; jam = Dual dup
+
+instance Scalable k => Scalable Dual(k) where
+  scale s = Dual(scale s)
+
+\end{code}
+\end{frame}
+
+
+
+\begin{frame}{Final notes}
+
+\begin{itemize}
+  \item |join and fork| mutually dualize 
+  
+  |(Dual f join Dual g = Dual (f fork g) and Dual f fork Dual g = Dual(f join g))|
+  \item Using the definition from chapter 8 we can determine that the duality of a matrix corresponds to it's transposition
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+
+
+\section{Foward-Mode Automatic Differentiation(FAD)}
+
+\begin{frame}{Fowards-mode Automatic Differentiation(FAD)}
+
+We can use the same deductions we've done in Cont and Dual to derive a category with full right-side association, thus creating a generized FAD algorithm.
+
+This algorithm is far more apropriated for low dimention domains.
+
+
+\begin{block}{Type definition and functor from type}
+\begin{code}
+newtype Begin(k,r) a b = Begin((r'k'a) -> (r'k'b))
+
+begin :: Category k => (a 'k' b) -> Begin(k,r) a b
+begin f = Begin(f .)
+\end{code}
+\end{block}
+
+We can derive categorical instances from the functor above and we can choose r to be the scalar field s, noting that s $\multimap$ a is isomorfic to a.
+
+
+\end{frame}
+
+%Ar2
 \section{Scaling Up}
 \begin{frame}
 \begin{itemize}
