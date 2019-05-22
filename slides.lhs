@@ -36,23 +36,28 @@
 %include polycode.fmt
 %format -> = "\rightarrow "
 %format ->+ = "\rightarrow^+ "
-%format fork = " \Delta "
-%format join = " \nabla "
+%format sto = "\multimap "
+%format forku = " \Delta "
+%format joinu = " \nabla "
 %format bigD = "\mathcal{D}"
 %format bigDplus = "\mathcal{D}^{+}"
+%format bigDplus0 = "\mathcal{D}^{+}_{0}"
 %format bigDhat = "\mathcal{\hat{D}}"
 %format bigU = "\mathcal{U}"
 %format bigV = "\mathcal{V}"
-%format o = " \circ "
+%format Contkr = "Cont^{k}_{r}"
+%format Beginkr = "Begin^{k}_{r}"
+%format Dualk = " Dual_k "
 %format => = "\Rightarrow"
 %format Dk = " D_k "
 %format >< = " \times "
+%format (inv (x)) = x "^{-1}"
 %----------------------------------------------------
 
 \newenvironment{slide}[1]{\begin{frame}\frametitle{#1}}{\end{frame}}
 
 \title
-{...Machine Learning...}
+{Simple essence of AD}
 
 \author[Artur, Ezequiel, Nelson] 
 {Artur \and Ezequiel \and Nelson}
@@ -158,7 +163,7 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \hspace{-2mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon} - \textit{$f $$'$ $(x)$} = 0 \hspace{0.5mm} 
 \Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f $$'$ $(x)$}}{\varepsilon} = 0 \\
 & 
-\hspace{-5.9cm}  \Leftrightarrow  
+\hspace{-6.6cm}  \Leftrightarrow  
 \lim_{\varepsilon \to 0} 
 \frac{
 \norm{ \textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f'(x)$} } 
@@ -177,11 +182,11 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \begin{defi}
 	Let $f::a \to b$ be a function, where $a$ and $b$ are vetorial spaces that share a common underlying field. The first derivate definition is the following:
 	\begin{align*} 
-	\mathcal{D} :: (a \to b) \to (a \to (a \multimap b))
+	\mathcal{D} :: (a \to b) \to (a \to (a sto b))
 	\end{align*}
-	If we differentiate two times vezes, we have:
+	If we differentiate two times, we have:
 	\begin{align*} 
-	 \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a \multimap a \multimap b ))
+	 \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a sto a sto b ))
 	\end{align*}
 \end{defi}
 \end{frame}
@@ -191,7 +196,7 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \vspace{15mm}
 \begin{teor}
 	
-	Let $f:: a \to b$ and $g:: b \to c$ be two functions. Then the derivative of the composition of $f$ e $g$ is:
+	Let $f:: a \to b$ and $g:: b \to c$ be two functions. Then the derivative of the composition of $f$ and $g$ is:
 	\begin{align*}
 	\mathcal{D} \ (g \circ f ) \ a= \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.6mm} \circ \hspace{0.6mm} \mathcal{D} \hspace{0.6mm} f \ a
 	\end{align*}
@@ -199,56 +204,57 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition}
-\vspace{10mm}
-Unfortunately the previous theorem isn't a efficient recipe for composition, and now we will introduce a second derivate definition:
-\begin{align*}
-\mathcal{D}_{0}^{+} :: (a \to b) \to ((a \to b) \times (a \to (a \multimap b))) \\
-& \hspace{-6.18cm} \mathcal{D}_{0}^{+} \hspace{0.5mm} f =(f,\hspace{0.2mm} \mathcal{D} f)
-\end{align*}
+Unfortunately the previous theorem isn't a efficient recipe for composition. As such we will introduce a second derivate definition:
+\begin{code}
+bigDplus0 :: (a -> b) -> ((a -> b) >< (a -> (a sto b))) 
+bigDplus0 f = (f, bigD f)
+\end{code}
 \pause
 
 With this, the chain rule will have the following expression:
 
-$\mathcal{D}_{0}^{+} \hspace{0.5mm} (g \circ f) $ =
+$\mathcal{D}_{0}^{+} \hspace{0.5mm} (g \circ f) $ 
 
-$= (g \circ f,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} (g \circ f) \hspace{0.5mm})$ \hspace{3.17cm} (definition of $\mathcal{D}_{0}^{+}$)
+\{definition of $\mathcal{D}_{0}^{+}$\}\\
+$= (g \circ f,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} (g \circ f) \hspace{0.5mm})$ \hspace{3.3cm} \\
+\{theorem and definition of $g \circ f$\}\\
 
-$= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.5mm} \circ \hspace{0.5mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )$ \hspace{1.5mm} (theorem and definition of $g \circ f$)
+$= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.5mm} \circ \hspace{0.5mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )$ \hspace{1.5mm} \\
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
-\vspace{9mm}
 Having in mind optimizations, we introduce the third and last derivate definition:
-\begin{align*}
-\mathcal{D}^{+} :: (a \to b) \to (a \to (b \times (a \multimap b))) \\
-& \hspace{-5cm}\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )
-\end{align*}
+\begin{code}
+bigDplus :: (a -> b) -> (a -> (b >< (a sto b))) 
+bigDplus f a = (f a, bigD f a)
+\end{code}
 \pause
 
-As $\times$ has more priority than $\to$ e $\multimap$, we can rewrite $\mathcal{D}^{+} $ as:
-\begin{align*}
-\mathcal{D}^{+} :: (a \to b) \to (a \to b \times (a \multimap b))  \\
-& \hspace{-5cm}\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )
-\end{align*}
+As $\times$ has more priority than $\to$ and $\multimap$, we can rewrite $\mathcal{D}^{+} $ as:
+\begin{code}
+bigDplus :: (a -> b) -> (a -> b >< (a sto b)) 
+bigDplus f a = (f a, bigD f a)
+\end{code}
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
 \vspace{15mm}
 \begin{coro}
 	$\mathcal{D}^{+}$ is efficiently compositional in relation to $(\circ)$, that is, in Haskell:
-	\begin{align*}
-	 \mathcal{D}^{+} \hspace{0.5mm} (g \circ f) \hspace{0.9mm} a = \textbf{let} \hspace{0.5mm} \{(b,\hspace{0.2mm} f') = \mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a; \hspace{0.5mm} (c,\hspace{0.2mm} g')=\mathcal{D}^{+} \hspace{0.5mm} g \hspace{0.9mm} b \} \hspace{1mm} \textbf{in} \hspace{1mm} (c,\hspace{0.2mm} g' \circ f') 
-	\end{align*}
+	\begin{code}
+	bigDplus (g . f) a = let {(b, f') = bigDplus f a; (c, g') = bigDplus g b} 
+            in (c, g' . f') 
+	\end{code}
 \end{coro}
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Parallel Composition} 
 \vspace{10mm}
 Another important way of combining functions is the operation cross, that combines two functions in parallel:
-\begin{align*}
-(\boldsymbol{\times}) :: (a \to c) \to (b \to d) \to (a \times b \to c \times d) \\
-& \hspace{-6.23cm}f \boldsymbol{\times} g = \lambda(a,\hspace{0.5mm} b) \to (f \hspace{0.5mm} a,\hspace{0.2mm} g \hspace{0.5mm} b) 
-\end{align*}
+\begin{code}
+(><) :: (a -> c) -> (b -> d) -> (a >< b -> c >< d) 
+f >< g = \(a, b) -> (f a,g b) 
+\end{code}
 \pause
 \begin{teor}	
 	Let $f :: a \to c$ and $g :: b \to d$ be two function. Then the cross rule is the following:
@@ -263,14 +269,15 @@ Another important way of combining functions is the operation cross, that combin
 \vspace{15mm}
 \begin{coro}
 	The function $\mathcal{D}^{+}$ is compositional in relation to $(\boldsymbol{\times})$
-	\begin{align*}
-	 \mathcal{D}^{+} \hspace{0.5mm} (f \boldsymbol{\times} g) \hspace{0.9mm} (a,\hspace{0.2mm} b) = \textbf{let} \hspace{0.5mm} \{(c,\hspace{0.2mm} f') = \mathcal{D}^{+} \hspace{0.3mm} f \hspace{0.7mm} a; \hspace{0.5mm} (d,\hspace{0.2mm} g')=\mathcal{D}^{+} \hspace{0.3mm} g \hspace{0.7mm} b \} \hspace{0.8mm} \textbf{in} \hspace{0.8mm}  ((c,\hspace{0.2mm} d), \hspace{0.2mm} f' \boldsymbol{\times} g') 
-	\end{align*}
+\begin{code}
+	bigDplus (f >< g) (a, b) = let {(c, f') = bigDplus f a; (d, g') = bigDplus g b} 
+            in ((c, d), f' >< g') 
+\end{code}
 \end{coro}
 \end{frame}
 %%%
 \begin{frame}
-\frametitle{Derivative e Linear Functions} 
+\frametitle{Derivative and Linear Functions} 
 \vspace{5mm}
 \begin{defi}
 	A function $f$ is said to be linear when preserves addition and scalar multiplication.
@@ -312,15 +319,21 @@ Another important way of combining functions is the operation cross, that combin
 \begin{frame}{A short introdution}
 
     \begin{block}{Corollary 1.1}
-    NOTA: adicionar definição do corolário 1.1 aqui
+\begin{code}
+	bigDplus (g . f) a = let {(b, f') = bigDplus f a; (c, g') = bigDplus g b} 
+            in (c, g' . f') 
+\end{code}
     \end{block}
     
     \begin{block}{Corollary 2.1}
-    NOTA: adicionar definição do corolário 2.1 aqui
+\begin{code}
+	bigDplus (f >< g) (a, b) = let {(c, f') = bigDplus f a; (d, g') = bigDplus g b} 
+            in ((c, d), f' >< g') 
+\end{code}
     \end{block}
     
     \begin{block}{Corollary 3.1}
-    NOTA: adicionar definição do corolário 3.1 aqui
+	For all linear functions  $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
     \end{block}
  
 \end{frame}
@@ -330,11 +343,11 @@ Another important way of combining functions is the operation cross, that combin
 
 \begin{frame}{Categories}
 
-A category is a collection of objects(sets and types) and morphisms(operation between objects),
-with 2 basic operations(identity and composition) of morfisms, and 2 laws:
+A category is a collection of objects (sets and types) and morphisms(operation between objects),
+with 2 basic operations (identity and composition) of morfisms, and 2 laws:
 
 \begin{itemize}
-    \item (C.1)  $id \circ f = id \circ f = f$
+    \item (C.1)  $id \circ f = f \circ id = f$
     \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
@@ -343,7 +356,7 @@ For this paper, objects are data types and morfisms are functions
 \end{block}
 
 \begin{columns}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.6\textwidth}
 \begin{code}
 class Category k where
     id::(a'k'a)
@@ -351,7 +364,7 @@ class Category k where
 \end{code}
 \end{column}
 
-\begin{column}{0.5\textwidth}
+\begin{column}{0.6\textwidth}
 \begin{code}
 instance Category (->) where
     id = \a -> a 
@@ -375,7 +388,7 @@ A functor F between 2 categories |bigU and bigV| is such that:
 \end{itemize}
 
 \begin{block}{Note}
-Given this papers category properties(objects are data types) functors map types to themselves
+Given this papers category properties (objects are data types) functors map types to themselves
 \end{block}
 
 \end{frame}
@@ -383,14 +396,10 @@ Given this papers category properties(objects are data types) functors map types
 
 
 \begin{frame}{Objective}
-
-Let's start by defining a new data type:
-
-newtype |bigD| a b = |bigD| (a |->| b $\times$ (a $\multimap$ b))
-
-,and adapting |bigDplus| to use it:
-
-\begin{block}{Adapted definition}
+\begin{block}{|bigD| definition}
+|newtype bigD a b = bigD (a -> b >< (a sto b))|
+\end{block}
+\begin{block}{Adapted definition for |bigD| type}
 \begin{code}
 
 bigDhat :: (a -> b) -> bigD a b
@@ -408,20 +417,22 @@ Our objective is to deduce an instance of a Category for |bigD| where |bigDhat| 
 
 \begin{frame}{Instance deduction}
 
-Before deducing our instance we must first note that using corollaries 3.1 and 1.1 we can determine that
+Using corollaries 3.1 and 1.1 we can determine that
 
 \begin{itemize}
-    \item (DP.1) |bigDplus| id = $\lambda$ a -> (id a,id)
+    \item (DP.1) |bigDplus id = \ a -> (id a,id)|
     \item (DP.2)    
-    |bigDplus|(g $\circ$ f) = $\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b } 
-        in (c,g' $\circ$ f')
+\begin{code}
+    bigDplus (g . f) = \ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b } 
+        in (c,g' . f')
+\end{code}
 \end{itemize}
 
 Saying that |bigDhat| is a functor is equivalent to, for all f and g functions of apropriate types:
 
     |id = bigDhat id = bigD (bigDplus id)|
 
-    |bigDhat| g $\circ$ |bigDhat| f = |bigDhat|  (g $\circ$ f) = |bigD| (|bigDhat| (g $\circ$ f))
+    |bigDhat g . bigDhat f = bigDhat (g . f) = bigD (bigDhat (g . f))|
 
 
 \end{frame}
@@ -432,16 +443,19 @@ Saying that |bigDhat| is a functor is equivalent to, for all f and g functions o
 
 Based on  (DP.1) and (DP.2) we'll rewrite the above into the following definition:
 
-id = |bigD| ($\lambda$ a -> (id a,id))
+|id = bigD (\ a -> (id a,id))|
 
-|bigDhat| g $\circ$ |bigDhat| f = |bigD| ($\lambda$ a -> let{(b,f') = |bigDplus| f a; (c,g') = |bigDplus| g b} in (c,g' $\circ$ f'))
+|bigDhat g . bigDhat f = bigD (\ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' . f'))|
+\vspace{5mm}
 
+\pause
+The first equation shown above has a trivial solution.
+\vspace{3mm}
 
-The first equation shown above has a trivial solution(define id of instance as |bigD|($\lambda$ a -> (id a,id)))
-
+\pause
 To solve the second we'll first solve a more general one:
 
-|bigD| g $\circ$ |bigD| f = |bigD|($\lambda$ a -> let{(b,f') = f a; (c,g') = g b } in(c,g' $\circ$ f'))
+|bigD g . bigD f = bigD (\ a -> let{(b,f') = f a; (c,g') = g b} in (c,g' . f'))|
 
 This condition also leads us to a trivial solution inside our instance.
 
@@ -478,19 +492,19 @@ instance Category bigD where
 
 In order to prove that the instance is correct we must check if it follows laws (C.1) and (C.2).
 
-First we must make a concession: that we only use morfisms arising from |bigDplus|(we can force this by transforming |bigD| into an abstract type).
+First we must make a concession: that we only use morfisms arising from |bigDplus|.
 If we do, then |bigDplus| is a functor.
 
 
 \begin{block}{(C.1) proof}
 
-id $\circ$ |bigDhat|
-
-= |bigDhat| id $\circ$ |bigDhat| f - functor law for id (specification of |bigDhat|)
-
-= |bigDhat| (id $\circ$ f) - functor law for ($\circ$)
-
-= |bigDhat| f - categorical law
+id $\circ$ |bigDhat| \\
+\{ functor law for id (specification of |bigDhat|) \}\\
+= |bigDhat| id $\circ$ |bigDhat| f \\
+\{ functor law for ($\circ$) \}\\
+= |bigDhat| (id $\circ$ f) \\
+\{ categorical law \}\\
+= |bigDhat| f 
 \end{block}
 
 \end{frame}
@@ -500,30 +514,22 @@ id $\circ$ |bigDhat|
 
 \begin{block}{(C.2) proof}
 
-|bigDhat| h $\circ$ (|bigDhat| g $\circ$ |bigDhat| f)
-
-= |bigDhat| h $\circ$ |bigDhat| (g $\circ$ f) - functor law for ($\circ$)
-
-= |bigDhat| (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)
-
-= |bigDhat| ((h $\circ$ g) $\circ$ f) - categorical law
-
-= |bigDhat| (h $\circ$ g) $\circ$ |bigDhat| f - functor law for ($\circ$)
-
-= (|bigDhat| h $\circ$ |bigDhat| g) $\circ$ |bigDhat| f - functor law for ($\circ$)
+|bigDhat| h $\circ$ (|bigDhat| g $\circ$ |bigDhat| f)\\
+\{ 2x functor law for ($\circ$) \}\\
+= |bigDhat| (h $\circ$ (g $\circ$ f))\\ 
+\{ categorical law \}\\
+= |bigDhat| ((h $\circ$ g) $\circ$ f)\\
+\{ 2x functor law for ($\circ$) \}\\
+= (|bigDhat| h $\circ$ |bigDhat| g) $\circ$ |bigDhat| f 
 
 \end{block}
 
 \begin{alertblock}{Note}
 This proofs don't require anything from |bigD and bigDhat| aside from functor laws.
-As such, all other instances of categories created from a functor won't require further proving like this onr did.
+As such, all other instances of categories created from a functor won't require further proving like this one did.
 
 \end{alertblock}
 \end{frame}
-
-
-
-
 
 \begin{frame}{Monoidal categories and functors}
 
@@ -534,14 +540,11 @@ Generalized parallel composition shall be defined using a monoidal category:
 
 
 class Category k => Monoidal k where
-    (x) :: (a 'k' c) -> (b 'k' d) -> ((a x b) 'k' (c x d)) 
+    (><) :: (a 'k' c) -> (b 'k' d) -> ((a >< b) 'k' (c >< d)) 
 
-\end{code}
-
-\begin{code}
 
 instance Monoidal (->) where
-    f x g = \(a,b) -> (f a,g b)
+    f >< g = \(a,b) -> (f a,g b)
 
 \end{code}
 
@@ -562,19 +565,23 @@ A monoidal functor F between categories |bigU and bigV| is such that:
 
 From corollary 2.1 we can deduce that:
 
-|bigDplus| (f $\times$ g) = $\lambda$ (a,b) -> let{(c,f')=|bigDplus| f a;(d,g')= |bigDplus| g b} 
+|bigDplus (f >< g) = \ (a,b) -> let{(c,f')=bigDplus f a;(d,g')= bigDplus g b}| 
 
-    in ((c,d),f' $\times$ g')
+|    in ((c,d),f' >< g')|
 
+\vspace{3mm}
+\pause
 Deriving F from |bigDhat| leaves us with the following definition:
 
-|bigD| (|bigDplus| f) $\times$ |bigD| (|bigDplus| g) = |bigD| (|bigDplus| (f $\times$ g))
+|bigD (bigDplus f) >< bigD (bigDplus g) = bigD (bigDplus (f >< g))|
 
+\vspace{3mm}
+\pause
 Using the same method as before, we replace |bigDplus| with it's definition and generalize the condition:
 
-|bigD| f $\times$ |bigD| g =
+|bigD f >< bigD g =|
 
-|bigD| ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))
+|bigD (\ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' >< g'))|
 
 and this is enough for our new instance.
 \end{frame}
@@ -586,8 +593,8 @@ and this is enough for our new instance.
 \begin{code}
 
 instance Monoidal bigD where
-    bigD f x bigD g = bigD(\(a,b) -> let{(c,f') = f a;(d,g') = g b} 
-                                     in ((c,d),f' x g'))
+    bigD f >< bigD g = bigD(\(a,b) -> let{(c,f') = f a;(d,g') = g b} 
+                                     in ((c,d),f' >< g'))
 
 \end{code}
 \end{block}
@@ -602,11 +609,7 @@ instance Monoidal bigD where
 class Monoidal k => Cartesian k where
     exl :: (a,b)'k'a
     exr :: (a,b)'k'b
-    dup :: a'k'(a,a)
-
-\end{code}
-
-\begin{code}
+    dup :: a 'k' (a,a)
 
 instance Cartesian (->) where
     exl = \(a,b) -> a
@@ -615,8 +618,7 @@ instance Cartesian (->) where
 
 \end{code}
 
-
-
+\vspace{-3mm}
 \begin{block}
 
 A cartesian functor F between categories |bigU and bigV| is such that:
@@ -635,22 +637,22 @@ A cartesian functor F between categories |bigU and bigV| is such that:
 
 \begin{frame}{Instance deduction}
 
-From corollary 3.1 and from exl,exr and dup being linear functions we can deduce that:
+From corollary 3.1 and from exl, exr and dup being linear functions we can deduce that:
 
-|bigDplus| exl = |\p ->| (exl p,exl)
+|bigDplus exl = \ p -> (exl p,exl)|
 
-|bigDplus| exr = |\p ->| (exr p,exr)
+|bigDplus exr = \ p -> (exr p,exr)|
 
-|bigDplus| dup = |\p ->| (dup a,dup)
+|bigDplus dup = \ p -> (dup a,dup)|
 
-
+\vspace{3mm}
 With this in mind we can arrive at our instance:
 
-exl = |bigD|(|bigDplus| exl)
+|exl = bigD(bigDplus exl)|
 
-exr = |bigD|(|bigDplus| exr)
+|exr = bigD(bigDplus exr)|
 
-dup = |bigD|(|bigDplus| dup)
+|dup = bigD(bigDplus dup)|
 
 \end{frame}
 
@@ -666,7 +668,7 @@ exr = linearD exr
 
 dup = linearD dup
 
-
+\vspace{2mm}
 and  convert this directly into a new instance:
 
 \begin{block}{Categorical instance we've deduced}
@@ -694,10 +696,10 @@ In this paper coproducts are categorical products, i.e., biproducts
 \begin{block}{Definition}
 \begin{code}
 
-class Category k => Cocartesian k where:
-    inl :: a'k'(a,b)
-    inr :: b'k'(a,b)
-    jam :: (a,a)'k'a
+class Category k => Cocartesian k where
+    inl :: a 'k' (a,b)
+    inr :: b 'k' (a,b)
+    jam :: (a,a) 'k' a
 
 \end{code}
 \end{block}
@@ -724,9 +726,9 @@ A cocartesian functor F between categories |bigU and bigV| is such that:
 \begin{slide}{Fork and Join}
     \begin{itemize}
         \item
-            |fork :: Cartesian k => (a 'k' c) -> (a 'k' d) -> (a 'k' (c >< d))|
+            |forku :: Cartesian k => (a 'k' c) -> (a 'k' d) -> (a 'k' (c >< d))|
         \item
-            |join :: Cartesian k => (c 'k' a) -> (d 'k' a) -> ((c >< d) 'k' a)|
+            |joinu :: Cartesian k => (c 'k' a) -> (d 'k' a) -> ((c >< d) 'k' a)|
     \end{itemize}
 \end{slide}
 
@@ -807,7 +809,7 @@ jamF = \(a, b) -> a + b
     instance NumCat D where
         negateC = linearD negateC
         addC = linearD addC
-        mulC = D (\(a, b) -> (a * b, scale b join scale a))
+        mulC = D (\(a, b) -> (a * b, scale b joinu scale a))
 
     instance FloatingCat D where
         sinC = D(\a -> (sin a, scale (cos a)))
@@ -830,9 +832,9 @@ jamF = \(a, b) -> a + b
     cosSinProd (x, y) = (cos z, sin z) where z=x*y
 \end{code}
 \begin{block}{With a compiler plugin we can obtain}
-|sqr = mulC o (id fork id)|\\
-|magSqr = addC o (mulC o (exl fork exl) fork mulC o (exr fork exr))|\\
-|cosSinProd = (cosC fork sinC) o mulC|\\
+|sqr = mulC . (id forku id)|\\
+|magSqr = addC . (mulC . (exl forku exl) forku mulC . (exr forku exr))|\\
+|cosSinProd = (cosC forku sinC) . mulC|\\
 \end{block} 
 \end{frame}
 
@@ -864,24 +866,23 @@ jamF = \(a, b) -> a + b
     instance Scalable k s ⇒ NumCat Dk s where
         negateC = linearD negateC negateC
         addC = linearD addC addC
-        mulC = D (\(a, b) -> (a * b, scale b join scale a))
+        mulC = D (\(a, b) -> (a * b, scale b joinu scale a))
 \end{code}
 \end{frame}
 
 %Ne2
 
 \begin{frame}{Matrices}
-\vspace{10mm}
 There exists three, non-exclusive, possibilities for a nonempty matrix $W$:
 \vspace{1mm}
 \begin{itemize}
 	\item width $W$ = height $W$ = $1$;
 	\vspace{1.5mm}
-	\item W is the horizontal juxtaposition of two matrices $U$ e $V$,\\
+	\item W is the horizontal juxtaposition of two matrices $U$ and $V$,\\
 	 where height $W$ = height $U$ = height $V$ and\\
 	 width $W$ = width $U$ $+$ width $V$;
 	 \vspace{1.5mm}
-	\item W is the vertical juxtaposition of two matrices $U$ e $V$,\\
+	\item W is the vertical juxtaposition of two matrices $U$ and $V$,\\
 	 where width $W$ = width $U$ = width $V$ and\\ 
 	 height $W$ = height $U$ $+$ height $V$.
 \end{itemize}
@@ -889,11 +890,10 @@ There exists three, non-exclusive, possibilities for a nonempty matrix $W$:
 \end{frame}
 
 \begin{frame}{Extracting a Data Representation}
-\vspace{15mm}
 
 %In addition to what we have used so far, we also need a Data Representation. 
 In machine learning, a Gradient-based optimization works by searching for local
-minima in the domain of a differentiable function $f :: a \to s$. Each step in the search is in the direction opposite of the gradient of $f$, which is a vector form of $\mathcal{D} f$.
+minima in the domain of a differentiable function $f :: a \to s$. Each step in the search is in the direction opposite of the gradient of $f$, which is a vector form of $\mathcal{D}\ f$.
 
 \pause
 \vspace{5mm}
@@ -903,7 +903,6 @@ matrix by applying $f$ to every vector in a basis of $U$.
 \end{frame}
 
 \begin{frame}{Generalized Matrices}
-\vspace{18mm}
 Given a scalar field $s$, a free vector space has the form $p \to s$ for some $p$, where the
 cardinality of $p$ is the dimension of the vector space and there exists a finite number of values for $p$.
 
@@ -911,7 +910,7 @@ cardinality of $p$ is the dimension of the vector space and there exists a finit
 
 \vspace{5mm}
 
-In particular, we can represent vector spaces over a given field as a representable functor, i.e., a functor F such that $\exists p$ $\forall s$ $F$ $s$ $\cong$ $p \to s$.
+In particular, we can represent vector spaces over a given field as a representable functor, i.e., a functor F such that: $$\exists p\ \forall s\ F\ s\ \cong\ p \to s$$
 \end{frame}
 
 %Ez2
@@ -937,7 +936,7 @@ In particular, we can represent vector spaces over a given field as a representa
 Given a category k we can represent its morfisms the following way:
 
 \begin{block}{Left-Compose functions}
-f :: a'k'b |=>| ($\circ$ f) :: (b'k'r) |->| (a'k'r) where r is any object of k.
+|f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| where r is any object of k.
 \end{block}
 
 If h is the morfism we'll compose with f then h is the continuation of f.
@@ -950,13 +949,13 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 
 \begin{block}{Defining new type}
 \begin{code}
-newtype Cont(k,r) a b = Cont((b'k'r) -> (a'k'r))
+newtype Contkr a b = Cont((b 'k' r) -> (a 'k' r))
 \end{code}
 \end{block}
 
 \begin{block}{Functor derived from type}
 \begin{code}
-cont :: Category k => (a 'k' b) -> Cont(k,r) a b
+cont :: Category k => (a 'k' b) -> Contkr a b
 cont f = Cont(. f)
 \end{code}
 \end{block}
@@ -968,22 +967,22 @@ cont f = Cont(. f)
 \begin{frame}{Instance deduction}
 \begin{code}
 
-instance Category k => Category Cont(k,r)where
+instance Category k => Category Contkr where
   id = Cont id
   Cont g . Cont f = Cont(f . g)
 
-instance Monoidal k => Monoidal Cont(k,r)where
-  Conf f x Cont g = Cont(join . (f x g) . unjoin)
+instance Monoidal k => Monoidal Contkr where
+  Conf f >< Cont g = Cont(join . (f >< g) . unjoin)
 
-instance Cartesian k => Cartesian Cont(k,r) where
+instance Cartesian k => Cartesian Contkr where
   exl = Cont(join . inl) ; exr = Cont(join . inr) 
   dup = Cont(jam . unjoin)
 
-instance Cocartesian k => Cocartesian Cont(k,r) where
+instance Cocartesian k => Cocartesian Contkr where
   inl = Cont(exl . unjoin) ; inr = Cont(exr . unjoin) 
   jam = Cont(join . dup)
 
-instance Scalable k a => Scalable Cont(k,r) a where
+instance Scalable k a => Scalable Contkr a where
   scale s = Cont(scale s)
 
 
@@ -1008,13 +1007,13 @@ Each linear map in A $\multimap$ s can be represented in the form of dot u for s
 
 \begin{block}{Definition and instanciation}
 \begin{code}
-class HasDot(S) u where dot :: u -> (u -o s)
+class HasDot(S) u where dot :: u -> (u sto s)
 
 instance HasDot(IR) IR where dot = scale 
 
 instance (HasDot(S) a,HasDot(S) b) 
-  => HasDot(S) (a x b) 
-  where dot(u,v) = dot u fork dot v
+  => HasDot(S) (a >< b) 
+  where dot(u,v) = dot u forku dot v
 \end{code}
 \end{block}
 
@@ -1024,11 +1023,11 @@ instance (HasDot(S) a,HasDot(S) b)
 
 \begin{frame}{Instance deduction}
 
-The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) -> (a $\multimap$ s) which is isomorfic to (a -> b).
+The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) |->| (a $\multimap$ s) which is isomorfic to (a |->| b).
 
 \begin{block}{Type definition for duality}
 \begin{code}
-newtype Dual(K) a b = Dual(b'k'a)
+newtype Dual(K) a b = Dual(b 'k' a)
 \end{code}
 \end{block}
 
@@ -1045,7 +1044,7 @@ convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor:
 \begin{block}{Functor definition}
 \begin{code}
 asDual :: (HasDot(S) a,HasDot(S) b) => 
-  ((b -o s) -> (a -o s)) -> (b -o a)
+  ((b sto s) -> (a sto s)) -> (b sto a)
 asDual (Cont f) = Dual (onDot f)
 \end{code}
 
@@ -1053,8 +1052,8 @@ where
 
 \begin{code}
 onDot :: (HasDot(S) a,HasDot(S) b) => 
-  ((b -o s) -> (a -o s)) -> (b -o a)
-onDot f = dot^-1 . f . dot
+  ((b sto s) -> (a sto s)) -> (b sto a)
+onDot f = inv dot . f . dot
 \end{code}
 \end{block}
 
@@ -1065,20 +1064,22 @@ onDot f = dot^-1 . f . dot
 \begin{frame}{Instance deduction}
 \begin{code}
 
-instance Category k => Category Dual(k) where
+instance Category k => Category Dualk where
   id = Dual id
   Dual g . Dual f = Dual (f . g)
 
-instance Monoidal k => Monoidal Dual(k) where
-  Dual f x Dual g = Dual (f x g)
+instance Monoidal k => Monoidal Dualk where
+  Dual f >< Dual g = Dual (f >< g)
 
-instance Cartesian k => Cartesian Dual(k) where
-  exl = Dual inl ;  exr = Dual inr ;  dup = Dual jam
+instance Cartesian k => Cartesian Dualk where
+  exl = Dual inl ;  exr = Dual inr
+  dup = Dual jam
 
-instance Cocartesian k => CocartesianDual(k) where
-  inl = Dual exl ; inr = Dual exr ; jam = Dual dup
+instance Cocartesian k => Cocartesian Dualk where
+  inl = Dual exl ; inr = Dual exr
+  jam = Dual dup
 
-instance Scalable k => Scalable Dual(k) where
+instance Scalable k => Scalable Dualk where
   scale s = Dual(scale s)
 
 \end{code}
@@ -1089,18 +1090,13 @@ instance Scalable k => Scalable Dual(k) where
 \begin{frame}{Final notes}
 
 \begin{itemize}
-  \item |join and fork| mutually dualize 
+  \item |(joinu) and (forku)| mutually dualize 
   
-  |(Dual f join Dual g = Dual (f fork g) and Dual f fork Dual g = Dual(f join g))|
+  |(Dual f joinu Dual g) = Dual (f forku g) and Dual f forku Dual g = Dual(f joinu g))|
   \item Using the definition from chapter 8 we can determine that the duality of a matrix corresponds to it's transposition
 \end{itemize}
 
 \end{frame}
-
-
-
-
-
 
 
 \section{Foward-Mode Automatic Differentiation(FAD)}
@@ -1114,9 +1110,9 @@ This algorithm is far more apropriated for low dimention domains.
 
 \begin{block}{Type definition and functor from type}
 \begin{code}
-newtype Begin(k,r) a b = Begin((r'k'a) -> (r'k'b))
+newtype Beginkr a b = Begin((r 'k' a) -> (r 'k' b))
 
-begin :: Category k => (a 'k' b) -> Begin(k,r) a b
+begin :: Category k => (a 'k' b) -> Beginkr a b
 begin f = Begin(f .)
 \end{code}
 \end{block}
@@ -1178,11 +1174,11 @@ A practical alternative is to consider n-ary products as representable functors(
         jamI :: h a ‘k‘ a
 
     instance (MonoidalI k h, Zip h) => MonoidalI Dk h where
-        crossI fs = D ((id >< crossI) o unzip o crossI (fmap unD fs))
+        crossI fs = D ((id >< crossI) . unzip . crossI (fmap unD fs))
 
     instance (CocartesianI (->) h, CartesianI k h, Zip h) =>
             CartesianI Dk h where
-        exl = linearD exl exl
+        exI = linearD exI exI
         replI = zipWith linearD replI replI
 
     instance (CocartesianI k h, Zip h) => CocartesianI Dk h where
@@ -1192,6 +1188,26 @@ A practical alternative is to consider n-ary products as representable functors(
 \end{code}
 \end{frame}
 
+\begin{frame}
+\begin{code}
+    class MonoidalI k h => CocartesianI k h where
+        inI :: h (a ‘k‘ h a)
+        jamI :: h a ‘k‘ a
+
+    instance (MonoidalI k h, Zip h) => MonoidalI Dk h where
+        crossI fs = D ((id >< crossI) . unzip . crossI (fmap unD fs))
+
+    instance (CocartesianI (->) h, CartesianI k h, Zip h) =>
+            CartesianI Dk h where
+        exI = zipWith linearD exI exI
+        replI = linearD replI replI
+
+    instance (CocartesianI k h, Zip h) => CocartesianI Dk h where
+        inI = zipWith linearD  inIF inl 
+        jamI = linearD sum jamI    
+ 
+\end{code}
+\end{frame}
 \section{Related Work and conlusion}
 \begin{frame}
 \begin{itemize}
@@ -1208,162 +1224,6 @@ A practical alternative is to consider n-ary products as representable functors(
 
 %fim
 
-% %format (der (f)) = "{\cal D}^+ " f
-% %format (DS (a) (b) (c)) = "{" c "}\times " b "^{" a "}"
-% 
-% |der() : (A->B) -> DS A B B|
-% 
-% \begin{eqnarray*}
-% \xymatrix@@C=4em{
-%   C
-% &
-%   B
-%       \ar[l]_-{|g|}
-% &
-%   A
-%       \ar[l]_-{|f|}
-% \\
-%   |DS A B ((DS B C C))|
-%       \ar[d]_-{|mu|}
-% &
-%   |DS A B B|
-%       \ar[l]_-{|der g >< id|}
-% &
-%   |A|
-%       \ar[l]_-{|der f|}
-%       \ar[dll]^-{|der((g.f))|}
-% \\
-%   |DS A C C|
-% }
-% \end{eqnarray*}
-% \begin{spec}
-% mu :: (DS A B ((DS B C D))) -> (DS A C D)
-% mu = (id >< (uncurry (.))) . assocr
-% \end{spec}
-% 
-% \begin{eqnarray*}
-% \xymatrix@@C=4em{
-%   C
-% &
-%   B
-%       \ar[l]_-{|g|}
-% &
-%   A
-%       \ar[l]_-{|f|}
-% \\
-%   |DS A B ((DS B C C))|
-%       \ar[d]_-{|mu|}
-% &
-%   |DS A B B|
-%       \ar[l]_-{|der g >< id|}
-%       \ar@@{..}[d]
-% &
-%   |A|
-%       \ar[l]_-{|der f|}
-%                 \ar@@/^3pc/[lld]^-{|der((g.f))|}
-% \\
-%   |DS A C C|
-% &
-%   |B|
-%       \ar[l]_-{|der g|}
-% }
-% \end{eqnarray*}
-
-
-%============================EXEMPLO==========================
-%\section{Introduction}
-%
-%\subsection[Short First Subsection Name]{First Subsection Name}
-%
-%\begin{frame}{Make Titles Informative. Use Uppercase Letters.}{Subtitles are optional.}
-%  % - A title should summarize the slide in an understandable fashion
-%  %   for anyone how does not follow everything on the slide itself.
-%
-%  \begin{itemize}
-%  \item
-%    Use \texttt{itemize} a lot.
-%  \item
-%    Use very short sentences or short phrases.
-%  \end{itemize}
-%\end{frame}
-%
-%\begin{frame}{Make Titles Informative.}
-%
-%  You can create overlays\dots
-%  \begin{itemize}
-%  \item using the \texttt{pause} command:
-%    \begin{itemize}
-%    \item
-%      First item.
-%      \pause
-%    \item    
-%      Second item.
-%    \end{itemize}
-%  \item
-%    using overlay specifications:
-%    \begin{itemize}
-%    \item<3->
-%      First item.
-%    \item<4->
-%      Second item.
-%    \end{itemize}
-%  \item
-%    using the general \texttt{uncover} command:
-%    \begin{itemize}
-%      \uncover<5->{\item
-%        First item.}
-%      \uncover<6->{\item
-%        Second item.}
-%    \end{itemize}
-%  \end{itemize}
-%\end{frame}
-%
-%\begin{frame}{}
-%\end{frame}
-%
-%\subsection{Second Subsection}
-%
-%\begin{frame}{Make Titles Informative.}
-%\end{frame}
-%
-%
-%
-%\section{Summary}
-%
-%\subsection{coisas1}
-%
-%\begin{frame}{Summary}
-%
-%  % Keep the summary *very short*.
-%  \begin{itemize}
-%  \item
-%    The \alert{first main message} of your talk in one or two lines.
-%  \item
-%    The \alert{second main message} of your talk in one or two lines.
-%  \item
-%    Perhaps a \alert{third message}, but not more than that.
-%  \end{itemize}
-%  
-%  % The following outlook is optional.
-%  \vskip0pt plus.5fill
-%  \begin{itemize}
-%  \item
-%    Outlook
-%    \begin{itemize}
-%    \item
-%      Something you haven't solved.
-%    \item
-%      Something else you haven't solved.
-%    \end{itemize}
-%  \end{itemize}
-%\end{frame}
-%
-%\subsection{coisas2}
-%\begin{frame}{coisas2}
-%
-%
-%\end{frame}
-%=================================================================
 
 \end{document}
 

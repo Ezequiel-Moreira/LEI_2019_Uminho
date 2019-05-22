@@ -297,7 +297,7 @@
 \newenvironment{slide}[1]{\begin{frame}\frametitle{#1}}{\end{frame}}
 
 \title
-{...Machine Learning...}
+{Simple essence of AD}
 
 \author[Artur, Ezequiel, Nelson] 
 {Artur \and Ezequiel \and Nelson}
@@ -403,7 +403,7 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \hspace{-2mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon} - \textit{$f $$'$ $(x)$} = 0 \hspace{0.5mm} 
 \Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f $$'$ $(x)$}}{\varepsilon} = 0 \\
 & 
-\hspace{-5.9cm}  \Leftrightarrow  
+\hspace{-6.6cm}  \Leftrightarrow  
 \lim_{\varepsilon \to 0} 
 \frac{
 \norm{ \textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f'(x)$} } 
@@ -422,11 +422,11 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \begin{defi}
 	Let $f::a \to b$ be a function, where $a$ and $b$ are vetorial spaces that share a common underlying field. The first derivate definition is the following:
 	\begin{align*} 
-	\mathcal{D} :: (a \to b) \to (a \to (a \multimap b))
+	\mathcal{D} :: (a \to b) \to (a \to (a sto b))
 	\end{align*}
-	If we differentiate two times vezes, we have:
+	If we differentiate two times, we have:
 	\begin{align*} 
-	 \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a \multimap a \multimap b ))
+	 \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a sto a sto b ))
 	\end{align*}
 \end{defi}
 \end{frame}
@@ -436,7 +436,7 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \vspace{15mm}
 \begin{teor}
 	
-	Let $f:: a \to b$ and $g:: b \to c$ be two functions. Then the derivative of the composition of $f$ e $g$ is:
+	Let $f:: a \to b$ and $g:: b \to c$ be two functions. Then the derivative of the composition of $f$ and $g$ is:
 	\begin{align*}
 	\mathcal{D} \ (g \circ f ) \ a= \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.6mm} \circ \hspace{0.6mm} \mathcal{D} \hspace{0.6mm} f \ a
 	\end{align*}
@@ -444,56 +444,80 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition}
-\vspace{10mm}
-Unfortunately the previous theorem isn't a efficient recipe for composition, and now we will introduce a second derivate definition:
-\begin{align*}
-\mathcal{D}_{0}^{+} :: (a \to b) \to ((a \to b) \times (a \to (a \multimap b))) \\
-& \hspace{-6.18cm} \mathcal{D}_{0}^{+} \hspace{0.5mm} f =(f,\hspace{0.2mm} \mathcal{D} f)
-\end{align*}
+Unfortunately the previous theorem isn't a efficient recipe for composition. As such we will introduce a second derivate definition:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathcal{D}^{+}_{0}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow ((\Varid{a}\rightarrow \Varid{b}) \times (\Varid{a}\rightarrow (\Varid{a}\;\multimap \;\Varid{b}))){}\<[E]%
+\\
+\>[B]{}\mathcal{D}^{+}_{0}\;\Varid{f}\mathrel{=}(\Varid{f},\mathcal{D}\;\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \pause
 
 With this, the chain rule will have the following expression:
 
-$\mathcal{D}_{0}^{+} \hspace{0.5mm} (g \circ f) $ =
+$\mathcal{D}_{0}^{+} \hspace{0.5mm} (g \circ f) $ 
 
-$= (g \circ f,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} (g \circ f) \hspace{0.5mm})$ \hspace{3.17cm} (definition of $\mathcal{D}_{0}^{+}$)
+\{definition of $\mathcal{D}_{0}^{+}$\}\\
+$= (g \circ f,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} (g \circ f) \hspace{0.5mm})$ \hspace{3.3cm} \\
+\{theorem and definition of $g \circ f$\}\\
 
-$= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.5mm} \circ \hspace{0.5mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )$ \hspace{1.5mm} (theorem and definition of $g \circ f$)
+$= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.5mm} \circ \hspace{0.5mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )$ \hspace{1.5mm} \\
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
-\vspace{9mm}
 Having in mind optimizations, we introduce the third and last derivate definition:
-\begin{align*}
-\mathcal{D}^{+} :: (a \to b) \to (a \to (b \times (a \multimap b))) \\
-& \hspace{-5cm}\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )
-\end{align*}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathcal{D}^{+}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\rightarrow (\Varid{b} \times (\Varid{a}\;\multimap \;\Varid{b}))){}\<[E]%
+\\
+\>[B]{}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a}\mathrel{=}(\Varid{f}\;\Varid{a},\mathcal{D}\;\Varid{f}\;\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \pause
 
-As $\times$ has more priority than $\to$ e $\multimap$, we can rewrite $\mathcal{D}^{+} $ as:
-\begin{align*}
-\mathcal{D}^{+} :: (a \to b) \to (a \to b \times (a \multimap b))  \\
-& \hspace{-5cm}\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )
-\end{align*}
+As $\times$ has more priority than $\to$ and $\multimap$, we can rewrite $\mathcal{D}^{+} $ as:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathcal{D}^{+}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\;\multimap \;\Varid{b})){}\<[E]%
+\\
+\>[B]{}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a}\mathrel{=}(\Varid{f}\;\Varid{a},\mathcal{D}\;\Varid{f}\;\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
 \vspace{15mm}
 \begin{coro}
 	$\mathcal{D}^{+}$ is efficiently compositional in relation to $(\circ)$, that is, in Haskell:
-	\begin{align*}
-	 \mathcal{D}^{+} \hspace{0.5mm} (g \circ f) \hspace{0.9mm} a = \textbf{let} \hspace{0.5mm} \{(b,\hspace{0.2mm} f') = \mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a; \hspace{0.5mm} (c,\hspace{0.2mm} g')=\mathcal{D}^{+} \hspace{0.5mm} g \hspace{0.9mm} b \} \hspace{1mm} \textbf{in} \hspace{1mm} (c,\hspace{0.2mm} g' \circ f') 
-	\end{align*}
+	\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[9]{}\mathcal{D}^{+}\;(\Varid{g}\mathbin{\circ}\Varid{f})\;\Varid{a}\mathrel{=}\mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\\
+\>[9]{}\hsindent{4}{}\<[13]%
+\>[13]{}\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{coro}
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Parallel Composition} 
 \vspace{10mm}
 Another important way of combining functions is the operation cross, that combines two functions in parallel:
-\begin{align*}
-(\boldsymbol{\times}) :: (a \to c) \to (b \to d) \to (a \times b \to c \times d) \\
-& \hspace{-6.23cm}f \boldsymbol{\times} g = \lambda(a,\hspace{0.5mm} b) \to (f \hspace{0.5mm} a,\hspace{0.2mm} g \hspace{0.5mm} b) 
-\end{align*}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}( \times )\mathbin{::}(\Varid{a}\rightarrow \Varid{c})\rightarrow (\Varid{b}\rightarrow \Varid{d})\rightarrow (\Varid{a} \times \Varid{b}\rightarrow \Varid{c} \times \Varid{d}){}\<[E]%
+\\
+\>[B]{}\Varid{f} \times \Varid{g}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \pause
 \begin{teor}	
 	Let $f :: a \to c$ and $g :: b \to d$ be two function. Then the cross rule is the following:
@@ -508,14 +532,22 @@ Another important way of combining functions is the operation cross, that combin
 \vspace{15mm}
 \begin{coro}
 	The function $\mathcal{D}^{+}$ is compositional in relation to $(\boldsymbol{\times})$
-	\begin{align*}
-	 \mathcal{D}^{+} \hspace{0.5mm} (f \boldsymbol{\times} g) \hspace{0.9mm} (a,\hspace{0.2mm} b) = \textbf{let} \hspace{0.5mm} \{(c,\hspace{0.2mm} f') = \mathcal{D}^{+} \hspace{0.3mm} f \hspace{0.7mm} a; \hspace{0.5mm} (d,\hspace{0.2mm} g')=\mathcal{D}^{+} \hspace{0.3mm} g \hspace{0.7mm} b \} \hspace{0.8mm} \textbf{in} \hspace{0.8mm}  ((c,\hspace{0.2mm} d), \hspace{0.2mm} f' \boldsymbol{\times} g') 
-	\end{align*}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[9]{}\mathcal{D}^{+}\;(\Varid{f} \times \Varid{g})\;(\Varid{a},\Varid{b})\mathrel{=}\mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\\
+\>[9]{}\hsindent{4}{}\<[13]%
+\>[13]{}\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{coro}
 \end{frame}
 %%%
 \begin{frame}
-\frametitle{Derivative e Linear Functions} 
+\frametitle{Derivative and Linear Functions} 
 \vspace{5mm}
 \begin{defi}
 	A function $f$ is said to be linear when preserves addition and scalar multiplication.
@@ -557,15 +589,35 @@ Another important way of combining functions is the operation cross, that combin
 \begin{frame}{A short introdution}
 
     \begin{block}{Corollary 1.1}
-    NOTA: adicionar definição do corolário 1.1 aqui
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[9]{}\mathcal{D}^{+}\;(\Varid{g}\mathbin{\circ}\Varid{f})\;\Varid{a}\mathrel{=}\mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\\
+\>[9]{}\hsindent{4}{}\<[13]%
+\>[13]{}\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
     \end{block}
     
     \begin{block}{Corollary 2.1}
-    NOTA: adicionar definição do corolário 2.1 aqui
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[9]{}\mathcal{D}^{+}\;(\Varid{f} \times \Varid{g})\;(\Varid{a},\Varid{b})\mathrel{=}\mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\\
+\>[9]{}\hsindent{4}{}\<[13]%
+\>[13]{}\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
     \end{block}
     
     \begin{block}{Corollary 3.1}
-    NOTA: adicionar definição do corolário 3.1 aqui
+	For all linear functions  $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
     \end{block}
  
 \end{frame}
@@ -575,11 +627,11 @@ Another important way of combining functions is the operation cross, that combin
 
 \begin{frame}{Categories}
 
-A category is a collection of objects(sets and types) and morphisms(operation between objects),
-with 2 basic operations(identity and composition) of morfisms, and 2 laws:
+A category is a collection of objects (sets and types) and morphisms(operation between objects),
+with 2 basic operations (identity and composition) of morfisms, and 2 laws:
 
 \begin{itemize}
-    \item (C.1)  $id \circ f = id \circ f = f$
+    \item (C.1)  $id \circ f = f \circ id = f$
     \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
@@ -588,7 +640,7 @@ For this paper, objects are data types and morfisms are functions
 \end{block}
 
 \begin{columns}
-\begin{column}{0.5\textwidth}
+\begin{column}{0.6\textwidth}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -604,7 +656,7 @@ For this paper, objects are data types and morfisms are functions
 \end{hscode}\resethooks
 \end{column}
 
-\begin{column}{0.5\textwidth}
+\begin{column}{0.6\textwidth}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -636,7 +688,7 @@ A functor F between 2 categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{
 \end{itemize}
 
 \begin{block}{Note}
-Given this papers category properties(objects are data types) functors map types to themselves
+Given this papers category properties (objects are data types) functors map types to themselves
 \end{block}
 
 \end{frame}
@@ -644,14 +696,10 @@ Given this papers category properties(objects are data types) functors map types
 
 
 \begin{frame}{Objective}
-
-Let's start by defining a new data type:
-
-newtype \ensuremath{\mathcal{D}} a b = \ensuremath{\mathcal{D}} (a \ensuremath{\rightarrow } b $\times$ (a $\multimap$ b))
-
-,and adapting \ensuremath{\mathcal{D}^{+}} to use it:
-
-\begin{block}{Adapted definition}
+\begin{block}{\ensuremath{\mathcal{D}} definition}
+\ensuremath{\mathbf{newtype}\;\mathcal{D}\;\Varid{a}\;\Varid{b}\mathrel{=}\mathcal{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\;\multimap \;\Varid{b}))}
+\end{block}
+\begin{block}{Adapted definition for \ensuremath{\mathcal{D}} type}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -671,20 +719,29 @@ Our objective is to deduce an instance of a Category for \ensuremath{\mathcal{D}
 
 \begin{frame}{Instance deduction}
 
-Before deducing our instance we must first note that using corollaries 3.1 and 1.1 we can determine that
+Using corollaries 3.1 and 1.1 we can determine that
 
 \begin{itemize}
-    \item (DP.1) \ensuremath{\mathcal{D}^{+}} id = $\lambda$ a -> (id a,id)
+    \item (DP.1) \ensuremath{\mathcal{D}^{+}\;\Varid{id}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{id}\;\Varid{a},\Varid{id})}
     \item (DP.2)    
-    \ensuremath{\mathcal{D}^{+}}(g $\circ$ f) = $\lambda$ a -> let{(b,f') = \ensuremath{\mathcal{D}^{+}} f a; (c,g') = \ensuremath{\mathcal{D}^{+}} g b } 
-        in (c,g' $\circ$ f')
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathcal{D}^{+}\;(\Varid{g}\mathbin{\circ}\Varid{f})\mathrel{=}\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{itemize}
 
 Saying that \ensuremath{\mathcal{\hat{D}}} is a functor is equivalent to, for all f and g functions of apropriate types:
 
     \ensuremath{\Varid{id}\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{id})}
 
-    \ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f = \ensuremath{\mathcal{\hat{D}}}  (g $\circ$ f) = \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{\hat{D}}} (g $\circ$ f))
+    \ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\circ}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\circ}\Varid{f})\mathrel{=}\mathcal{D}\;(\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\circ}\Varid{f}))}
 
 
 \end{frame}
@@ -695,16 +752,19 @@ Saying that \ensuremath{\mathcal{\hat{D}}} is a functor is equivalent to, for al
 
 Based on  (DP.1) and (DP.2) we'll rewrite the above into the following definition:
 
-id = \ensuremath{\mathcal{D}} ($\lambda$ a -> (id a,id))
+\ensuremath{\Varid{id}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{id}\;\Varid{a},\Varid{id}))}
 
-\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f = \ensuremath{\mathcal{D}} ($\lambda$ a -> let{(b,f') = \ensuremath{\mathcal{D}^{+}} f a; (c,g') = \ensuremath{\mathcal{D}^{+}} g b} in (c,g' $\circ$ f'))
+\ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\circ}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'}))}
+\vspace{5mm}
 
+\pause
+The first equation shown above has a trivial solution.
+\vspace{3mm}
 
-The first equation shown above has a trivial solution(define id of instance as \ensuremath{\mathcal{D}}($\lambda$ a -> (id a,id)))
-
+\pause
 To solve the second we'll first solve a more general one:
 
-\ensuremath{\mathcal{D}} g $\circ$ \ensuremath{\mathcal{D}} f = \ensuremath{\mathcal{D}}($\lambda$ a -> let{(b,f') = f a; (c,g') = g b } in(c,g' $\circ$ f'))
+\ensuremath{\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'}))}
 
 This condition also leads us to a trivial solution inside our instance.
 
@@ -755,19 +815,19 @@ This condition also leads us to a trivial solution inside our instance.
 
 In order to prove that the instance is correct we must check if it follows laws (C.1) and (C.2).
 
-First we must make a concession: that we only use morfisms arising from \ensuremath{\mathcal{D}^{+}}(we can force this by transforming \ensuremath{\mathcal{D}} into an abstract type).
+First we must make a concession: that we only use morfisms arising from \ensuremath{\mathcal{D}^{+}}.
 If we do, then \ensuremath{\mathcal{D}^{+}} is a functor.
 
 
 \begin{block}{(C.1) proof}
 
-id $\circ$ \ensuremath{\mathcal{\hat{D}}}
-
-= \ensuremath{\mathcal{\hat{D}}} id $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for id (specification of \ensuremath{\mathcal{\hat{D}}})
-
-= \ensuremath{\mathcal{\hat{D}}} (id $\circ$ f) - functor law for ($\circ$)
-
-= \ensuremath{\mathcal{\hat{D}}} f - categorical law
+id $\circ$ \ensuremath{\mathcal{\hat{D}}} \\
+\{ functor law for id (specification of \ensuremath{\mathcal{\hat{D}}}) \}\\
+= \ensuremath{\mathcal{\hat{D}}} id $\circ$ \ensuremath{\mathcal{\hat{D}}} f \\
+\{ functor law for ($\circ$) \}\\
+= \ensuremath{\mathcal{\hat{D}}} (id $\circ$ f) \\
+\{ categorical law \}\\
+= \ensuremath{\mathcal{\hat{D}}} f 
 \end{block}
 
 \end{frame}
@@ -777,30 +837,22 @@ id $\circ$ \ensuremath{\mathcal{\hat{D}}}
 
 \begin{block}{(C.2) proof}
 
-\ensuremath{\mathcal{\hat{D}}} h $\circ$ (\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f)
-
-= \ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} (g $\circ$ f) - functor law for ($\circ$)
-
-= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ (g $\circ$ f)) - functor law for ($\circ$)
-
-= \ensuremath{\mathcal{\hat{D}}} ((h $\circ$ g) $\circ$ f) - categorical law
-
-= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for ($\circ$)
-
-= (\ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f - functor law for ($\circ$)
+\ensuremath{\mathcal{\hat{D}}} h $\circ$ (\ensuremath{\mathcal{\hat{D}}} g $\circ$ \ensuremath{\mathcal{\hat{D}}} f)\\
+\{ 2x functor law for ($\circ$) \}\\
+= \ensuremath{\mathcal{\hat{D}}} (h $\circ$ (g $\circ$ f))\\ 
+\{ categorical law \}\\
+= \ensuremath{\mathcal{\hat{D}}} ((h $\circ$ g) $\circ$ f)\\
+\{ 2x functor law for ($\circ$) \}\\
+= (\ensuremath{\mathcal{\hat{D}}} h $\circ$ \ensuremath{\mathcal{\hat{D}}} g) $\circ$ \ensuremath{\mathcal{\hat{D}}} f 
 
 \end{block}
 
 \begin{alertblock}{Note}
 This proofs don't require anything from \ensuremath{\mathcal{D}\;\Varid{and}\;\mathcal{\hat{D}}} aside from functor laws.
-As such, all other instances of categories created from a functor won't require further proving like this onr did.
+As such, all other instances of categories created from a functor won't require further proving like this one did.
 
 \end{alertblock}
 \end{frame}
-
-
-
-
 
 \begin{frame}{Monoidal categories and functors}
 
@@ -814,18 +866,12 @@ Generalized parallel composition shall be defined using a monoidal category:
 \>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}(\Varid{x})\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a}\;\Varid{x}\;\Varid{b})\;\text{\tt 'k'}\;(\Varid{c}\;\Varid{x}\;\Varid{d})){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}( \times )\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a} \times \Varid{b})\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d})){}\<[E]%
+\\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{f}\;\Varid{x}\;\Varid{g}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
+\>[5]{}\Varid{f} \times \Varid{g}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -846,19 +892,23 @@ A monoidal functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\m
 
 From corollary 2.1 we can deduce that:
 
-\ensuremath{\mathcal{D}^{+}} (f $\times$ g) = $\lambda$ (a,b) -> let{(c,f')=\ensuremath{\mathcal{D}^{+}} f a;(d,g')= \ensuremath{\mathcal{D}^{+}} g b} 
+\ensuremath{\mathcal{D}^{+}\;(\Varid{f} \times \Varid{g})\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}} 
 
-    in ((c,d),f' $\times$ g')
+\ensuremath{\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'})}
 
+\vspace{3mm}
+\pause
 Deriving F from \ensuremath{\mathcal{\hat{D}}} leaves us with the following definition:
 
-\ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} f) $\times$ \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} g) = \ensuremath{\mathcal{D}} (\ensuremath{\mathcal{D}^{+}} (f $\times$ g))
+\ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{f}) \times \mathcal{D}\;(\mathcal{D}^{+}\;\Varid{g})\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;(\Varid{f} \times \Varid{g}))}
 
+\vspace{3mm}
+\pause
 Using the same method as before, we replace \ensuremath{\mathcal{D}^{+}} with it's definition and generalize the condition:
 
-\ensuremath{\mathcal{D}} f $\times$ \ensuremath{\mathcal{D}} g =
+\ensuremath{\mathcal{D}\;\Varid{f} \times \mathcal{D}\;\Varid{g}\mathrel{=}}
 
-\ensuremath{\mathcal{D}} ($\lambda$ (a,b) -> let{(c,f') = f a; (d,g') = g b} in ((c,d),f' $\times$ g'))
+\ensuremath{\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'}))}
 
 and this is enough for our new instance.
 \end{frame}
@@ -875,10 +925,10 @@ and this is enough for our new instance.
 \>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\mathcal{D}\;\Varid{f}\;\Varid{x}\;\mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
+\>[5]{}\mathcal{D}\;\Varid{f} \times \mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}{}\<[E]%
 \\
 \>[5]{}\hsindent{33}{}\<[38]%
-\>[38]{}\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'}\;\Varid{x}\;\Varid{g'})){}\<[E]%
+\>[38]{}\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -901,14 +951,8 @@ and this is enough for our new instance.
 \>[5]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{b}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{dup}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\Varid{dup}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
+\\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
@@ -922,8 +966,7 @@ and this is enough for our new instance.
 \ColumnHook
 \end{hscode}\resethooks
 
-
-
+\vspace{-3mm}
 \begin{block}
 
 A cartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\mathcal{V}} is such that:
@@ -942,22 +985,22 @@ A cartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\;\
 
 \begin{frame}{Instance deduction}
 
-From corollary 3.1 and from exl,exr and dup being linear functions we can deduce that:
+From corollary 3.1 and from exl, exr and dup being linear functions we can deduce that:
 
-\ensuremath{\mathcal{D}^{+}} exl = \ensuremath{\lambda \Varid{p}\rightarrow } (exl p,exl)
+\ensuremath{\mathcal{D}^{+}\;\Varid{exl}\mathrel{=}\lambda \Varid{p}\rightarrow (\Varid{exl}\;\Varid{p},\Varid{exl})}
 
-\ensuremath{\mathcal{D}^{+}} exr = \ensuremath{\lambda \Varid{p}\rightarrow } (exr p,exr)
+\ensuremath{\mathcal{D}^{+}\;\Varid{exr}\mathrel{=}\lambda \Varid{p}\rightarrow (\Varid{exr}\;\Varid{p},\Varid{exr})}
 
-\ensuremath{\mathcal{D}^{+}} dup = \ensuremath{\lambda \Varid{p}\rightarrow } (dup a,dup)
+\ensuremath{\mathcal{D}^{+}\;\Varid{dup}\mathrel{=}\lambda \Varid{p}\rightarrow (\Varid{dup}\;\Varid{a},\Varid{dup})}
 
-
+\vspace{3mm}
 With this in mind we can arrive at our instance:
 
-exl = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} exl)
+\ensuremath{\Varid{exl}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{exl})}
 
-exr = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} exr)
+\ensuremath{\Varid{exr}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{exr})}
 
-dup = \ensuremath{\mathcal{D}}(\ensuremath{\mathcal{D}^{+}} dup)
+\ensuremath{\Varid{dup}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{dup})}
 
 \end{frame}
 
@@ -973,7 +1016,7 @@ exr = linearD exr
 
 dup = linearD dup
 
-
+\vspace{2mm}
 and  convert this directly into a new instance:
 
 \begin{block}{Categorical instance we've deduced}
@@ -1011,13 +1054,13 @@ In this paper coproducts are categorical products, i.e., biproducts
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}\mathbin{:}{}\<[E]%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{inl}\mathbin{::}\Varid{a'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\>[5]{}\Varid{inl}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{inr}\mathbin{::}\Varid{b'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\>[5]{}\Varid{inr}\mathbin{::}\Varid{b}\;\text{\tt 'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
 \>[5]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
@@ -1234,9 +1277,9 @@ A cocartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\
 \ColumnHook
 \end{hscode}\resethooks
 \begin{block}{With a compiler plugin we can obtain}
-\ensuremath{\Varid{sqr}\mathrel{=}\Varid{mulC}\; \circ \;(\Varid{id}\; \Delta \;\Varid{id})}\\
-\ensuremath{\Varid{magSqr}\mathrel{=}\Varid{addC}\; \circ \;(\Varid{mulC}\; \circ \;(\Varid{exl}\; \Delta \;\Varid{exl})\; \Delta \;\Varid{mulC}\; \circ \;(\Varid{exr}\; \Delta \;\Varid{exr}))}\\
-\ensuremath{\Varid{cosSinProd}\mathrel{=}(\Varid{cosC}\; \Delta \;\Varid{sinC})\; \circ \;\Varid{mulC}}\\
+\ensuremath{\Varid{sqr}\mathrel{=}\Varid{mulC}\mathbin{\circ}(\Varid{id}\; \Delta \;\Varid{id})}\\
+\ensuremath{\Varid{magSqr}\mathrel{=}\Varid{addC}\mathbin{\circ}(\Varid{mulC}\mathbin{\circ}(\Varid{exl}\; \Delta \;\Varid{exl})\; \Delta \;\Varid{mulC}\mathbin{\circ}(\Varid{exr}\; \Delta \;\Varid{exr}))}\\
+\ensuremath{\Varid{cosSinProd}\mathrel{=}(\Varid{cosC}\; \Delta \;\Varid{sinC})\mathbin{\circ}\Varid{mulC}}\\
 \end{block} 
 \end{frame}
 
@@ -1299,17 +1342,16 @@ A cocartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\
 %Ne2
 
 \begin{frame}{Matrices}
-\vspace{10mm}
 There exists three, non-exclusive, possibilities for a nonempty matrix $W$:
 \vspace{1mm}
 \begin{itemize}
 	\item width $W$ = height $W$ = $1$;
 	\vspace{1.5mm}
-	\item W is the horizontal juxtaposition of two matrices $U$ e $V$,\\
+	\item W is the horizontal juxtaposition of two matrices $U$ and $V$,\\
 	 where height $W$ = height $U$ = height $V$ and\\
 	 width $W$ = width $U$ $+$ width $V$;
 	 \vspace{1.5mm}
-	\item W is the vertical juxtaposition of two matrices $U$ e $V$,\\
+	\item W is the vertical juxtaposition of two matrices $U$ and $V$,\\
 	 where width $W$ = width $U$ = width $V$ and\\ 
 	 height $W$ = height $U$ $+$ height $V$.
 \end{itemize}
@@ -1317,11 +1359,10 @@ There exists three, non-exclusive, possibilities for a nonempty matrix $W$:
 \end{frame}
 
 \begin{frame}{Extracting a Data Representation}
-\vspace{15mm}
 
 %In addition to what we have used so far, we also need a Data Representation. 
 In machine learning, a Gradient-based optimization works by searching for local
-minima in the domain of a differentiable function $f :: a \to s$. Each step in the search is in the direction opposite of the gradient of $f$, which is a vector form of $\mathcal{D} f$.
+minima in the domain of a differentiable function $f :: a \to s$. Each step in the search is in the direction opposite of the gradient of $f$, which is a vector form of $\mathcal{D}\ f$.
 
 \pause
 \vspace{5mm}
@@ -1331,7 +1372,6 @@ matrix by applying $f$ to every vector in a basis of $U$.
 \end{frame}
 
 \begin{frame}{Generalized Matrices}
-\vspace{18mm}
 Given a scalar field $s$, a free vector space has the form $p \to s$ for some $p$, where the
 cardinality of $p$ is the dimension of the vector space and there exists a finite number of values for $p$.
 
@@ -1339,7 +1379,7 @@ cardinality of $p$ is the dimension of the vector space and there exists a finit
 
 \vspace{5mm}
 
-In particular, we can represent vector spaces over a given field as a representable functor, i.e., a functor F such that $\exists p$ $\forall s$ $F$ $s$ $\cong$ $p \to s$.
+In particular, we can represent vector spaces over a given field as a representable functor, i.e., a functor F such that: $$\exists p\ \forall s\ F\ s\ \cong\ p \to s$$
 \end{frame}
 
 %Ez2
@@ -1365,7 +1405,7 @@ In particular, we can represent vector spaces over a given field as a representa
 Given a category k we can represent its morfisms the following way:
 
 \begin{block}{Left-Compose functions}
-f :: a'k'b \ensuremath{\Rightarrow} ($\circ$ f) :: (b'k'r) \ensuremath{\rightarrow } (a'k'r) where r is any object of k.
+\ensuremath{\Varid{f}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;\Varid{b}\Rightarrow(\mathbin{\circ}\Varid{f})\mathbin{::}(\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})} where r is any object of k.
 \end{block}
 
 If h is the morfism we'll compose with f then h is the continuation of f.
@@ -1380,7 +1420,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b'k'r})\rightarrow (\Varid{a'k'r})){}\<[E]%
+\>[B]{}\mathbf{newtype}\;Cont^{k}_{r}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -1389,7 +1429,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow \Conid{Cont}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Cont^{k}_{r}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
 \>[B]{}\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f}){}\<[E]%
 \ColumnHook
@@ -1405,7 +1445,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;Cont^{k}_{r}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{id}\mathrel{=}\Conid{Cont}\;\Varid{id}{}\<[E]%
@@ -1413,28 +1453,28 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Conid{Cont}\;\Varid{g}\mathbin{\circ}\Conid{Cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;Cont^{k}_{r}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Conid{Conf}\;\Varid{f}\;\Varid{x}\;\Conid{Cont}\;\Varid{g}\mathrel{=}\Conid{Cont}\;( \nabla \mathbin{\circ}(\Varid{f}\;\Varid{x}\;\Varid{g})\mathbin{\circ}\Varid{unjoin}){}\<[E]%
+\>[3]{}\Conid{Conf}\;\Varid{f} \times \Conid{Cont}\;\Varid{g}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}(\Varid{f} \times \Varid{g})\mathbin{\circ}\Varid{unjoin}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;Cont^{k}_{r}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{exl}\mathrel{=}\Conid{Cont}\;( \nabla \mathbin{\circ}\Varid{inl});\Varid{exr}\mathrel{=}\Conid{Cont}\;( \nabla \mathbin{\circ}\Varid{inr}){}\<[E]%
+\>[3]{}\Varid{exl}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{inl});\Varid{exr}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{inr}){}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{dup}\mathrel{=}\Conid{Cont}\;(\Varid{jam}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;Cont^{k}_{r}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{inl}\mathrel{=}\Conid{Cont}\;(\Varid{exl}\mathbin{\circ}\Varid{unjoin});\Varid{inr}\mathrel{=}\Conid{Cont}\;(\Varid{exr}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{jam}\mathrel{=}\Conid{Cont}\;( \nabla \mathbin{\circ}\Varid{dup}){}\<[E]%
+\>[3]{}\Varid{jam}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{dup}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\Rightarrow\Conid{Scalable}\;\Conid{Cont}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\Rightarrow\Conid{Scalable}\;Cont^{k}_{r}\;\Varid{a}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Cont}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
@@ -1463,14 +1503,14 @@ Each linear map in A $\multimap$ s can be represented in the form of dot u for s
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{class}\;\Conid{HasDot}\;(\Conid{S})\;\Varid{u}\;\mathbf{where}\;\Varid{dot}\mathbin{::}\Varid{u}\rightarrow (\Varid{u}\mathbin{-} \circ \;\Varid{s}){}\<[E]%
+\>[B]{}\mathbf{class}\;\Conid{HasDot}\;(\Conid{S})\;\Varid{u}\;\mathbf{where}\;\Varid{dot}\mathbin{::}\Varid{u}\rightarrow (\Varid{u}\;\multimap \;\Varid{s}){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;\Conid{HasDot}\;(\Conid{IR})\;\Conid{IR}\;\mathbf{where}\;\Varid{dot}\mathrel{=}\Varid{scale}{}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b}){}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Rightarrow\Conid{HasDot}\;(\Conid{S})\;(\Varid{a}\;\Varid{x}\;\Varid{b}){}\<[E]%
+\>[3]{}\Rightarrow\Conid{HasDot}\;(\Conid{S})\;(\Varid{a} \times \Varid{b}){}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\mathbf{where}\;\Varid{dot}\;(\Varid{u},\Varid{v})\mathrel{=}\Varid{dot}\;\Varid{u}\; \Delta \;\Varid{dot}\;\Varid{v}{}\<[E]%
@@ -1484,13 +1524,13 @@ Each linear map in A $\multimap$ s can be represented in the form of dot u for s
 
 \begin{frame}{Instance deduction}
 
-The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) -> (a $\multimap$ s) which is isomorfic to (a -> b).
+The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) \ensuremath{\rightarrow } (a $\multimap$ s) which is isomorfic to (a \ensuremath{\rightarrow } b).
 
 \begin{block}{Type definition for duality}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;\Conid{Dual}\;(\Conid{K})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b'k'a}){}\<[E]%
+\>[B]{}\mathbf{newtype}\;\Conid{Dual}\;(\Conid{K})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b}\;\text{\tt 'k'}\;\Varid{a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -1513,7 +1553,7 @@ convert from $Cont_{k}^{S}$ to $Dual_{k}$ using a functor:
 \>[B]{}\Varid{asDual}\mathbin{::}(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b})\Rightarrow{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}((\Varid{b}\mathbin{-} \circ \;\Varid{s})\rightarrow (\Varid{a}\mathbin{-} \circ \;\Varid{s}))\rightarrow (\Varid{b}\mathbin{-} \circ \;\Varid{a}){}\<[E]%
+\>[3]{}((\Varid{b}\;\multimap \;\Varid{s})\rightarrow (\Varid{a}\;\multimap \;\Varid{s}))\rightarrow (\Varid{b}\;\multimap \;\Varid{a}){}\<[E]%
 \\
 \>[B]{}\Varid{asDual}\;(\Conid{Cont}\;\Varid{f})\mathrel{=}\Conid{Dual}\;(\Varid{onDot}\;\Varid{f}){}\<[E]%
 \ColumnHook
@@ -1528,9 +1568,9 @@ where
 \>[B]{}\Varid{onDot}\mathbin{::}(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b})\Rightarrow{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}((\Varid{b}\mathbin{-} \circ \;\Varid{s})\rightarrow (\Varid{a}\mathbin{-} \circ \;\Varid{s}))\rightarrow (\Varid{b}\mathbin{-} \circ \;\Varid{a}){}\<[E]%
+\>[3]{}((\Varid{b}\;\multimap \;\Varid{s})\rightarrow (\Varid{a}\;\multimap \;\Varid{s}))\rightarrow (\Varid{b}\;\multimap \;\Varid{a}){}\<[E]%
 \\
-\>[B]{}\Varid{onDot}\;\Varid{f}\mathrel{=}\Varid{dot}\mathbin{\char94 -}\mathrm{1}\mathbin{\circ}\Varid{f}\mathbin{\circ}\Varid{dot}{}\<[E]%
+\>[B]{}\Varid{onDot}\;\Varid{f}\mathrel{=}\Varid{dot}^{-1}\mathbin{\circ}\Varid{f}\mathbin{\circ}\Varid{dot}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -1544,9 +1584,8 @@ where
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{21}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{39}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;\Conid{Dual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\; Dual_k \;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{id}\mathrel{=}\Conid{Dual}\;\Varid{id}{}\<[E]%
@@ -1554,24 +1593,29 @@ where
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Conid{Dual}\;\Varid{g}\mathbin{\circ}\Conid{Dual}\;\Varid{f}\mathrel{=}\Conid{Dual}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Conid{Dual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\; Dual_k \;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Conid{Dual}\;\Varid{f}\;\Varid{x}\;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\;\Varid{x}\;\Varid{g}){}\<[E]%
+\>[3]{}\Conid{Dual}\;\Varid{f} \times \Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f} \times \Varid{g}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Conid{Dual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\; Dual_k \;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{exl}\mathrel{=}\Conid{Dual}\;\Varid{inl};{}\<[21]%
-\>[21]{}\Varid{exr}\mathrel{=}\Conid{Dual}\;\Varid{inr};{}\<[39]%
-\>[39]{}\Varid{dup}\mathrel{=}\Conid{Dual}\;\Varid{jam}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{CocartesianDual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\>[21]{}\Varid{exr}\mathrel{=}\Conid{Dual}\;\Varid{inr}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{inl}\mathrel{=}\Conid{Dual}\;\Varid{exl};\Varid{inr}\mathrel{=}\Conid{Dual}\;\Varid{exr};\Varid{jam}\mathrel{=}\Conid{Dual}\;\Varid{dup}{}\<[E]%
+\>[3]{}\Varid{dup}\mathrel{=}\Conid{Dual}\;\Varid{jam}{}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\Rightarrow\Conid{Scalable}\;\Conid{Dual}\;(\Varid{k})\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\; Dual_k \;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{inl}\mathrel{=}\Conid{Dual}\;\Varid{exl};\Varid{inr}\mathrel{=}\Conid{Dual}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{jam}\mathrel{=}\Conid{Dual}\;\Varid{dup}{}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\Rightarrow\Conid{Scalable}\; Dual_k \;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Dual}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
@@ -1584,18 +1628,13 @@ where
 \begin{frame}{Final notes}
 
 \begin{itemize}
-  \item \ensuremath{ \nabla \;\Varid{and}\; \Delta } mutually dualize 
+  \item \ensuremath{( \nabla )\;\Varid{and}\;( \Delta )} mutually dualize 
   
-  \ensuremath{(\Conid{Dual}\;\Varid{f}\; \nabla \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \Delta \;\Varid{g})\;\Varid{and}\;\Conid{Dual}\;\Varid{f}\; \Delta \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \nabla \;\Varid{g}))}
+  \ensuremath{(\Conid{Dual}\;\Varid{f}\; \nabla \;\Conid{Dual}\;\Varid{g})\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \Delta \;\Varid{g})\;\Varid{and}\;\Conid{Dual}\;\Varid{f}\; \Delta \;\Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f}\; \nabla \;\Varid{g}))}
   \item Using the definition from chapter 8 we can determine that the duality of a matrix corresponds to it's transposition
 \end{itemize}
 
 \end{frame}
-
-
-
-
-
 
 
 \section{Foward-Mode Automatic Differentiation(FAD)}
@@ -1611,9 +1650,9 @@ This algorithm is far more apropriated for low dimention domains.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;\Conid{Begin}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r'k'a})\rightarrow (\Varid{r'k'b})){}\<[E]%
+\>[B]{}\mathbf{newtype}\;Begin^{k}_{r}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{r}\;\text{\tt 'k'}\;\Varid{b})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow \Conid{Begin}\;(\Varid{k},\Varid{r})\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Begin^{k}_{r}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
 \>[B]{}\Varid{begin}\;\Varid{f}\mathrel{=}\Conid{Begin}\;(\Varid{f}\mathbin{\circ}){}\<[E]%
 \ColumnHook
@@ -1729,7 +1768,7 @@ A practical alternative is to consider n-ary products as representable functors(
 \>[5]{}\mathbf{instance}\;(\Conid{MonoidalI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow\Conid{MonoidalI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{crossI}\;\Varid{fs}\mathrel{=}\Conid{D}\;((\Varid{id} \times \Varid{crossI})\; \circ \;\Varid{unzip}\; \circ \;\Varid{crossI}\;(\Varid{fmap}\;\Varid{unD}\;\Varid{fs})){}\<[E]%
+\>[9]{}\Varid{crossI}\;\Varid{fs}\mathrel{=}\Conid{D}\;((\Varid{id} \times \Varid{crossI})\mathbin{\circ}\Varid{unzip}\mathbin{\circ}\Varid{crossI}\;(\Varid{fmap}\;\Varid{unD}\;\Varid{fs})){}\<[E]%
 \\[\blanklineskip]%
 \>[5]{}\mathbf{instance}\;(\Conid{CocartesianI}\;(\rightarrow )\;\Varid{h},\Conid{CartesianI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow{}\<[E]%
 \\
@@ -1737,7 +1776,7 @@ A practical alternative is to consider n-ary products as representable functors(
 \>[13]{}\Conid{CartesianI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{exl}\mathrel{=}\Varid{linearD}\;\Varid{exl}\;\Varid{exl}{}\<[E]%
+\>[9]{}\Varid{exI}\mathrel{=}\Varid{linearD}\;\Varid{exI}\;\Varid{exI}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
 \>[9]{}\Varid{replI}\mathrel{=}\Varid{zipWith}\;\Varid{linearD}\;\Varid{replI}\;\Varid{replI}{}\<[E]%
@@ -1754,6 +1793,49 @@ A practical alternative is to consider n-ary products as representable functors(
 \end{hscode}\resethooks
 \end{frame}
 
+\begin{frame}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{32}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\Rightarrow\Conid{CocartesianI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{inI}\mathbin{::}\Varid{h}\;(\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{h}\;\Varid{a}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{jamI}\mathbin{::}\Varid{h}\;\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{MonoidalI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow\Conid{MonoidalI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{crossI}\;\Varid{fs}\mathrel{=}\Conid{D}\;((\Varid{id} \times \Varid{crossI})\mathbin{\circ}\Varid{unzip}\mathbin{\circ}\Varid{crossI}\;(\Varid{fmap}\;\Varid{unD}\;\Varid{fs})){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{CocartesianI}\;(\rightarrow )\;\Varid{h},\Conid{CartesianI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow{}\<[E]%
+\\
+\>[5]{}\hsindent{8}{}\<[13]%
+\>[13]{}\Conid{CartesianI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{exI}\mathrel{=}\Varid{zipWith}\;\Varid{linearD}\;\Varid{exI}\;\Varid{exI}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{replI}\mathrel{=}\Varid{linearD}\;\Varid{replI}\;\Varid{replI}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{CocartesianI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow\Conid{CocartesianI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{inI}\mathrel{=}\Varid{zipWith}\;\Varid{linearD}\;{}\<[32]%
+\>[32]{}\Varid{inIF}\;\Varid{inl}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{jamI}\mathrel{=}\Varid{linearD}\;\Varid{sum}\;\Varid{jamI}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{frame}
 \section{Related Work and conlusion}
 \begin{frame}
 \begin{itemize}
@@ -1770,162 +1852,6 @@ A practical alternative is to consider n-ary products as representable functors(
 
 %fim
 
-% %format (der (f)) = "{\cal D}^+ " f
-% %format (DS (a) (b) (c)) = "{" c "}\times " b "^{" a "}"
-% 
-% |der() : (A->B) -> DS A B B|
-% 
-% \begin{eqnarray*}
-% \xymatrix@@C=4em{
-%   C
-% &
-%   B
-%       \ar[l]_-{|g|}
-% &
-%   A
-%       \ar[l]_-{|f|}
-% \\
-%   |DS A B ((DS B C C))|
-%       \ar[d]_-{|mu|}
-% &
-%   |DS A B B|
-%       \ar[l]_-{|der g >< id|}
-% &
-%   |A|
-%       \ar[l]_-{|der f|}
-%       \ar[dll]^-{|der((g.f))|}
-% \\
-%   |DS A C C|
-% }
-% \end{eqnarray*}
-% \begin{spec}
-% mu :: (DS A B ((DS B C D))) -> (DS A C D)
-% mu = (id >< (uncurry (.))) . assocr
-% \end{spec}
-% 
-% \begin{eqnarray*}
-% \xymatrix@@C=4em{
-%   C
-% &
-%   B
-%       \ar[l]_-{|g|}
-% &
-%   A
-%       \ar[l]_-{|f|}
-% \\
-%   |DS A B ((DS B C C))|
-%       \ar[d]_-{|mu|}
-% &
-%   |DS A B B|
-%       \ar[l]_-{|der g >< id|}
-%       \ar@@{..}[d]
-% &
-%   |A|
-%       \ar[l]_-{|der f|}
-%                 \ar@@/^3pc/[lld]^-{|der((g.f))|}
-% \\
-%   |DS A C C|
-% &
-%   |B|
-%       \ar[l]_-{|der g|}
-% }
-% \end{eqnarray*}
-
-
-%============================EXEMPLO==========================
-%\section{Introduction}
-%
-%\subsection[Short First Subsection Name]{First Subsection Name}
-%
-%\begin{frame}{Make Titles Informative. Use Uppercase Letters.}{Subtitles are optional.}
-%  % - A title should summarize the slide in an understandable fashion
-%  %   for anyone how does not follow everything on the slide itself.
-%
-%  \begin{itemize}
-%  \item
-%    Use \texttt{itemize} a lot.
-%  \item
-%    Use very short sentences or short phrases.
-%  \end{itemize}
-%\end{frame}
-%
-%\begin{frame}{Make Titles Informative.}
-%
-%  You can create overlays\dots
-%  \begin{itemize}
-%  \item using the \texttt{pause} command:
-%    \begin{itemize}
-%    \item
-%      First item.
-%      \pause
-%    \item    
-%      Second item.
-%    \end{itemize}
-%  \item
-%    using overlay specifications:
-%    \begin{itemize}
-%    \item<3->
-%      First item.
-%    \item<4->
-%      Second item.
-%    \end{itemize}
-%  \item
-%    using the general \texttt{uncover} command:
-%    \begin{itemize}
-%      \uncover<5->{\item
-%        First item.}
-%      \uncover<6->{\item
-%        Second item.}
-%    \end{itemize}
-%  \end{itemize}
-%\end{frame}
-%
-%\begin{frame}{}
-%\end{frame}
-%
-%\subsection{Second Subsection}
-%
-%\begin{frame}{Make Titles Informative.}
-%\end{frame}
-%
-%
-%
-%\section{Summary}
-%
-%\subsection{coisas1}
-%
-%\begin{frame}{Summary}
-%
-%  % Keep the summary *very short*.
-%  \begin{itemize}
-%  \item
-%    The \alert{first main message} of your talk in one or two lines.
-%  \item
-%    The \alert{second main message} of your talk in one or two lines.
-%  \item
-%    Perhaps a \alert{third message}, but not more than that.
-%  \end{itemize}
-%  
-%  % The following outlook is optional.
-%  \vskip0pt plus.5fill
-%  \begin{itemize}
-%  \item
-%    Outlook
-%    \begin{itemize}
-%    \item
-%      Something you haven't solved.
-%    \item
-%      Something else you haven't solved.
-%    \end{itemize}
-%  \end{itemize}
-%\end{frame}
-%
-%\subsection{coisas2}
-%\begin{frame}{coisas2}
-%
-%
-%\end{frame}
-%=================================================================
 
 \end{document}
 
