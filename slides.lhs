@@ -53,6 +53,8 @@
 %format Dk = " D_k "
 %format >< = " \times "
 %format (inv (x)) = x "^{-1}"
+%format (der (f)) = "{\cal D}^+ " f
+%format (DS (a) (b) (c)) = "{" c "}\times " b "^{" a "}"
 %----------------------------------------------------
 
 \newenvironment{slide}[1]{\begin{frame}\frametitle{#1}}{\end{frame}}
@@ -185,11 +187,12 @@ Assuming that the notion of derivatives that we need matches with a linear map, 
 	\begin{code} 
 	bigD :: (a -> b) -> (a -> (a sto b))
 	\end{code}
-	If we differentiate two times, we have:
-	\begin{code} 
-	 bigDsquared = bigD . bigD :: (a -> b) -> (a -> (a sto a sto b ))
-	\end{code}
+    If we differentiate two times, we have:
+    \begin{code} 
+     bigDsquared = bigD . bigD :: (a -> b) -> (a -> (a sto a sto b ))
+    \end{code}
 \end{defi}
+
 \end{frame}
 
 \begin{frame}
@@ -237,9 +240,9 @@ bigDplus :: (a -> b) -> (a -> b >< (a sto b))
 bigDplus f a = (f a, bigD f a)
 \end{code}
 \end{frame}
+
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
-\vspace{15mm}
 \begin{coro}
 	$\mathcal{D}^{+}$ is efficiently compositional in relation to $(\circ)$, that is, in Haskell:
 	\begin{code}
@@ -247,7 +250,25 @@ bigDplus f a = (f a, bigD f a)
             in (c, g' . f') 
 	\end{code}
 \end{coro}
+\vspace{-3mm}
+
+\begin{eqnarray*}
+\xymatrix@@C=4em{
+  |DS A B ((DS B C C))|
+      \ar[d]_-{|(id >< (uncurry (.))) . assocr|}
+&
+  |DS A B B|
+      \ar[l]_-{|der g >< id|}
+&
+  |A|
+      \ar[l]_-{|der f|}
+      \ar[dll]^-{|der((g.f))|}
+\\
+  |DS A C C|
+}
+\end{eqnarray*}
 \end{frame}
+
 \begin{frame}
 \frametitle{Rules for Differentiation - Parallel Composition} 
 \vspace{10mm}
@@ -921,10 +942,10 @@ In particular, we can represent vector spaces over a given field as a representa
 \begin{frame}{A short introdution}
 
 \begin{itemize}
-    \item<1-> We've derived and generalized an AD algorithm using categories
-    \item<2-> With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
-    \item<3-> We want to obtain generalized FAD and RAD algorithms 
-    \item<4-> How do we describe this in Categorical notation?
+    \item We've derived and generalized an AD algorithm using categories
+    \item With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
+    \item We want to obtain generalized FAD and RAD algorithms 
+    \item How do we describe this in Categorical notation?
 \end{itemize}
 
 \end{frame}
