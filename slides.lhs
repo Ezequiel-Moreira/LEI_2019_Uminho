@@ -41,6 +41,7 @@
 %format joinu = " \nabla "
 %format bigD = "\mathcal{D}"
 %format bigDplus = "\mathcal{D}^{+}"
+%format bigDsquared = "\mathcal{D}^{2}"
 %format bigDplus0 = "\mathcal{D}^{+}_{0}"
 %format bigDhat = "\mathcal{\hat{D}}"
 %format bigU = "\mathcal{U}"
@@ -156,7 +157,7 @@ The chain rule in $\R^{m}\hspace{-0.3mm}\to \R^{n}$ is:
 \begin{frame}
 \frametitle{Generalization and Chain Rule}
 \vspace{15mm}
-Assuming that the notion of derivates that we need matches with a linear map, where it is accepted the chain rule previously seen, we will define a new generalization:
+Assuming that the notion of derivatives that we need matches with a linear map, where it is accepted the chain rule previously seen, we will define a new generalization:
 \pause
 
 \begin{align*}
@@ -180,14 +181,14 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 	\frametitle{Derivate as a linear map} 
 \end{center}
 \begin{defi}
-	Let $f::a \to b$ be a function, where $a$ and $b$ are vetorial spaces that share a common underlying field. The first derivate definition is the following:
-	\begin{align*} 
-	\mathcal{D} :: (a \to b) \to (a \to (a sto b))
-	\end{align*}
+	Let $f::a \to b$ be a function, where $a$ and $b$ are vectorial spaces that share a common underlying field. The first derivative definition is the following:
+	\begin{code} 
+	bigD :: (a -> b) -> (a -> (a sto b))
+	\end{code}
 	If we differentiate two times, we have:
-	\begin{align*} 
-	 \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a sto a sto b ))
-	\end{align*}
+	\begin{code} 
+	 bigDsquared = bigD . bigD :: (a -> b) -> (a -> (a sto a sto b ))
+	\end{code}
 \end{defi}
 \end{frame}
 
@@ -204,7 +205,7 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition}
-Unfortunately the previous theorem isn't a efficient recipe for composition. As such we will introduce a second derivate definition:
+Unfortunately the previous theorem isn't a efficient recipe for composition. As such we will introduce a second derivative definition:
 \begin{code}
 bigDplus0 :: (a -> b) -> ((a -> b) >< (a -> (a sto b))) 
 bigDplus0 f = (f, bigD f)
@@ -223,7 +224,7 @@ $= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
-Having in mind optimizations, we introduce the third and last derivate definition:
+Having in mind optimizations, we introduce the third and last derivative definition:
 \begin{code}
 bigDplus :: (a -> b) -> (a -> (b >< (a sto b))) 
 bigDplus f a = (f a, bigD f a)
@@ -920,7 +921,7 @@ In particular, we can represent vector spaces over a given field as a representa
 \begin{frame}{A short introdution}
 
 \begin{itemize}
-    \item<1-> In chapter 4 we've derived an AD algorithm that was generalized in figure 6 of the document
+    \item<1-> We've derived and generalized an AD algorithm using categories
     \item<2-> With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
     \item<3-> We want to obtain generalized FAD and RAD algorithms 
     \item<4-> How do we describe this in Categorical notation?
@@ -1127,7 +1128,7 @@ We can derive categorical instances from the functor above and we can choose r t
 \begin{frame}
 \begin{itemize}
 \item
-Practical applications often involves high-dimensional spaces.
+Practical applications often involve high-dimensional spaces.
 \item
 Binary products are a very inefficient and unwieldy way of encoding high-dimensional spaces.
 \item
@@ -1212,9 +1213,9 @@ A practical alternative is to consider n-ary products as representable functors(
 \begin{frame}
 \begin{itemize}
 \item
-    Suggests that some of the work refered does just a part of this paper.
+    Suggests that some of the work refered to does just a part of this paper.
 \item
-    This paper was a continuation of the [Elliot 2017]
+    This paper is a follow up of [Elliot 2017]
 \item
     Suggests that this implementation is simple, efficient, it can free memory dinamically (RAD) and is naturally parallel.
 \item
