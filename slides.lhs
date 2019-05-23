@@ -1146,7 +1146,7 @@ We can derive categorical instances from the functor above and we can choose r t
 
 %Ar2
 \section{Scaling Up}
-\begin{frame}
+\begin{frame}{Scaling Up}
 \begin{itemize}
 \item
 Practical applications often involve high-dimensional spaces.
@@ -1231,16 +1231,16 @@ A practical alternative is to consider n-ary products as representable functors(
 \end{code}
 \end{frame}
 \section{Related Work and conlusion}
-\begin{frame}
+\begin{frame}{Conclusion}
 \begin{itemize}
 \item
     Suggests that some of the work referred to does just a part of this paper.
 \item
-    This paper is a follow up of [Elliot 2017]\cite{Elliott:2017} 
+    This paper ([Elliott 2018]\cite{Elliott:2018}) is a follow up of [Elliott 2017]\cite{Elliott:2017} 
 \item
     Suggests that this implementation is simple, efficient, it can free memory dinamically (RAD) and is naturally parallel.
 \item
-    Future work are detailed performace analysis; higher-order differentiation and automatic incrementation (continuing previous work [Elliot 2017]\cite{Elliott:2017})
+    Future work are detailed performace analysis; higher-order differentiation and automatic incrementation (continuing previous work [Elliott 2017]\cite{Elliott:2017})
 \end{itemize}
 \end{frame}
 
