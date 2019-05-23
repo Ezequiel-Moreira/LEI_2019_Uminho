@@ -1118,8 +1118,18 @@ A cocartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\
     \begin{itemize}
         \item
             \ensuremath{ \Delta \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{d})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d}))}
+            \xymatrix@R=5mm{
+                & \\
+                \ar[ur]\ar[dr] \\
+                & 
+            }
         \item
             \ensuremath{ \nabla \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{c}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{d}\;\text{\tt 'k'}\;\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\;\text{\tt 'k'}\;\Varid{a})}
+            \xymatrix@R=5mm{
+                \ar[dr]\\
+                &  \\
+                \ar[ur]
+            }
     \end{itemize}
 \end{slide}
 
@@ -1739,7 +1749,7 @@ A practical alternative is to consider n-ary products as representable functors(
 \>[9]{}\Varid{replI}{}\<[17]%
 \>[17]{}\mathbin{::}\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{h}\;\Varid{a}{}\<[E]%
 \\[\blanklineskip]%
-\>[5]{}\mathbf{class}\;(\Conid{Representable}\;\Varid{h},\Conid{Zip}\;\Varid{h},\Conid{Pointed}\;\Varid{h})\Rightarrow{}\<[E]%
+\>[5]{}\mathbf{instance}\;(\Conid{Representable}\;\Varid{h},\Conid{Zip}\;\Varid{h},\Conid{Pointed}\;\Varid{h})\Rightarrow{}\<[E]%
 \\
 \>[5]{}\hsindent{8}{}\<[13]%
 \>[13]{}\Conid{CartesianI}\;(\rightarrow )\;\Varid{h}\;\mathbf{where}{}\<[E]%

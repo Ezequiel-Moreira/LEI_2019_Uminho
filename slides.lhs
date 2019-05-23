@@ -749,8 +749,18 @@ A cocartesian functor F between categories |bigU and bigV| is such that:
     \begin{itemize}
         \item
             |forku :: Cartesian k => (a 'k' c) -> (a 'k' d) -> (a 'k' (c >< d))|
+            \xymatrix@@R=5mm{
+                & \\
+                \ar[ur]\ar[dr] \\
+                & 
+            }
         \item
             |joinu :: Cartesian k => (c 'k' a) -> (d 'k' a) -> ((c >< d) 'k' a)|
+            \xymatrix@@R=5mm{
+                \ar[dr]\\
+                &  \\
+                \ar[ur]
+            }
     \end{itemize}
 \end{slide}
 
@@ -1171,7 +1181,7 @@ A practical alternative is to consider n-ary products as representable functors(
         exI     :: h (h a ‘k‘ a)
         replI   :: a ‘k‘ h a
 
-    class (Representable h, Zip h, Pointed h) => 
+    instance (Representable h, Zip h, Pointed h) => 
             CartesianI (->) h where
         exI = tabulate (flip index)
         replI = point
