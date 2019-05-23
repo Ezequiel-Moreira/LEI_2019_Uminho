@@ -499,7 +499,7 @@ If we do, then |bigDplus| is a functor.
 
 \begin{block}{(C.1) proof}
 
-id $\circ$ |bigDhat| \\
+id $\circ$ |bigDhat| f \\
 \{ functor law for id (specification of |bigDhat|) \}\\
 = |bigDhat| id $\circ$ |bigDhat| f \\
 \{ functor law for ($\circ$) \}\\
