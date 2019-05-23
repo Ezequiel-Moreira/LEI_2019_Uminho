@@ -1213,18 +1213,20 @@ A practical alternative is to consider n-ary products as representable functors(
 \begin{frame}
 \begin{itemize}
 \item
-    Suggests that some of the work refered to does just a part of this paper.
+    Suggests that some of the work referred to does just a part of this paper.
 \item
-    This paper is a follow up of [Elliot 2017]
+    This paper is a follow up of [Elliot 2017]\cite{Elliott:2017} 
 \item
     Suggests that this implementation is simple, efficient, it can free memory dinamically (RAD) and is naturally parallel.
 \item
-    Future work are detailed performace analysis; higher-order differentiation and automatic incrementation (continuing previous work [Elliot 2017])
+    Future work are detailed performace analysis; higher-order differentiation and automatic incrementation (continuing previous work [Elliot 2017]\cite{Elliott:2017})
 \end{itemize}
 \end{frame}
 
+\section{Bibliography}
+\bibliographystyle{acm}%{ACM-Reference-Format}
+\bibliography{slides}
 %fim
-
 
 \end{document}
 

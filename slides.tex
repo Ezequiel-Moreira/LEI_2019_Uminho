@@ -396,7 +396,7 @@ The chain rule in $\R^{m}\hspace{-0.3mm}\to \R^{n}$ is:
 \begin{frame}
 \frametitle{Generalization and Chain Rule}
 \vspace{15mm}
-Assuming that the notion of derivates that we need matches with a linear map, where it is accepted the chain rule previously seen, we will define a new generalization:
+Assuming that the notion of derivatives that we need matches with a linear map, where it is accepted the chain rule previously seen, we will define a new generalization:
 \pause
 
 \begin{align*}
@@ -420,14 +420,22 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 	\frametitle{Derivate as a linear map} 
 \end{center}
 \begin{defi}
-	Let $f::a \to b$ be a function, where $a$ and $b$ are vetorial spaces that share a common underlying field. The first derivate definition is the following:
-	\begin{align*} 
-	\mathcal{D} :: (a \to b) \to (a \to (a sto b))
-	\end{align*}
+	Let $f::a \to b$ be a function, where $a$ and $b$ are vectorial spaces that share a common underlying field. The first derivative definition is the following:
+	\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[9]{}\mathcal{D}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\rightarrow (\Varid{a}\;\multimap \;\Varid{b})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 	If we differentiate two times, we have:
-	\begin{align*} 
-	 \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a sto a sto b ))
-	\end{align*}
+	\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{10}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[10]{}\mathcal{D}^{2}\mathrel{=}\mathcal{D}\mathbin{\circ}\mathcal{D}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\rightarrow (\Varid{a}\;\multimap \;\Varid{a}\;\multimap \;\Varid{b})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
 \end{defi}
 \end{frame}
 
@@ -444,7 +452,7 @@ Assuming that the notion of derivates that we need matches with a linear map, wh
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition}
-Unfortunately the previous theorem isn't a efficient recipe for composition. As such we will introduce a second derivate definition:
+Unfortunately the previous theorem isn't a efficient recipe for composition. As such we will introduce a second derivative definition:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -467,7 +475,7 @@ $= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D
 \end{frame}
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
-Having in mind optimizations, we introduce the third and last derivate definition:
+Having in mind optimizations, we introduce the third and last derivative definition:
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -577,7 +585,7 @@ Another important way of combining functions is the operation cross, that combin
 
 \begin{frame}{A short introdution}
 \begin{itemize}
- \item<1-> We want to calculate \ensuremath{\mathcal{D}}.
+ \item<1-> We want to calculate \ensuremath{\mathcal{D}^{+}}.
  \item<2-> However, \ensuremath{\mathcal{D}} is not computable.
  \item<3-> Solution: reimplement corollaries using category theory
 \end{itemize}
@@ -1389,7 +1397,7 @@ In particular, we can represent vector spaces over a given field as a representa
 \begin{frame}{A short introdution}
 
 \begin{itemize}
-    \item<1-> In chapter 4 we've derived an AD algorithm that was generalized in figure 6 of the document
+    \item<1-> We've derived and generalized an AD algorithm using categories
     \item<2-> With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
     \item<3-> We want to obtain generalized FAD and RAD algorithms 
     \item<4-> How do we describe this in Categorical notation?
@@ -1494,7 +1502,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 
 Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
 
-A vector space A over a scalar field has A $\multimap$ s as its dual.
+A vector space A over a scalar field s has A $\multimap$ s as its dual.
 
 Each linear map in A $\multimap$ s can be represented in the form of dot u for some u :: A where
 
@@ -1530,7 +1538,7 @@ The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) \
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;\Conid{Dual}\;(\Conid{K})\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b}\;\text{\tt 'k'}\;\Varid{a}){}\<[E]%
+\>[B]{}\mathbf{newtype}\; Dual_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b}\;\text{\tt 'k'}\;\Varid{a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -1669,7 +1677,7 @@ We can derive categorical instances from the functor above and we can choose r t
 \begin{frame}
 \begin{itemize}
 \item
-Practical applications often involves high-dimensional spaces.
+Practical applications often involve high-dimensional spaces.
 \item
 Binary products are a very inefficient and unwieldy way of encoding high-dimensional spaces.
 \item
@@ -1840,18 +1848,20 @@ A practical alternative is to consider n-ary products as representable functors(
 \begin{frame}
 \begin{itemize}
 \item
-    Suggests that some of the work refered does just a part of this paper.
+    Suggests that some of the work referred to does just a part of this paper.
 \item
-    This paper was a continuation of the [Elliot 2017]
+    This paper is a follow up of [Elliot 2017]\cite{Elliott:2017} 
 \item
     Suggests that this implementation is simple, efficient, it can free memory dinamically (RAD) and is naturally parallel.
 \item
-    Future work are detailed performace analysis; higher-order differentiation and automatic incrementation (continuing previous work [Elliot 2017])
+    Future work are detailed performace analysis; higher-order differentiation and automatic incrementation (continuing previous work [Elliot 2017]\cite{Elliott:2017})
 \end{itemize}
 \end{frame}
 
+\section{Bibliography}
+\bibliographystyle{acm}%{ACM-Reference-Format}
+\bibliography{slides}
 %fim
-
 
 \end{document}
 
