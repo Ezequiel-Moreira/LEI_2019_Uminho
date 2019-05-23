@@ -308,7 +308,7 @@ f >< g = \(a, b) -> (f a,g b)
 
 \begin{frame}{A short introdution}
 \begin{itemize}
- \item<1-> We want to calculate |bigD|.
+ \item<1-> We want to calculate |bigDplus|.
  \item<2-> However, |bigD| is not computable.
  \item<3-> Solution: reimplement corollaries using category theory
 \end{itemize}
