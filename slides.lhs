@@ -1002,7 +1002,7 @@ instance Scalable k a => Scalable Contkr a where
 
 Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
 
-A vector space A over a scalar field has A $\multimap$ s as its dual.
+A vector space A over a scalar field s has A $\multimap$ s as its dual.
 
 Each linear map in A $\multimap$ s can be represented in the form of dot u for some u :: A where
 
@@ -1028,7 +1028,7 @@ The internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) |
 
 \begin{block}{Type definition for duality}
 \begin{code}
-newtype Dual(K) a b = Dual(b 'k' a)
+newtype Dualk a b = Dual(b 'k' a)
 \end{code}
 \end{block}
 
