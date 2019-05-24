@@ -1119,16 +1119,16 @@ A cocartesian functor F between categories \ensuremath{\mathcal{U}\;\Varid{and}\
         \item
             \ensuremath{ \Delta \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{d})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d}))}
             \xymatrix@R=5mm{
-                & \\
-                \ar[ur]\ar[dr] \\
-                & 
+                & c \\
+                a \ar[ur]\ar[dr] \\
+                & d
             }
         \item
             \ensuremath{ \nabla \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{c}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{d}\;\text{\tt 'k'}\;\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\;\text{\tt 'k'}\;\Varid{a})}
             \xymatrix@R=5mm{
-                \ar[dr]\\
-                &  \\
-                \ar[ur]
+                c\ar[dr]\\
+                & a \\
+                d\ar[ur]
             }
     \end{itemize}
 \end{slide}
@@ -1457,7 +1457,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;Cont^{k}_{r}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})){}\<[E]%
+\>[B]{}\mathbf{newtype}\;Cont^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -1466,7 +1466,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Cont^{k}_{r}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Cont^{r}_{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
 \>[B]{}\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f}){}\<[E]%
 \ColumnHook
@@ -1482,7 +1482,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;Cont^{k}_{r}\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;Cont^{r}_{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{id}\mathrel{=}\Conid{Cont}\;\Varid{id}{}\<[E]%
@@ -1490,12 +1490,12 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Conid{Cont}\;\Varid{g}\mathbin{\circ}\Conid{Cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;Cont^{k}_{r}\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;Cont^{r}_{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Conid{Conf}\;\Varid{f} \times \Conid{Cont}\;\Varid{g}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}(\Varid{f} \times \Varid{g})\mathbin{\circ}\Varid{unjoin}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;Cont^{k}_{r}\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;Cont^{r}_{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{exl}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{inl});\Varid{exr}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{inr}){}\<[E]%
@@ -1503,7 +1503,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{dup}\mathrel{=}\Conid{Cont}\;(\Varid{jam}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;Cont^{k}_{r}\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;Cont^{r}_{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{inl}\mathrel{=}\Conid{Cont}\;(\Varid{exl}\mathbin{\circ}\Varid{unjoin});\Varid{inr}\mathrel{=}\Conid{Cont}\;(\Varid{exr}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
@@ -1511,7 +1511,7 @@ If h is the morfism we'll compose with f then h is the continuation of f.
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{jam}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{dup}){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\Rightarrow\Conid{Scalable}\;Cont^{k}_{r}\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\Rightarrow\Conid{Scalable}\;Cont^{r}_{k}\;\Varid{a}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
 \>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Cont}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
@@ -1687,9 +1687,9 @@ This algorithm is far more apropriated for low dimention domains.
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;Begin^{k}_{r}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{r}\;\text{\tt 'k'}\;\Varid{b})){}\<[E]%
+\>[B]{}\mathbf{newtype}\;Begin^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{r}\;\text{\tt 'k'}\;\Varid{b})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Begin^{k}_{r}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Begin^{r}_{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
 \>[B]{}\Varid{begin}\;\Varid{f}\mathrel{=}\Conid{Begin}\;(\Varid{f}\mathbin{\circ}){}\<[E]%
 \ColumnHook

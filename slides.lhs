@@ -750,16 +750,16 @@ A cocartesian functor F between categories |bigU and bigV| is such that:
         \item
             |forku :: Cartesian k => (a 'k' c) -> (a 'k' d) -> (a 'k' (c >< d))|
             \xymatrix@@R=5mm{
-                & \\
-                \ar[ur]\ar[dr] \\
-                & 
+                & c \\
+                a \ar[ur]\ar[dr] \\
+                & d
             }
         \item
             |joinu :: Cartesian k => (c 'k' a) -> (d 'k' a) -> ((c >< d) 'k' a)|
             \xymatrix@@R=5mm{
-                \ar[dr]\\
-                &  \\
-                \ar[ur]
+                c\ar[dr]\\
+                & a \\
+                d\ar[ur]
             }
     \end{itemize}
 \end{slide}
