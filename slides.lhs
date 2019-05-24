@@ -69,7 +69,7 @@
 {Universidade do Minho}
 
 \date
-{26 de Abril}
+{24 de Maio}
 
 \subject{Talks}
 
