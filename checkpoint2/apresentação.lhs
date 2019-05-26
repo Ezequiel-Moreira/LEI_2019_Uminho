@@ -209,12 +209,184 @@ Funtor: mapeia uma categoria noutra, preservando a estrutura
 \end{frame}
 
 
+\section{Adaptação de definições}
+
+\begin{frame}{Adaptação de definições}
+
+\begin{block}{|bigD| definition}
+|newtype bigD a b = bigD (a -> b >< (a sto b))|
+\end{block}
+\begin{block}{Adapted definition for |bigD| type}
+\begin{code}
+
+bigDhat :: (a -> b) -> bigD a b
+bigDhat f = bigD(bigDplus f)
+
+\end{code}
+\end{block}
+
+Our objective is to deduce an instance of a Category for |bigD| where |bigDhat| is a functor.
+
+\end{frame}
+
 
 
 
 
 
 \section{Dedução de instâncias em categorias}
+
+\begin{frame}{Passos para obter a instância}
+1º passo: assumir que |bigDhat| é funtor de uma instância a determinar
+
+|id = bigDhat id = bigD (bigDplus id)|
+
+|bigDhat g . bigDhat f = bigDhat (g . f) = bigD (bigDhat (g . f))|
+
+
+2º passo: substituir quando tivermos |bigDplus| pelo que determinamos nos corolários
+
+
+|id = bigD (\ a -> (id a,id))|
+
+|bigDhat g . bigDhat f = bigD (\ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' . f'))|
+
+
+
+3º passo: generalizar condição se necessário para obtermos 
+
+
+The first equation shown above has a trivial solution.
+
+
+To solve the second we'll first solve a more general one:
+
+|bigD g . bigD f = bigD (\ a -> let{(b,f') = f a; (c,g') = g b} in (c,g' . f'))|
+
+This condition also leads us to a trivial solution inside our instance.
+
+\end{frame}
+
+
+
+\begin{frame}{Instâncias que deduzimos- categoria}
+\begin{code}
+class Category k where
+    id::(a'k'a)
+    (.)::(b'k'c)->(a'k'b)->(a'k'c)
+\end{code}
+
+\begin{block}{ |bigDhat| definition for linear functions}
+\begin{code}
+linearD :: (a -> b) -> bigD a b
+linearD f = bigD(\a -> (f a,f))
+\end{code}
+\end{block}
+
+\begin{block}{Categorical instance}
+\begin{code}
+instance Category bigD where
+    id = linearD id
+    bigD g . bigD f = 
+    bigD( \a -> let{(b,f') = f a;(c,g') = g b} in (c,g' . f'))
+\end{code}
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}{Instâncias que deduzimos- categoria monoidal}
+\begin{code}
+class Category k => Monoidal k where
+    (><) :: (a 'k' c) -> (b 'k' d) -> ((a >< b) 'k' (c >< d)) 
+\end{code}
+
+
+\begin{block}{Categorical instance}
+\begin{code}
+
+instance Monoidal bigD where
+    bigD f >< bigD g = bigD(\(a,b) -> let{(c,f') = f a;(d,g') = g b} 
+                                     in ((c,d),f' >< g'))
+
+\end{code}
+\end{block}
+\end{frame}
+
+
+
+
+\begin{frame}{Instâncias que deduzimos- categoria cartesiana e cocartesiana}
+
+\begin{code}
+class Monoidal k => Cartesian k where
+  exl :: (a,b)'k'a
+  exr :: (a,b)'k'b
+  dup :: a 'k' (a,a)
+\end{code}
+
+\begin{block}{Categorical instance}
+\begin{code}
+
+instance Cartesian D where
+    exl = linearD exl
+    exr = linearD exr
+    dup = linearD dup
+
+\end{code}
+\end{block}
+
+\begin{code}
+
+class Category k => Cocartesian k where
+    inl :: a 'k' (a,b)
+    inr :: b 'k' (a,b)
+    jam :: (a,a) 'k' a
+
+\end{code}
+\end{frame}
+
+
+
+
+\begin{frame}{Instâncias que deduzimos - caso |(->+)|}
+\begin{code}
+newtype a ->+ b=AddFun(a->b)
+
+instance Category (->+) where
+   type Obj (->+) = Additive
+   id = AddFun id
+   AddFun g . AddFun f = AddFun (g . f )
+
+instance Monoidal (->+) where
+   AddFun f >< AddFun g = AddFun (f >< g)
+
+instance Cartesian (->+) where
+   exl = AddFun exl
+   exr = AddFun exr
+   dup = AddFun dup
+\end{code}
+\end{frame}
+
+\begin{frame}{Instâncias que deduzimos - caso |(->+)|}
+\begin{code}
+instance Cocartesian (->+) where
+  inl = AddFun inlF
+  inr = AddFun inrF
+  jam = AddFun jamF
+
+inlF :: Additive b => a -> a >< b
+inrF :: Additive a => b -> a >< b
+jamF :: Additive a => a >< a -> a
+
+inlF = \a -> (a, 0)
+inrF = \b -> (0, b)
+jamF = \(a, b) -> a + b
+
+\end{code}
+\end{frame}
+
+
 
 
 
