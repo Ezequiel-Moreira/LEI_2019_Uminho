@@ -1,7 +1,6 @@
 import qualified Control.Category as C
 import Data.Kind as K
 
-
 class CategoryNum k where
     idn :: Num a => k a a
     cpn :: (Num a, Num b, Num c) => k b c -> k a b -> k a c
@@ -121,6 +120,11 @@ instance Num a => NumCat (->) a where
     addC    = uncurry (+)
     mulC    = uncurry (*)
 
+instance Num a => NumCat S_arr a where
+    negateC = AddFun negate
+    addC    = AddFun $ uncurry (+)
+    mulC    = AddFun $ uncurry (*)
+
 instance Floating a => FloatingCat (->) a where
     sinC = sin 
     cosC = cos
@@ -173,6 +177,9 @@ instance (Floating s, Scalable k s) =>
     expC = D (\a -> let e = expC a 
                     in (e, scale e))
 
---Deriv :: Sarr a b -> D S_arr a b
+unD (D f) = f
+unAddFun (AddFun f) = f
 
+sqr :: Num a => D S_arr a a
+sqr = mulC `cpn` (idn `splitn` idn)
 
