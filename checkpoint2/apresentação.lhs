@@ -132,7 +132,8 @@ Objetivo: criar uma formalização genérica do conceito de ML para aprendizagem
 |bigD| - aproximação linear de uma função
 
 \begin{defi}
-	Let $f::a \to b$ be a function, where $a$ and $b$ are vectorial spaces that share a common underlying field. The first derivative definition is the following:
+  Let $f::a \to b$ be a function, where $a$ and $b$ are vectorial spaces that share a common underlying field. 
+  The first derivative definition is the following:
 	\begin{code} 
 	bigD :: (a -> b) -> (a -> (a sto b))
 	\end{code}
@@ -189,8 +190,7 @@ de modo a obter um algoritmo generalizado para AD.
 
 \begin{frame}{Categorias e funtores}
 
-Categoria: conjunto de objetos e morfismos com 2 de base(id e composição) e 2 regras
-
+Categoria: conjunto de objetos e morfismos com duas operações base(id e composição) e 2 regras:
 \begin{itemize}
     \item (C.1)  $id \circ f = f \circ id = f$
     \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
@@ -198,10 +198,9 @@ Categoria: conjunto de objetos e morfismos com 2 de base(id e composição) e 2 
 
 
 Funtor: mapeia uma categoria noutra, preservando a estrutura
-
 \begin{itemize}
-    \item given any object t $\in$ |bigU| there exists an object F t $\in$ |bigV|
-    \item given any morphism m :: a |->| b $\in$ |bigU| there exists a morphism F m :: F a |->| F b $\in$ |bigV|
+    \item Dado um objeto t $\in$ |bigU| existe um objeto correspondente F t $\in$ |bigV| 
+    \item  Dado um morfismo m :: a |->| b $\in$ |bigU| existe um morfismo correspondente F m :: F a |->| F b $\in$ |bigV|
     \item F id ($\in$ |bigU|) = id ($\in$ |bigV|)
     \item F (f $\circ$ g) = F f $\circ$ F g
 \end{itemize}
@@ -225,8 +224,7 @@ bigDhat f = bigD(bigDplus f)
 \end{code}
 \end{block}
 
-Our objective is to deduce an instance of a Category for |bigD| where |bigDhat| is a functor.
-
+Queremos deduzir uma instância de categoria para |bigD| onde |bigDhat| é funtor.
 \end{frame}
 
 
@@ -237,7 +235,7 @@ Our objective is to deduce an instance of a Category for |bigD| where |bigDhat| 
 \section{Dedução de instâncias em categorias}
 
 \begin{frame}{Passos para obter a instância}
-1º passo: assumir que |bigDhat| é funtor de uma instância a determinar
+1º passo: assumir que |bigDhat| é funtor de uma instância de |bigD| a determinar
 
 |id = bigDhat id = bigD (bigDplus id)|
 
@@ -255,15 +253,13 @@ Our objective is to deduce an instance of a Category for |bigD| where |bigDhat| 
 
 3º passo: generalizar condição se necessário para obtermos 
 
+Para a nossa instância a primeira equação que determinamos serve como definição da identidade.
 
-The first equation shown above has a trivial solution.
-
-
-To solve the second we'll first solve a more general one:
+Para definir a composição começamos por a generalizar:
 
 |bigD g . bigD f = bigD (\ a -> let{(b,f') = f a; (c,g') = g b} in (c,g' . f'))|
 
-This condition also leads us to a trivial solution inside our instance.
+, sendo que esta também pode ser usada na definição da composição da nossa instância.
 
 \end{frame}
 
