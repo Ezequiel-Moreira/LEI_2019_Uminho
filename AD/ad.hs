@@ -183,3 +183,10 @@ unAddFun (AddFun f) = f
 sqr :: Num a => D S_arr a a
 sqr = mulC `cpn` (idn `splitn` idn)
 
+magSqr :: Num a => D S_arr (a,a) a
+magSqr = addC `cpn` ((mulC `cpn` (exln `splitn` exln)) `splitn` (mulC `cpn` (exrn `splitn` exrn)))
+
+cosSinProd :: Floating a => D S_arr (a,a) (a,a)
+cosSinProd = (cosC `splitn` sinC) `cpn` mulC
+
+deriv f a = (unAddFun $ snd $ unD f $ a) 1
