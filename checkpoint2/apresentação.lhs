@@ -108,28 +108,146 @@
 \end{frame}
 
 
+\section{Nota}
+
+ISTO É UM ESBOÇO(por agora)
+
+
+
 \section{Relembrar}
+
+\begin{frame}{Relembrar}
+Documento estudado: "The simple essence of automatic differentiation"
+
+Objetivo: criar uma formalização genérica do conceito de ML para aprendizagem supervisionada 
+\end{frame}
+
+
+
 
 
 \section{Conceitos base}
 
+\begin{frame}{Definição de |bigD| e conversão em |bigDplus|}
+|bigD| - aproximação linear de uma função
+
+\begin{defi}
+	Let $f::a \to b$ be a function, where $a$ and $b$ are vectorial spaces that share a common underlying field. The first derivative definition is the following:
+	\begin{code} 
+	bigD :: (a -> b) -> (a -> (a sto b))
+	\end{code}
+\end{defi}
+
+|bigDplus| - versão de D com composição eficiente 
+
+\begin{code}
+bigDplus :: (a -> b) -> (a -> (b >< (a sto b))) 
+bigDplus f a = (f a, bigD f a)
+\end{code}
+
+\end{frame}
+
+
+\begin{frame}{Corolários associados a |bigDplus|}
+
+\begin{block}{Corollary 1.1}
+\begin{code}
+	bigDplus (g . f) a = let {(b, f') = bigDplus f a; (c, g') = bigDplus g b} 
+            in (c, g' . f') 
+\end{code}
+\end{block}
+    
+\begin{block}{Corollary 2.1}
+\begin{code}
+	bigDplus (f >< g) (a, b) = let {(c, f') = bigDplus f a; (d, g') = bigDplus g b} 
+            in ((c, d), f' >< g') 
+\end{code}
+\end{block}
+    
+\begin{block}{Corollary 3.1}
+	For all linear functions  $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
+\end{block}
+
+\end{frame}
+
+
+
+
 
 \section{Objetivo do documento}
+
+\begin{frame}{Objetivo do documento}
+Criar uma implementação de |bigDplus| através da transcrição dos seus corolários para teoria de categorias
+de modo a obter um algoritmo generalizado para AD.
+\end{frame}
+
+
+
+
+
+\section{Introdução breve a categorias e funtores}
+
+\begin{frame}{Categorias e funtores}
+
+Categoria: conjunto de objetos e morfismos com 2 de base(id e composição) e 2 regras
+
+\begin{itemize}
+    \item (C.1)  $id \circ f = f \circ id = f$
+    \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
+\end{itemize}
+
+
+Funtor: mapeia uma categoria noutra, preservando a estrutura
+
+\begin{itemize}
+    \item given any object t $\in$ |bigU| there exists an object F t $\in$ |bigV|
+    \item given any morphism m :: a |->| b $\in$ |bigU| there exists a morphism F m :: F a |->| F b $\in$ |bigV|
+    \item F id ($\in$ |bigU|) = id ($\in$ |bigV|)
+    \item F (f $\circ$ g) = F f $\circ$ F g
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
 
 
 \section{Dedução de instâncias em categorias}
 
 
+
+
+
+
 \section{Algoritmo AD generalizado}
+
+
+
+
 
 
 \section{Matrizes}
 
 
+
+
+
+
+
 \section{RAD e FAD generalizados}
 
 
+
+
+
+
 \section{Scaling up}
+
+
+
+
 
 
 \section{bibliografia e links}
