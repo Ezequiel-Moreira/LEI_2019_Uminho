@@ -1,0 +1,97 @@
+\documentclass[11pt,a4]{article}
+\usepackage[]{hyperref}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0.5em}
+\usepackage{amsmath}
+\usepackage[makeroom]{cancel}
+\usepackage{amsmath,amssymb,mathrsfs,amsthm}
+\usepackage{array}
+\usepackage{cite}
+\usepackage{epstopdf}
+\usepackage{hyperref}
+\usepackage{stmaryrd}
+\usepackage{graphicx,color}
+\usepackage{url}
+\usepackage{csquotes}
+\textwidth 15cm
+\textheight 22cm
+\hoffset -1.5cm
+\voffset -1cm
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def\H{{\mathbb{H}}}
+\def\ll{\llbracket}
+\def\rr{\rrbracket}
+
+%--------------------------------------------------------------------
+
+\usepackage[latin1]{inputenc}
+\usepackage[portuges]{babel}
+\newtheorem{teor}{Teorema}[section]
+\newtheorem{propo}{Proposi\c c\~ao}[section]
+\newtheorem{coro}{Corol\'ario}[section]
+\newtheorem{lema}{Lema}[section]
+\theoremstyle{definition}
+\newtheorem{defi}{Defini\c c\~ao}[section]
+\theoremstyle{definition}
+\newtheorem{exemplo}{Exemplo}[section]
+\theoremstyle{definition}
+\newtheorem{nota}{Nota}[section]
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\begin{document}
+\newenvironment{dem}[1][Dem:]{\noindent\textbf{#1} }{}
+
+
+\thispagestyle{empty}
+\vskip 5cm
+
+\setcounter{page}{0}
+\section{Definition of Derivative}
+\begin{defi}
+A function $f:\R \to \R$ is differentiable  at $x \in \R$, if there exists a number $f $$'$ $(x)$ such that:
+\begin{align*}
+\lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon} \ = \textit{$f $$'$ $(x)$}  
+\end{align*}
+
+-- -- Pause -- --
+
+\begin{align*}
+\hspace{-2mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon} - \textit{$f $$'$ $(x)$} = 0 \hspace{0.5mm} 
+\Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$} - (\varepsilon \cdotp \textit{$f $$'$ $(x)$})}{\varepsilon} = 0 
+\end{align*}
+
+-- -- Pause -- --
+
+\end{defi}
+
+\begin{defi}
+A function $f:\R^{m} \to \R^{n}$ is differentiable  at $x \in \R^{m}$, if there exists a unique linear transformation $\lambda:\R^{m} \to \R^{n}$  such that:
+\begin{align*}
+\lim_{\varepsilon \to 0} \frac{ \| \textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$} - \lambda (\varepsilon)  \|}{\| \varepsilon \|} = 0
+\end{align*}
+\end{defi}
+---------------------------------------------------------------------------------------------------------------
+
+-- -- Substituir todos os slides até "Derivate as linear map", exclusivé, com o que está acima e mudar o titulo de "Derivate as linear map" \ para "Haskell type signature" \ (placeholder para o titulo). 
+
+\section{O que vou dizer}
+
+
+
+\begin{itemize}
+	\item Como a diferenciação automática está relacionada com a computação de derivadas, precisamos de definir o que é uma derivada.
+	
+	\item Bem, irei começar com a definição usual que todos conhecem. Com isto, podemos dizer que a derivada de f no ponto x, representada nestes slides por f'(x), é uma aproximação linear local de f em x. Mas esta definição é uma particularidade de uma definição muito mais geral. 
+	
+	\item Usando tranformações simples na equação original, temos estas duas equivalências.
+	
+	\item E com isto, mostrarei a definição geral de derivilidade de $\R^{m}$ para $\R^{n}$, com n e m números naturais quaisquer. A transformação linear que é dita nesta definição é a expressão epsilon "vezes" \ f' (x).
+	
+	\item Como f'(x) é uma transformação linear podemos representar a derivada de uma função como uma matriz Jacobiana, onde no caso original que vimos, podemos representar a derivada como uma matriz com um só elemento. Chegamos a uma boa generalização e passaremos agora para uma implementação em Haskell.
+	
+	\item -- -- No Teorema 3 -- -- Isto, explica-se em parte com a frase "f'(x) é uma aproximação linear local de f em x"  que eu disse anteriormente. ( Existe a ideia do livro que revolve pela ideia $ \varepsilon *f'(\varepsilon) = f(\varepsilon) $ ser a transformação linear).
+\end{itemize}
+\end{document}
+
+
