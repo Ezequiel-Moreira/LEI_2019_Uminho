@@ -395,12 +395,48 @@ jamF = \(a, b) -> a + b
 
 \section{Algoritmo AD generalizado}
 
+\begin{frame}{Generalizing Automatic Differentiation}
+\begin{code}
+    newtype Dk a b = D (a -> b >< (a ‘k‘ b))
+
+    linearD :: (a -> b) -> (a ‘k‘ b) -> Dk a b
+    linearD f f'= D (\a -> (f a, f'))
+
+    instance Category k => Category Dk where
+        type Obj Dk = Additive ∧ Obj k ...
+     
+    instance Monoidal k => Monoidal Dk where ...
+     
+    instance Cartesian k => Cartesian Dk where ...
+     
+    instance Cocartesian k => Cocartesian Dk where
+        inl = linearD inlF inl
+        inr = linearD inrF inr
+        jam = linearD jamF jam
+     
+\end{code}
+
+\end{frame}
+\begin{frame}{Generalizing Automatic Differentiation}
+\begin{code}
+    instance Scalable k s ⇒ NumCat Dk s where
+        negateC = linearD negateC negateC
+        addC = linearD addC addC
+        mulC = D (\(a, b) -> (a * b, scale b joinu scale a))
+\end{code}
+\end{frame}
+
 
 
 
 
 
 \section{Matrizes}
+
+...
+
+
+
 
 
 
@@ -410,6 +446,57 @@ jamF = \(a, b) -> a + b
 
 \section{RAD e FAD generalizados}
 
+\begin{frame}{Generalizando RAD e FAD}
+
+Obter FAD e RAD de algoritmo AD genérico: forçar a direção da composição de morfismos
+
+\begin{block}{Left-Compose functions}
+|f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| where r is any object of k.
+\end{block}
+
+\begin{block}{Defining new type}
+\begin{code}
+newtype Contkr a b = Cont((b 'k' r) -> (a 'k' r))
+\end{code}
+\end{block}
+
+\begin{block}{Functor derived from type}
+\begin{code}
+cont :: Category k => (a 'k' b) -> Contkr a b
+cont f = Cont(. f)
+\end{code}
+\end{block}
+
+\end{frame}
+
+
+\begin{frame}{Instance deduction for RAD}
+\begin{code}
+
+instance Category k => Category Contkr where
+  id = Cont id
+  Cont g . Cont f = Cont(f . g)
+
+instance Monoidal k => Monoidal Contkr where
+  Conf f >< Cont g = Cont(join . (f >< g) . unjoin)
+
+instance Cartesian k => Cartesian Contkr where
+  exl = Cont(join . inl) ; exr = Cont(join . inr) 
+  dup = Cont(jam . unjoin)
+
+instance Cocartesian k => Cocartesian Contkr where
+  inl = Cont(exl . unjoin) ; inr = Cont(exr . unjoin) 
+  jam = Cont(join . dup)
+
+instance Scalable k a => Scalable Contkr a where
+  scale s = Cont(scale s)
+
+
+\end{code}
+\end{frame}
+
+
+
 
 
 
@@ -417,6 +504,7 @@ jamF = \(a, b) -> a + b
 
 \section{Scaling up}
 
+...
 
 
 
@@ -424,6 +512,7 @@ jamF = \(a, b) -> a + b
 
 \section{bibliografia e links}
 
+...
 
 
 
