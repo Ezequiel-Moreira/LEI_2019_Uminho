@@ -108,7 +108,32 @@
 \end{frame}
 
 
-\section{give title}
+\section{Relembrar}
+
+
+\section{Conceitos base}
+
+
+\section{Objetivo do documento}
+
+
+\section{Dedução de instâncias em categorias}
+
+
+\section{Algoritmo AD generalizado}
+
+
+\section{Matrizes}
+
+
+\section{RAD e FAD generalizados}
+
+
+\section{Scaling up}
+
+
+\section{bibliografia e links}
+
 
 
 
