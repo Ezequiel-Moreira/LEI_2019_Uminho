@@ -175,9 +175,9 @@ bigDplus f a = (f a, bigD f a)
 
 
 
-\section{Objetivo do documento}
+\section{Objetivo}
 
-\begin{frame}{Objetivo do documento}
+\begin{frame}{Objetivo}
 Criar uma implementação de |bigDplus| através da transcrição dos seus corolários para teoria de categorias
 de modo a obter um algoritmo generalizado para AD.
 \end{frame}
@@ -192,8 +192,8 @@ de modo a obter um algoritmo generalizado para AD.
 
 Categoria: conjunto de objetos e morfismos com duas operações base(id e composição) e 2 regras:
 \begin{itemize}
-    \item (C.1)  $id \circ f = f \circ id = f$
-    \item (C.2)  $f \circ (g \circ h) = (f \circ g) \circ h$
+    \item $id \circ f = f \circ id = f$
+    \item $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
 
@@ -212,7 +212,7 @@ Funtor: mapeia uma categoria noutra, preservando a estrutura
 
 \begin{frame}{Adaptação de definições}
 
-\begin{block}{|bigD| definition}
+\begin{block}{Definição de |bigD|}
 |newtype bigD a b = bigD (a -> b >< (a sto b))|
 \end{block}
 \begin{block}{Adapted definition for |bigD| type}
@@ -224,7 +224,6 @@ bigDhat f = bigD(bigDplus f)
 \end{code}
 \end{block}
 
-Queremos deduzir uma instância de categoria para |bigD| onde |bigDhat| é funtor.
 \end{frame}
 
 
@@ -234,33 +233,47 @@ Queremos deduzir uma instância de categoria para |bigD| onde |bigDhat| é funto
 
 \section{Dedução de instâncias em categorias}
 
-\begin{frame}{Passos para obter a instância}
-1º passo: assumir que |bigDhat| é funtor de uma instância de |bigD| a determinar
+\begin{frame}{Passos para obter a instância a partir da definição do funtor}
+
+\begin{itemize}
+    \item Passo 1 - Assumir que |bigDhat| é funtor de uma instância de |bigD| a determinar
+    \item Passo 2 - Substituir pelo que determinamos nos corolários
+    \item Passo 3 - Generalizar condições se necessário para obtermos instância
+\end{itemize}
+
+Este processo é o mesmo para vários tipos de categorias.
+
+\end{frame}
+
+
+
+\begin{frame}{Exemplo para categorias}
+\begin{block}{Passo 1}
 
 |id = bigDhat id = bigD (bigDplus id)|
 
 |bigDhat g . bigDhat f = bigDhat (g . f) = bigD (bigDhat (g . f))|
 
+\end{block}
 
-2º passo: substituir quando tivermos |bigDplus| pelo que determinamos nos corolários
 
+\begin{block}{Passo 2}
 
 |id = bigD (\ a -> (id a,id))|
 
 |bigDhat g . bigDhat f = bigD (\ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' . f'))|
 
+\end{block}
 
-
-3º passo: generalizar condição se necessário para obtermos 
+\begin{block}{Passo 3}
 
 Para a nossa instância a primeira equação que determinamos serve como definição da identidade.
 
-Para definir a composição começamos por a generalizar:
+Para definir a composição generalziamos a condição:
 
 |bigD g . bigD f = bigD (\ a -> let{(b,f') = f a; (c,g') = g b} in (c,g' . f'))|
 
-, sendo que esta também pode ser usada na definição da composição da nossa instância.
-
+\end{block}
 \end{frame}
 
 
@@ -272,14 +285,14 @@ class Category k where
     (.)::(b'k'c)->(a'k'b)->(a'k'c)
 \end{code}
 
-\begin{block}{ |bigDhat| definition for linear functions}
+\begin{block}{ Definição de |bigDhat| para funções lineares}
 \begin{code}
 linearD :: (a -> b) -> bigD a b
 linearD f = bigD(\a -> (f a,f))
 \end{code}
 \end{block}
 
-\begin{block}{Categorical instance}
+\begin{block}{Instancia deduzida para a categoria}
 \begin{code}
 instance Category bigD where
     id = linearD id
@@ -298,7 +311,7 @@ class Category k => Monoidal k where
 \end{code}
 
 
-\begin{block}{Categorical instance}
+\begin{block}{Instancia deduzida para a categoria monoidal}
 \begin{code}
 
 instance Monoidal bigD where
@@ -321,24 +334,20 @@ class Monoidal k => Cartesian k where
   dup :: a 'k' (a,a)
 \end{code}
 
-\begin{block}{Categorical instance}
+\begin{block}{Instancia deduzida para a categoria cartesiana}
 \begin{code}
-
 instance Cartesian D where
     exl = linearD exl
     exr = linearD exr
     dup = linearD dup
-
 \end{code}
 \end{block}
 
 \begin{code}
-
 class Category k => Cocartesian k where
     inl :: a 'k' (a,b)
     inr :: b 'k' (a,b)
     jam :: (a,a) 'k' a
-
 \end{code}
 \end{frame}
 
@@ -391,7 +400,7 @@ jamF = \(a, b) -> a + b
 
 \section{Algoritmo AD generalizado}
 
-\begin{frame}{Generalizing Automatic Differentiation}
+\begin{frame}{Instancia deduzida para AD genérico}
 \begin{code}
     newtype Dk a b = D (a -> b >< (a ‘k‘ b))
 
@@ -413,7 +422,7 @@ jamF = \(a, b) -> a + b
 \end{code}
 
 \end{frame}
-\begin{frame}{Generalizing Automatic Differentiation}
+\begin{frame}{Generalização de AD}
 \begin{code}
     instance Scalable k s ⇒ NumCat Dk s where
         negateC = linearD negateC negateC
@@ -446,17 +455,17 @@ jamF = \(a, b) -> a + b
 
 Obter FAD e RAD de algoritmo AD genérico: forçar a direção da composição de morfismos
 
-\begin{block}{Left-Compose functions}
+\begin{block}{Conversão da escrita de funções}
 |f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| where r is any object of k.
 \end{block}
 
-\begin{block}{Defining new type}
+\begin{block}{Definição de novo tipo}
 \begin{code}
 newtype Contkr a b = Cont((b 'k' r) -> (a 'k' r))
 \end{code}
 \end{block}
 
-\begin{block}{Functor derived from type}
+\begin{block}{Funtor derivado dele}
 \begin{code}
 cont :: Category k => (a 'k' b) -> Contkr a b
 cont f = Cont(. f)
@@ -466,7 +475,7 @@ cont f = Cont(. f)
 \end{frame}
 
 
-\begin{frame}{Instance deduction for RAD}
+\begin{frame}{Instancia deduzida para RAD genérico}
 \begin{code}
 
 instance Category k => Category Contkr where
