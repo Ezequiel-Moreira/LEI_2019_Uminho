@@ -464,17 +464,13 @@ instance Scalable k a => Scalable Contkr a where
 
 Demonstração prática
 
-Link do projeto git: [LEI 2019]\cite{LEI:2019}
+Link do projeto git: [LEI 2019] \cite{LEI:2019}
 
 \end{frame}
 
 
-
-
-
-\section{Bibliografia}
 \bibliographystyle{acm}%{ACM-Reference-Format}
-\bibliography{slides}
+\bibliography{apresentacao}
 
 
 
