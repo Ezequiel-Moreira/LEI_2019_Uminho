@@ -113,9 +113,10 @@
 \section{Relembrar}
 
 \begin{frame}{Relembrar}
-Documento estudado: "The simple essence of automatic differentiation"
+Documento estudado: "The simple essence of automatic differentiation"([Elliott 2018]\cite{Elliott:2018})
 
 Objetivo: Estudo e implementação de um algoritmo AD genérico
+
 \end{frame}
 
 
@@ -506,17 +507,23 @@ instance Scalable k a => Scalable Contkr a where
 
 
 
-\section{Scaling up}
+\section{Demonstração prática}
 
-...
+\begin{frame}{Demonstração prática}
+
+Demonstração prática
+
+Link do projeto git: [LEI 2019]\cite{LEI:2019}
+
+\end{frame}
 
 
 
 
 
 \section{Bibliografia}
-
-...
+\bibliographystyle{acm}%{ACM-Reference-Format}
+\bibliography{slides}
 
 
 
