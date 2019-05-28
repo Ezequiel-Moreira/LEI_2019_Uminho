@@ -450,7 +450,7 @@ jamF = \(a, b) -> a + b
 
 \begin{frame}{Generalizando RAD e FAD}
 
-Obter FAD e RAD de algoritmo AD genérico: forçar a direção da composição de morfismos
+Obter RAD e FAD de algoritmo AD genérico: forçar a direção da composição de morfismos
 
 \pause
 
