@@ -353,66 +353,29 @@
 
 \begin{frame}
 \frametitle{Definition of Derivative}
-\vspace{5mm}
 
 \begin{defi}
-		Let $f:\R \to \R$ be a function. The derivative of $f$ at point $x \in \R$ is defined the following way:
-	\begin{align*}
-	\textit{$f $$'$ $(x)$} = \ \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon}
-	\end{align*}
+A function $f:\R \to \R$ is differentiable  at $x \in \R$, if there exists a number $f'(x)$ such that:
+\begin{align*}
+\lim_{\varepsilon \to 0} \frac{\textit{$f(x+\varepsilon)-f(x)$}}{\varepsilon} \ = \textit{$f'(x)$}  
+\end{align*}
 \end{defi}
-\vspace{5mm}
-\pause
-This definition will also work with functions of types $\C \hspace{0.5mm}\to \C$ and $\R\hspace{0.6mm} \to \R^{n}$.
 
-\end{frame}
-%%%
-\begin{frame}
-\frametitle{Definition of Derivative}
-\vspace{10mm}
-For functions $F$ of types $\R^{m}\hspace{-0.3mm} \to \R$ and $\R^{m}\hspace{-0.3mm}\to \R^{n}$ (with $n>1$), we need a different definition.
 \pause
-\vspace{1mm}
-    \begin{itemize}
-    \item  For functions of type $\R^{m}\hspace{-0.3mm} \to \R$, it is necessary the introduction of the notion of parcial derivatives, $\frac{\partial F}{\partial x_{j}}\hspace{0.3mm}$, with $j \in$ \{$1,...,m$\}.
-    
-    \pause
-    \vspace{3mm}
-    \item For functions of type $\R^{m}\hspace{-0.3mm}\to \R^{n}$ (with $n>1$), apart from the use of parcial derivatives, it is necessary the use of Jacobian matrices $\mathbf{J}_{i,j} =\frac{\partial F_{i}}{\partial x_{j}}$, where $i \in$ \{$1,...,n$\} and $F_{i}$ is a function $\R^{m}\hspace{-0.3mm}\to \R$.
-    \end{itemize} 
-\end{frame}
-%%%
-\begin{frame}
-\frametitle{Generalization and Chain Rule}
-\vspace{15mm}
-Let $\mathbf{A}$ and $\mathbf{B}$ be two Jacobian matrices. 
-
-The composition rule in $\R^{m}\hspace{-0.3mm}\to \R^{n}$ is:
+\vspace{-2mm}
 \begin{align*}
-(\mathbf{A} \cdotp \mathbf{B})_{i,j}= \sum_{k=1}^{m} \mathbf{A}_{i,k} \cdotp \mathbf{B}_{k,j}
-\end{align*}
-\end{frame}
-%%%
-\begin{frame}
-\frametitle{Generalization and Chain Rule}
-\vspace{15mm}
-Assuming that the notion of derivatives that we need matches with a linear map, where it is accepted the composition rule previously seen, we will define a new generalization:
-\pause
-
-\begin{align*}
-\hspace{-2mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - $f(x)$}}{\varepsilon} - \textit{$f $$'$ $(x)$} = 0 \hspace{0.5mm} 
-\Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f $$'$ $(x)$}}{\varepsilon} = 0 \\
-& 
-\hspace{-6.6cm}  \Leftrightarrow  
-\lim_{\varepsilon \to 0} 
-\frac{
-\norm{ \textit{$f$($x$ $+$ $\varepsilon$) - ($f(x)$)} + \varepsilon \cdotp \textit{$f'(x)$} } 
-}{
-\norm{ \varepsilon }
-} 
-= 0
+\hspace{-3mm} \lim_{\varepsilon \to 0} \frac{\textit{$f(x+\varepsilon)-f(x)$}}{\varepsilon} - \textit{$f'(x)$} = 0 \hspace{0.5mm} 
+\Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f(x+\varepsilon)-f(x)$} - (\varepsilon \cdotp \textit{$f'(x)$})}{\varepsilon} = 0 
 \end{align*}
 
+\pause
+
+\begin{defi}
+A function $f:\R^{m} \to \R^{n}$ is differentiable  at $x \in \R^{m}$, if there exists a unique linear transformation $\mu:\R^{m} \to \R^{n}$  such that:
+\begin{align*}
+\lim_{\varepsilon \to 0} \frac{ \norm{ \textit{$f(x+\varepsilon)-f(x)-$} \mu (\varepsilon) } }{ \norm{ \varepsilon }} = 0
+\end{align*}
+\end{defi}
 \end{frame}
 %%%
 \begin{frame}
