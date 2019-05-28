@@ -147,22 +147,22 @@ bigDplus f a = (f a, bigD f a)
 
 \begin{frame}{Corolários associados a |bigDplus|}
 
-\begin{block}{Corollary 1.1}
+\begin{block}{Corolário 1.1}
 \begin{code}
 	bigDplus (g . f) a = let {(b, f') = bigDplus f a; (c, g') = bigDplus g b} 
             in (c, g' . f') 
 \end{code}
 \end{block}
     
-\begin{block}{Corollary 2.1}
+\begin{block}{Corolário 2.1}
 \begin{code}
 	bigDplus (f >< g) (a, b) = let {(c, f') = bigDplus f a; (d, g') = bigDplus g b} 
             in ((c, d), f' >< g') 
 \end{code}
 \end{block}
     
-\begin{block}{Corollary 3.1}
-	For all linear functions  $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
+\begin{block}{Corolário 3.1}
+	Para todas as funções lineares $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
 \end{block}
 
 \end{frame}
@@ -208,10 +208,10 @@ Funtor: mapeia uma categoria noutra, preservando a estrutura
 
 \begin{frame}{Adaptação de definições}
 
-\begin{block}{Definição de |bigD|}
+\begin{block}{Definição de tipo |bigD|}
 |newtype bigD a b = bigD (a -> b >< (a sto b))|
 \end{block}
-\begin{block}{Adapted definition for |bigD| type}
+\begin{block}{Definição de |bigDhat|}
 \begin{code}
 
 bigDhat :: (a -> b) -> bigD a b
@@ -219,6 +219,15 @@ bigDhat f = bigD(bigDplus f)
 
 \end{code}
 \end{block}
+
+
+\begin{block}{ Definição de |bigDhat| para funções lineares}
+\begin{code}
+linearD :: (a -> b) -> bigD a b
+linearD f = bigD(\a -> (f a,f))
+\end{code}
+\end{block}
+
 
 \end{frame}
 
@@ -275,16 +284,11 @@ Para definir a composição generalziamos a condição:
 
 \section{Instâncias deduzidas}
 \begin{frame}
+\begin{block}{Definição da classe de categoria}
 \begin{code}
 class Category k where
     id::(a'k'a)
     (.)::(b'k'c)->(a'k'b)->(a'k'c)
-\end{code}
-
-\begin{block}{ Definição de |bigDhat| para funções lineares}
-\begin{code}
-linearD :: (a -> b) -> bigD a b
-linearD f = bigD(\a -> (f a,f))
 \end{code}
 \end{block}
 
@@ -301,10 +305,12 @@ instance Category bigD where
 
 
 \begin{frame}
+\begin{block}{Definição da classe de categoria monoidal}
 \begin{code}
 class Category k => Monoidal k where
     (><) :: (a 'k' c) -> (b 'k' d) -> ((a >< b) 'k' (c >< d)) 
 \end{code}
+\end{block}
 
 
 \begin{block}{Instancia deduzida para a categoria monoidal}
@@ -323,12 +329,14 @@ instance Monoidal bigD where
 
 \begin{frame}
 
+\begin{block}{Definição da classe de categoria cartesiana}
 \begin{code}
 class Monoidal k => Cartesian k where
   exl :: (a,b)'k'a
   exr :: (a,b)'k'b
   dup :: a 'k' (a,a)
 \end{code}
+\end{block}
 
 \begin{block}{Instancia deduzida para a categoria cartesiana}
 \begin{code}
@@ -339,14 +347,18 @@ instance Cartesian D where
 \end{code}
 \end{block}
 
+\end{frame}
+
+\begin{frame}
+\begin{block}{Definição da classe de categoria cocartesiana}
 \begin{code}
 class Category k => Cocartesian k where
     inl :: a 'k' (a,b)
     inr :: b 'k' (a,b)
     jam :: (a,a) 'k' a
 \end{code}
+\end{block}
 \end{frame}
-
 
 
 

@@ -392,7 +392,7 @@ Objetivo: criar uma formalização genérica do conceito de ML para aprendizagem
 
 \begin{frame}{Corolários associados a \ensuremath{\mathcal{D}^{+}}}
 
-\begin{block}{Corollary 1.1}
+\begin{block}{Corolário 1.1}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -406,7 +406,7 @@ Objetivo: criar uma formalização genérica do conceito de ML para aprendizagem
 \end{hscode}\resethooks
 \end{block}
     
-\begin{block}{Corollary 2.1}
+\begin{block}{Corolário 2.1}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{9}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -420,8 +420,8 @@ Objetivo: criar uma formalização genérica do conceito de ML para aprendizagem
 \end{hscode}\resethooks
 \end{block}
     
-\begin{block}{Corollary 3.1}
-	For all linear functions  $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
+\begin{block}{Corolário 3.1}
+	Para todas as funções lineares $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
 \end{block}
 
 \end{frame}
@@ -467,10 +467,10 @@ Funtor: mapeia uma categoria noutra, preservando a estrutura
 
 \begin{frame}{Adaptação de definições}
 
-\begin{block}{Definição de \ensuremath{\mathcal{D}}}
+\begin{block}{Definição de tipo \ensuremath{\mathcal{D}}}
 \ensuremath{\mathbf{newtype}\;\mathcal{D}\;\Varid{a}\;\Varid{b}\mathrel{=}\mathcal{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\;\multimap \;\Varid{b}))}
 \end{block}
-\begin{block}{Adapted definition for \ensuremath{\mathcal{D}} type}
+\begin{block}{Definição de \ensuremath{\mathcal{\hat{D}}}}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -480,6 +480,19 @@ Funtor: mapeia uma categoria noutra, preservando a estrutura
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
+
+
+\begin{block}{ Definição de \ensuremath{\mathcal{\hat{D}}} para funções lineares}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{linearD}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\end{block}
+
 
 \end{frame}
 
@@ -536,6 +549,7 @@ Para definir a composição generalziamos a condição:
 
 \section{Instâncias deduzidas}
 \begin{frame}
+\begin{block}{Definição da classe de categoria}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -547,16 +561,6 @@ Para definir a composição generalziamos a condição:
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
 \>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b'k'c})\rightarrow (\Varid{a'k'b})\rightarrow (\Varid{a'k'c}){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-
-\begin{block}{ Definição de \ensuremath{\mathcal{\hat{D}}} para funções lineares}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
-\\
-\>[B]{}\Varid{linearD}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -584,6 +588,7 @@ Para definir a composição generalziamos a condição:
 
 
 \begin{frame}
+\begin{block}{Definição da classe de categoria monoidal}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -594,6 +599,7 @@ Para definir a composição generalziamos a condição:
 \>[5]{}( \times )\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a} \times \Varid{b})\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+\end{block}
 
 
 \begin{block}{Instancia deduzida para a categoria monoidal}
@@ -619,6 +625,7 @@ Para definir a composição generalziamos a condição:
 
 \begin{frame}
 
+\begin{block}{Definição da classe de categoria cartesiana}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{3}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -635,6 +642,7 @@ Para definir a composição generalziamos a condição:
 \>[3]{}\Varid{dup}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+\end{block}
 
 \begin{block}{Instancia deduzida para a categoria cartesiana}
 \begin{hscode}\SaveRestoreHook
@@ -655,6 +663,10 @@ Para definir a composição generalziamos a condição:
 \end{hscode}\resethooks
 \end{block}
 
+\end{frame}
+
+\begin{frame}
+\begin{block}{Definição da classe de categoria cocartesiana}
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -671,8 +683,8 @@ Para definir a composição generalziamos a condição:
 \>[5]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
+\end{block}
 \end{frame}
-
 
 
 
