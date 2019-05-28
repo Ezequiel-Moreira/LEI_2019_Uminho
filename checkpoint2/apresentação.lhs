@@ -115,7 +115,7 @@
 \begin{frame}{Relembrar}
 Documento estudado: "The simple essence of automatic differentiation"
 
-Objetivo: Criar uma formalização de uma ML para aprendizagem supervisionada genérica
+Objetivo: Estudo e implementação de um algoritmo AD genérico
 \end{frame}
 
 
@@ -127,13 +127,13 @@ Objetivo: Criar uma formalização de uma ML para aprendizagem supervisionada ge
 \begin{frame}{Definição de |bigD| e conversão em |bigDplus|}
 |bigD| - aproximação linear de uma função
 
-\begin{defi}
-  Let $f::a \to b$ be a function, where $a$ and $b$ are vectorial spaces that share a common underlying field. 
-  The first derivative definition is the following:
+\begin{block}{Definição}
+  Seja $f::a \to b$ uma função onde $a$ e $b$ são espaços vetoriais sobre um corpo comum.
+  A primeira definição de derivada é:
 	\begin{code} 
 	bigD :: (a -> b) -> (a -> (a sto b))
 	\end{code}
-\end{defi}
+\end{block}
 
 |bigDplus| - versão de D com composição eficiente 
 
