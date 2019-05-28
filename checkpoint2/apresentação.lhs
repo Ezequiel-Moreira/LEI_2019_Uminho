@@ -171,7 +171,7 @@ bigDplus f a = (f a, bigD f a)
 
 
 
-\section{Objetivo}
+\section{Categorias e funtores}
 
 \begin{frame}{Objetivo}
 Criar uma implementação de |bigDplus| através da transcrição dos seus corolários para teoria de categorias
@@ -182,7 +182,6 @@ de modo a obter um algoritmo generalizado para AD.
 
 
 
-\section{Categorias e funtores}
 
 \begin{frame}{Categorias e funtores}
 
@@ -204,8 +203,6 @@ Funtor: mapeia uma categoria noutra, preservando a estrutura
 
 \end{frame}
 
-
-\section{Adaptação de definições}
 
 \begin{frame}{Adaptação de definições}
 
