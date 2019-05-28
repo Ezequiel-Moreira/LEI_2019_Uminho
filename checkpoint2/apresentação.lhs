@@ -115,7 +115,7 @@
 \begin{frame}{Relembrar}
 Documento estudado: "The simple essence of automatic differentiation"
 
-Objetivo: criar uma formalização genérica do conceito de ML para aprendizagem supervisionada 
+Objetivo: Criar uma formalização de uma ML para aprendizagem supervisionada genérica
 \end{frame}
 
 
@@ -182,7 +182,7 @@ de modo a obter um algoritmo generalizado para AD.
 
 
 
-\section{Introdução breve a categorias e funtores}
+\section{Categorias e funtores}
 
 \begin{frame}{Categorias e funtores}
 
@@ -236,7 +236,7 @@ linearD f = bigD(\a -> (f a,f))
 
 
 
-\section{Dedução de instâncias em categorias}
+\section{Dedução de instâncias}
 
 \begin{frame}{Passos para obter a instância a partir da definição do funtor}
 
@@ -282,7 +282,6 @@ Para definir a composição generalizamos a condição:
 \end{frame}
 
 
-\section{Instâncias deduzidas}
 \begin{frame}
 \begin{block}{Definição da classe de categoria}
 \begin{code}
