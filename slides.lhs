@@ -2,7 +2,7 @@
 
 \mode<presentation>
 {
-  \usetheme{JuanLesPins}
+  \usetheme{Singapore}
 
   \setbeamercovered{transparent}
 }
@@ -150,7 +150,7 @@ For functions $F$ of types $\R^{m}\hspace{-0.3mm} \to \R$ and $\R^{m}\hspace{-0.
 \vspace{15mm}
 Let $\mathbf{A}$ and $\mathbf{B}$ be two Jacobian matrices. 
 
-The chain rule in $\R^{m}\hspace{-0.3mm}\to \R^{n}$ is:
+The composition rule in $\R^{m}\hspace{-0.3mm}\to \R^{n}$ is:
 \begin{align*}
 (\mathbf{A} \cdotp \mathbf{B})_{i,j}= \sum_{k=1}^{m} \mathbf{A}_{i,k} \cdotp \mathbf{B}_{k,j}
 \end{align*}
@@ -159,7 +159,7 @@ The chain rule in $\R^{m}\hspace{-0.3mm}\to \R^{n}$ is:
 \begin{frame}
 \frametitle{Generalization and Chain Rule}
 \vspace{15mm}
-Assuming that the notion of derivatives that we need matches with a linear map, where it is accepted the chain rule previously seen, we will define a new generalization:
+Assuming that the notion of derivatives that we need matches with a linear map, where it is accepted the composition rule previously seen, we will define a new generalization:
 \pause
 
 \begin{align*}
@@ -244,7 +244,7 @@ bigDplus f a = (f a, bigD f a)
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
 \begin{coro}
-	$\mathcal{D}^{+}$ is efficiently compositional in relation to $(\circ)$, that is, in Haskell:
+	$\mathcal{D}^{+}$ is compositionally efficient in relation to $(\circ)$, that is, in Haskell:
 	\begin{code}
 	bigDplus (g . f) a = let {(b, f') = bigDplus f a; (c, g') = bigDplus g b} 
             in (c, g' . f') 
@@ -331,7 +331,7 @@ f >< g = \(a, b) -> (f a,g b)
 \begin{itemize}
  \item<1-> We want to calculate |bigDplus|.
  \item<2-> However, |bigD| is not computable.
- \item<3-> Solution: reimplement corollaries using category theory
+ \item<3-> Solution: reimplement corollaries using category theory.
 \end{itemize}
 
 \end{frame}
@@ -365,7 +365,7 @@ f >< g = \(a, b) -> (f a,g b)
 
 \begin{frame}{Categories}
 
-A category is a collection of objects (sets and types) and morphisms(operation between objects),
+A category is a collection of objects (sets and types) and morphisms (operation between objects),
 with 2 basic operations (identity and composition) of morfisms, and 2 laws:
 
 \begin{itemize}
@@ -374,7 +374,7 @@ with 2 basic operations (identity and composition) of morfisms, and 2 laws:
 \end{itemize}
 
 \begin{block}{Note}
-For this paper, objects are data types and morfisms are functions
+For this article, objects are data types and morfisms are functions
 \end{block}
 
 \begin{columns}
@@ -410,7 +410,7 @@ A functor F between 2 categories |bigU and bigV| is such that:
 \end{itemize}
 
 \begin{block}{Note}
-Given this papers category properties (objects are data types) functors map types to themselves
+Given this category properties (objects are data types) functors map types to themselves
 \end{block}
 
 \end{frame}
@@ -450,7 +450,7 @@ Using corollaries 3.1 and 1.1 we can determine that
 \end{code}
 \end{itemize}
 
-Saying that |bigDhat| is a functor is equivalent to, for all f and g functions of apropriate types:
+Saying that |bigDhat| is a functor is equivalent to, for all f and g functions of appropriate types:
 
     |id = bigDhat id = bigD (bigDplus id)|
 
@@ -547,7 +547,7 @@ id $\circ$ |bigDhat| f \\
 \end{block}
 
 \begin{alertblock}{Note}
-This proofs don't require anything from |bigD and bigDhat| aside from functor laws.
+Those proofs don't require anything from |bigD and bigDhat| aside from functor laws.
 As such, all other instances of categories created from a functor won't require further proving like this one did.
 
 \end{alertblock}
@@ -599,7 +599,7 @@ Deriving F from |bigDhat| leaves us with the following definition:
 
 \vspace{3mm}
 \pause
-Using the same method as before, we replace |bigDplus| with it's definition and generalize the condition:
+Using the same method as before, we replace |bigDplus| with its definition and generalize the condition:
 
 |bigD f >< bigD g =|
 
@@ -682,7 +682,7 @@ With this in mind we can arrive at our instance:
 
 \begin{frame}{Instance deduction} 
 
-Replacing |bigDplus| with it's definition and remembering linearD's definition we can obtain:
+Replacing |bigDplus| with its definition and remembering linearD's definition we can obtain:
 
 exl = linearD exl
 
@@ -712,7 +712,7 @@ instance Cartesian D where
 This type of categories is the dual of the cartesian type of categories.
 
 \begin{block}{Note}
-In this paper coproducts are categorical products, i.e., biproducts
+In this article coproducts are categorical products, i.e., biproducts
 \end{block}
 
 \begin{block}{Definition}
@@ -952,9 +952,9 @@ In particular, we can represent vector spaces over a given field as a representa
 \begin{frame}{A short introdution}
 
 \begin{itemize}
-    \item We've derived and generalized an AD algorithm using categories
-    \item With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD
-    \item We want to obtain generalized FAD and RAD algorithms 
+    \item We've derived and generalized an AD algorithm using categories.
+    \item With fully right-associated compositions this algorithm becomes a foward-mode AD and with fully left-associated becomes a reverse-mode AD.
+    \item We want to obtain generalized FAD and RAD algorithms.
     \item How do we describe this in Categorical notation?
 \end{itemize}
 
@@ -1031,7 +1031,7 @@ instance Scalable k a => Scalable Contkr a where
 
 \begin{frame}{A short introdution}
 
-Due to it's widespread use in ML we'll talk about a specific case of RAD: computing gradients(derivatives of functions with scalar codomains)
+Due to its widespread use in ML we'll talk about a specific case of RAD: computing gradients (derivatives of functions with scalar codomains).
 
 A vector space A over a scalar field s has A $\multimap$ s as its dual.
 
@@ -1125,7 +1125,7 @@ instance Scalable k => Scalable Dualk where
   \item |(joinu) and (forku)| mutually dualize 
   
   |(Dual f joinu Dual g) = Dual (f forku g) and Dual f forku Dual g = Dual(f joinu g))|
-  \item Using the definition from chapter 8 we can determine that the duality of a matrix corresponds to it's transposition
+  \item Using the definition from chapter 8 we can determine that the duality of a matrix corresponds to its transposition
 \end{itemize}
 
 \end{frame}
@@ -1137,7 +1137,7 @@ instance Scalable k => Scalable Dualk where
 
 We can use the same deductions we've done in Cont and Dual to derive a category with full right-side association, thus creating a generized FAD algorithm.
 
-This algorithm is far more apropriated for low dimention domains.
+This algorithm is far more appropriate for low dimension domains.
 
 
 \begin{block}{Type definition and functor from type}
@@ -1163,7 +1163,7 @@ Practical applications often involve high-dimensional spaces.
 \item
 Binary products are a very inefficient and unwieldy way of encoding high-dimensional spaces.
 \item
-A practical alternative is to consider n-ary products as representable functors(?)
+A practical alternative is to consider n-ary products as representable functors.
 \end{itemize}
 \begin{code}
     class Category k => MonoidalI k h where
@@ -1244,9 +1244,9 @@ A practical alternative is to consider n-ary products as representable functors(
 \begin{frame}{Conclusion}
 \begin{itemize}
 \item
-    Suggests that some of the work referred to does just a part of this paper.
+    Suggests that some of the work referred to does just a part of this article.
 \item
-    This paper ([Elliott 2018]\cite{Elliott:2018}) is a follow up of [Elliott 2017]\cite{Elliott:2017} 
+    This article ([Elliott 2018]\cite{Elliott:2018}) is a follow up of [Elliott 2017]\cite{Elliott:2017} 
 \item
     Suggests that this implementation is simple, efficient, it can free memory dinamically (RAD) and is naturally parallel.
 \item
