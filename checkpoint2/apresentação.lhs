@@ -454,7 +454,7 @@ Obter RAD e FAD de algoritmo AD genérico: forçar a direção da composição d
 
 \pause
 
-\begin{block}{Conversão da escrita de funções}
+\begin{block}{Conversão da escrita de morfismos}
 |f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| para r objeto de categoria k.
 \end{block}
 
