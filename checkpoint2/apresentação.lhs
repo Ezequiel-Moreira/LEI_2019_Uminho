@@ -2,7 +2,7 @@
 
 \mode<presentation>
 {
-  \usetheme{JuanLesPins}
+  \usetheme{Singapore}
 
   \setbeamercovered{transparent}
 }
@@ -107,10 +107,6 @@
   \tableofcontents
 \end{frame}
 
-
-\section{Nota}
-
-ISTO É UM ESBOÇO(por agora)
 
 
 
@@ -277,8 +273,8 @@ Para definir a composição generalziamos a condição:
 \end{frame}
 
 
-
-\begin{frame}{Instâncias que deduzimos- categoria}
+\section{Instâncias deduzidas}
+\begin{frame}
 \begin{code}
 class Category k where
     id::(a'k'a)
@@ -304,7 +300,7 @@ instance Category bigD where
 
 
 
-\begin{frame}{Instâncias que deduzimos- categoria monoidal}
+\begin{frame}
 \begin{code}
 class Category k => Monoidal k where
     (><) :: (a 'k' c) -> (b 'k' d) -> ((a >< b) 'k' (c >< d)) 
@@ -325,7 +321,7 @@ instance Monoidal bigD where
 
 
 
-\begin{frame}{Instâncias que deduzimos- categoria cartesiana e cocartesiana}
+\begin{frame}
 
 \begin{code}
 class Monoidal k => Cartesian k where
