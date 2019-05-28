@@ -274,7 +274,7 @@ Este processo é o mesmo para vários tipos de categorias.
 
 Para a nossa instância a primeira equação que determinamos serve como definição da identidade.
 
-Para definir a composição generalziamos a condição:
+Para definir a composição generalizamos a condição:
 
 |bigD g . bigD f = bigD (\ a -> let{(b,f') = f a; (c,g') = g b} in (c,g' . f'))|
 
@@ -292,7 +292,7 @@ class Category k where
 \end{code}
 \end{block}
 
-\begin{block}{Instancia deduzida para a categoria}
+\begin{block}{Instância deduzida para a categoria}
 \begin{code}
 instance Category bigD where
     id = linearD id
@@ -313,7 +313,7 @@ class Category k => Monoidal k where
 \end{block}
 
 
-\begin{block}{Instancia deduzida para a categoria monoidal}
+\begin{block}{Instância deduzida para a categoria monoidal}
 \begin{code}
 
 instance Monoidal bigD where
@@ -338,7 +338,7 @@ class Monoidal k => Cartesian k where
 \end{code}
 \end{block}
 
-\begin{block}{Instancia deduzida para a categoria cartesiana}
+\begin{block}{Instância deduzida para a categoria cartesiana}
 \begin{code}
 instance Cartesian D where
     exl = linearD exl
@@ -408,7 +408,7 @@ jamF = \(a, b) -> a + b
 
 \section{Algoritmo AD generalizado}
 
-\begin{frame}{Instancia deduzida para AD genérico}
+\begin{frame}{Instância deduzida para AD genérico}
 \begin{code}
     newtype Dk a b = D (a -> b >< (a ‘k‘ b))
 
@@ -444,18 +444,6 @@ jamF = \(a, b) -> a + b
 
 
 
-\section{Matrizes}
-
-...
-
-
-
-
-
-
-
-
-
 
 \section{RAD e FAD generalizados}
 
@@ -464,7 +452,7 @@ jamF = \(a, b) -> a + b
 Obter FAD e RAD de algoritmo AD genérico: forçar a direção da composição de morfismos
 
 \begin{block}{Conversão da escrita de funções}
-|f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| where r is any object of k.
+|f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| para r objeto de categoria k.
 \end{block}
 
 \begin{block}{Definição de novo tipo}
@@ -483,7 +471,7 @@ cont f = Cont(. f)
 \end{frame}
 
 
-\begin{frame}{Instancia deduzida para RAD genérico}
+\begin{frame}{Instância deduzida para RAD genérico}
 \begin{code}
 
 instance Category k => Category Contkr where
@@ -523,7 +511,7 @@ instance Scalable k a => Scalable Contkr a where
 
 
 
-\section{bibliografia e links}
+\section{Bibliografia}
 
 ...
 
