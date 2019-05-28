@@ -451,6 +451,7 @@ Categoria: conjunto de objetos e morfismos com duas operações base(id e compos
     \item $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
+\pause
 
 Funtor: mapeia uma categoria noutra, preservando a estrutura
 \begin{itemize}
@@ -511,8 +512,6 @@ Funtor: mapeia uma categoria noutra, preservando a estrutura
     \item Passo 3 - Generalizar condições se necessário para obtermos instância
 \end{itemize}
 
-Este processo é o mesmo para vários tipos de categorias.
-
 \end{frame}
 
 
@@ -526,6 +525,7 @@ Este processo é o mesmo para vários tipos de categorias.
 
 \end{block}
 
+\pause
 
 \begin{block}{Passo 2}
 
@@ -534,6 +534,8 @@ Este processo é o mesmo para vários tipos de categorias.
 \ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\circ}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'}))}
 
 \end{block}
+
+\pause
 
 \begin{block}{Passo 3}
 
@@ -831,9 +833,14 @@ Para definir a composição generalizamos a condição:
 
 Obter FAD e RAD de algoritmo AD genérico: forçar a direção da composição de morfismos
 
+\pause
+
 \begin{block}{Conversão da escrita de funções}
 \ensuremath{\Varid{f}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;\Varid{b}\Rightarrow(\mathbin{\circ}\Varid{f})\mathbin{::}(\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})} para r objeto de categoria k.
 \end{block}
+
+
+\pause
 
 \begin{block}{Definição de novo tipo}
 \begin{hscode}\SaveRestoreHook

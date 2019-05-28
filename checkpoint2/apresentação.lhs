@@ -192,6 +192,7 @@ Categoria: conjunto de objetos e morfismos com duas operações base(id e compos
     \item $f \circ (g \circ h) = (f \circ g) \circ h$
 \end{itemize}
 
+\pause
 
 Funtor: mapeia uma categoria noutra, preservando a estrutura
 \begin{itemize}
@@ -246,8 +247,6 @@ linearD f = bigD(\a -> (f a,f))
     \item Passo 3 - Generalizar condições se necessário para obtermos instância
 \end{itemize}
 
-Este processo é o mesmo para vários tipos de categorias.
-
 \end{frame}
 
 
@@ -261,6 +260,7 @@ Este processo é o mesmo para vários tipos de categorias.
 
 \end{block}
 
+\pause
 
 \begin{block}{Passo 2}
 
@@ -269,6 +269,8 @@ Este processo é o mesmo para vários tipos de categorias.
 |bigDhat g . bigDhat f = bigD (\ a -> let{(b,f') = bigDplus f a; (c,g') = bigDplus g b} in (c,g' . f'))|
 
 \end{block}
+
+\pause
 
 \begin{block}{Passo 3}
 
@@ -450,9 +452,14 @@ jamF = \(a, b) -> a + b
 
 Obter FAD e RAD de algoritmo AD genérico: forçar a direção da composição de morfismos
 
+\pause
+
 \begin{block}{Conversão da escrita de funções}
 |f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| para r objeto de categoria k.
 \end{block}
+
+
+\pause
 
 \begin{block}{Definição de novo tipo}
 \begin{code}
