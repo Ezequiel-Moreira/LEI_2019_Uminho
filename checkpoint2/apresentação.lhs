@@ -357,85 +357,36 @@ class Category k => Cocartesian k where
     jam :: (a,a) 'k' a
 \end{code}
 \end{block}
+
+\pause
+
+\begin{block}{Dedução de|(->+)|}
+\hspace*{\fill}
+\xymatrix@@R=2mm{
+    a \ar[rd] &  \\
+      & a+b?\\
+    b \ar[ru] &  \\
+}
+\hspace*{\fill}
+\begin{itemize}
+\item 
+    Queremos uma categoria que os seus objetos tenham adição e seja capaz de multiplicar por constantes (scaling).
+\end{itemize}
+\end{block}
 \end{frame}
 
-
-
-\begin{frame}{Instâncias que deduzimos - caso |(->+)|}
-\begin{code}
-newtype a ->+ b=AddFun(a->b)
-
-instance Category (->+) where
-   type Obj (->+) = Additive
-   id = AddFun id
-   AddFun g . AddFun f = AddFun (g . f )
-
-instance Monoidal (->+) where
-   AddFun f >< AddFun g = AddFun (f >< g)
-
-instance Cartesian (->+) where
-   exl = AddFun exl
-   exr = AddFun exr
-   dup = AddFun dup
-\end{code}
-\end{frame}
-
-\begin{frame}{Instâncias que deduzimos - caso |(->+)|}
-\begin{code}
-instance Cocartesian (->+) where
-  inl = AddFun inlF
-  inr = AddFun inrF
-  jam = AddFun jamF
-
-inlF :: Additive b => a -> a >< b
-inrF :: Additive a => b -> a >< b
-jamF :: Additive a => a >< a -> a
-
-inlF = \a -> (a, 0)
-inrF = \b -> (0, b)
-jamF = \(a, b) -> a + b
-
-\end{code}
-\end{frame}
-
-
-
-
-
-
-
-
-\section{Algoritmo AD generalizado}
 
 \begin{frame}{Instância deduzida para AD genérico}
-\begin{code}
-    newtype Dk a b = D (a -> b >< (a ‘k‘ b))
+\begin{block}{Dedução de |Dk|}
+\begin{itemize}
+\item
+    Queremos ter um |Dk| tal que seja o |bigD| mas com uma categoria
+de genérica, pois nunca fizemos nada de específico com a |sto|.
+\item
+    Queremos definir também as operações usuais nesta categoria, como a soma, multiplicação, sin, cos, etc. 
+\end{itemize}
+\end{block}
 
-    linearD :: (a -> b) -> (a ‘k‘ b) -> Dk a b
-    linearD f f'= D (\a -> (f a, f'))
-
-    instance Category k => Category Dk where
-        type Obj Dk = Additive ∧ Obj k ...
-     
-    instance Monoidal k => Monoidal Dk where ...
-     
-    instance Cartesian k => Cartesian Dk where ...
-     
-    instance Cocartesian k => Cocartesian Dk where
-        inl = linearD inlF inl
-        inr = linearD inrF inr
-        jam = linearD jamF jam
-     
-\end{code}
-
-\end{frame}
-\begin{frame}{Generalização de AD}
-\begin{code}
-    instance Scalable k s ⇒ NumCat Dk s where
-        negateC = linearD negateC negateC
-        addC = linearD addC addC
-        mulC = D (\(a, b) -> (a * b, scale b joinu scale a))
-\end{code}
 \end{frame}
 
 

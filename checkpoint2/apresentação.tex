@@ -350,9 +350,10 @@
 \section{Relembrar}
 
 \begin{frame}{Relembrar}
-Documento estudado: "The simple essence of automatic differentiation"
+Documento estudado: "The simple essence of automatic differentiation"([Elliott 2018]\cite{Elliott:2018})
 
 Objetivo: Estudo e implementação de um algoritmo AD genérico
+
 \end{frame}
 
 
@@ -682,140 +683,36 @@ Para definir a composição generalizamos a condição:
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
+
+\pause
+
+\begin{block}{Dedução de\ensuremath{(\rightarrow^+ )}}
+\hspace*{\fill}
+\xymatrix@R=2mm{
+    a \ar[rd] &  \\
+      & a+b?\\
+    b \ar[ru] &  \\
+}
+\hspace*{\fill}
+\begin{itemize}
+\item 
+    Queremos uma categoria que os seus objetos tenham adição e seja capaz de multiplicar por constantes (scaling).
+\end{itemize}
+\end{block}
 \end{frame}
 
-
-
-\begin{frame}{Instâncias que deduzimos - caso \ensuremath{(\rightarrow^+ )}}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;\Varid{a}\rightarrow^+ \Varid{b}\mathrel{=}\Conid{AddFun}\;(\Varid{a}\rightarrow \Varid{b}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\mathbf{type}\;\Conid{Obj}\;(\rightarrow^+ )\mathrel{=}\Conid{Additive}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{id}\mathrel{=}\Conid{AddFun}\;\Varid{id}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Conid{AddFun}\;\Varid{g}\mathbin{\circ}\Conid{AddFun}\;\Varid{f}\mathrel{=}\Conid{AddFun}\;(\Varid{g}\mathbin{\circ}\Varid{f}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Conid{AddFun}\;\Varid{f} \times \Conid{AddFun}\;\Varid{g}\mathrel{=}\Conid{AddFun}\;(\Varid{f} \times \Varid{g}){}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{exl}\mathrel{=}\Conid{AddFun}\;\Varid{exl}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{exr}\mathrel{=}\Conid{AddFun}\;\Varid{exr}{}\<[E]%
-\\
-\>[B]{}\hsindent{4}{}\<[4]%
-\>[4]{}\Varid{dup}\mathrel{=}\Conid{AddFun}\;\Varid{dup}{}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-\end{frame}
-
-\begin{frame}{Instâncias que deduzimos - caso \ensuremath{(\rightarrow^+ )}}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{inl}\mathrel{=}\Conid{AddFun}\;\Varid{inlF}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{inr}\mathrel{=}\Conid{AddFun}\;\Varid{inrF}{}\<[E]%
-\\
-\>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{jam}\mathrel{=}\Conid{AddFun}\;\Varid{jamF}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{inlF}\mathbin{::}\Conid{Additive}\;\Varid{b}\Rightarrow\Varid{a}\rightarrow \Varid{a} \times \Varid{b}{}\<[E]%
-\\
-\>[B]{}\Varid{inrF}\mathbin{::}\Conid{Additive}\;\Varid{a}\Rightarrow\Varid{b}\rightarrow \Varid{a} \times \Varid{b}{}\<[E]%
-\\
-\>[B]{}\Varid{jamF}\mathbin{::}\Conid{Additive}\;\Varid{a}\Rightarrow\Varid{a} \times \Varid{a}\rightarrow \Varid{a}{}\<[E]%
-\\[\blanklineskip]%
-\>[B]{}\Varid{inlF}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{a},\mathrm{0}){}\<[E]%
-\\
-\>[B]{}\Varid{inrF}\mathrel{=}\lambda \Varid{b}\rightarrow (\mathrm{0},\Varid{b}){}\<[E]%
-\\
-\>[B]{}\Varid{jamF}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{a}\mathbin{+}\Varid{b}{}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
-\end{frame}
-
-
-
-
-
-
-
-
-\section{Algoritmo AD generalizado}
 
 \begin{frame}{Instância deduzida para AD genérico}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[5]{}\mathbf{newtype}\; D_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})){}\<[E]%
-\\[\blanklineskip]%
-\>[5]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})\rightarrow  D_k \;\Varid{a}\;\Varid{b}{}\<[E]%
-\\
-\>[5]{}\Varid{linearD}\;\Varid{f}\;\Varid{f'}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f'})){}\<[E]%
-\\[\blanklineskip]%
-\>[5]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\; D_k \;\mathbf{where}{}\<[E]%
-\\
-\>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\mathbf{type}\;\Conid{Obj}\; D_k \mathrel{=}\Conid{Additive}\mathbin{∧}\Conid{Obj}\;\Varid{k}\mathbin{...}{}\<[E]%
-\\[\blanklineskip]%
-\>[5]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\; D_k \;\mathbf{where}\mathbin{...}{}\<[E]%
-\\[\blanklineskip]%
-\>[5]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\; D_k \;\mathbf{where}\mathbin{...}{}\<[E]%
-\\[\blanklineskip]%
-\>[5]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\; D_k \;\mathbf{where}{}\<[E]%
-\\
-\>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{inl}\mathrel{=}\Varid{linearD}\;\Varid{inlF}\;\Varid{inl}{}\<[E]%
-\\
-\>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{inr}\mathrel{=}\Varid{linearD}\;\Varid{inrF}\;\Varid{inr}{}\<[E]%
-\\
-\>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{jam}\mathrel{=}\Varid{linearD}\;\Varid{jamF}\;\Varid{jam}{}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
+\begin{block}{Dedução de \ensuremath{ D_k }}
+\begin{itemize}
+\item
+    Queremos ter um \ensuremath{ D_k } tal que seja o \ensuremath{\mathcal{D}} mas com uma categoria
+de genérica, pois nunca fizemos nada de específico com a \ensuremath{\multimap }.
+\item
+    Queremos definir também as operações usuais nesta categoria, como a soma, multiplicação, sin, cos, etc. 
+\end{itemize}
+\end{block}
 
-\end{frame}
-\begin{frame}{Generalização de AD}
-\begin{hscode}\SaveRestoreHook
-\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
-\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[5]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{s}\mathbin{⇒}\Conid{NumCat}\; D_k \;\Varid{s}\;\mathbf{where}{}\<[E]%
-\\
-\>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{negateC}\mathrel{=}\Varid{linearD}\;\Varid{negateC}\;\Varid{negateC}{}\<[E]%
-\\
-\>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{addC}\mathrel{=}\Varid{linearD}\;\Varid{addC}\;\Varid{addC}{}\<[E]%
-\\
-\>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{mulC}\mathrel{=}\Conid{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{a}\mathbin{*}\Varid{b},\Varid{scale}\;\Varid{b}\; \nabla \;\Varid{scale}\;\Varid{a})){}\<[E]%
-\ColumnHook
-\end{hscode}\resethooks
 \end{frame}
 
 
@@ -911,17 +808,23 @@ Obter RAD e FAD de algoritmo AD genérico: forçar a direção da composição d
 
 
 
-\section{Scaling up}
+\section{Demonstração prática}
 
-...
+\begin{frame}{Demonstração prática}
+
+Demonstração prática
+
+Link do projeto git: [LEI 2019]\cite{LEI:2019}
+
+\end{frame}
 
 
 
 
 
 \section{Bibliografia}
-
-...
+\bibliographystyle{acm}%{ACM-Reference-Format}
+\bibliography{slides}
 
 
 
