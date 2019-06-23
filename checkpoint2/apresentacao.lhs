@@ -254,7 +254,7 @@ linearD f = bigD(\a -> (f a,f))
 
 |id = bigDhat id = bigD (bigDplus id)|
 
-|bigDhat g . bigDhat f = bigDhat (g . f) = bigD (bigDhat (g . f))|
+|bigDhat g . bigDhat f = bigDhat (g . f) = bigD (bigDplus (g . f))|
 
 \end{block}
 

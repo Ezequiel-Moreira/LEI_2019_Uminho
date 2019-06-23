@@ -417,7 +417,7 @@ Saying that |bigDhat| is a functor is equivalent to, for all f and g functions o
 
     |id = bigDhat id = bigD (bigDplus id)|
 
-    |bigDhat g . bigDhat f = bigDhat (g . f) = bigD (bigDhat (g . f))|
+    |bigDhat g . bigDhat f = bigDhat (g . f) = bigD (bigDplus (g . f))|
 
 
 \end{frame}

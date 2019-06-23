@@ -1,109 +1,97 @@
 import qualified Control.Category as C
 import Data.Kind as K
+import Prelude hiding (id, (.), either)
 
-class CategoryNum k where
-    idn :: Num a => k a a
-    cpn :: (Num a, Num b, Num c) => k b c -> k a b -> k a c
+class CategoryDom (d :: Type -> Constraint) (k :: Type -> Type -> *) where
+    id  :: d a => a `k` a
+    (.) :: (d a, d b, d c) => b `k` c -> a `k` b -> a `k` c
 
-instance CategoryNum (->) where
-    idn = \a -> a
-    cpn = \f -> \g -> f Prelude.. g
+instance CategoryDom d (->) where
+    id = \a -> a
+    f . g = \a -> f (g a) 
 
-class C.Category k => Monoidal k where
-    cross :: (k a c) -> (k b d) -> (k (a, b) (c, d))
+class CategoryDom d k => MonoidalDom d k where
+    (><) :: (d a, d b, d c, d e) => (a `k` c) -> (b `k` e) -> ((a, b) `k` (c, e))
 
-class CategoryNum k => MonoidalNum k where
-    crossn :: (Num a, Num b, Num c) => (k a c) -> (k b d) -> (k (a, b) (c, d))
+instance MonoidalDom d (->) where
+    f >< g = \(a,b) -> (f a, g b)
 
-instance Monoidal (->) where
-    cross f g = \(a,b) -> (f a, g b)
+class MonoidalDom d k => CartesianDom d k where
+    exl :: (d a, d b) => (a, b) `k` a
+    exr :: (d a, d b) => (a, b) `k` b
+    dup :: d a => a `k` (a, a)
 
-instance MonoidalNum (->) where
-    crossn f g = \(a,b) -> (f a, g b)
-
-class Monoidal k => Cartesian k where
-    exl :: k (a, b) a
-    exr :: k (a, b) b
-    dup :: k a (a, a)
-
-class MonoidalNum k => CartesianNum k where
-    exln :: (Num a, Num b)  => k (a, b) a
-    exrn :: (Num a, Num b)  => k (a, b) b
-    dupn :: Num a           => k a (a, a)
-
-instance Cartesian (->) where
+instance CartesianDom d (->) where
     exl = \(a, b) -> a
     exr = \(a, b) -> b
     dup = \a -> (a, a)
 
-instance CartesianNum (->) where
-    exln = \(a, b) -> a
-    exrn = \(a, b) -> b
-    dupn = \a -> (a, a)
+class Additive a where
+    zero :: a
+    (<+>)  :: a -> a -> a
 
-instance (Num a, Num b) => Num (a,b) where
-    (a,b) + (x,y)   = (a + x, b + y)
-    (a,b) - (x,y)   = (a - x, b - y)
-    (a,b) * (x,y)   = (a * x, b * y)
-    negate (a,b)    = (negate a, negate b)
-    abs (a,b)       = (abs a, abs b)
-    signum (a,b)    = (signum a, signum b)
-    fromInteger i   = (fromInteger i, fromInteger i)
+instance Additive Int where
+    zero = 0
+    (<+>) = (+)
 
-class CategoryNum k => Cocartesian k where
-    inl :: (Num a, Num b)   => k a (a, b)
-    inr :: (Num a, Num b)   => k b (a, b)
-    jam :: Num a            => k (a, a) a
+instance Additive Float where
+    zero = 0.0
+    (<+>) = (+)
 
-data S_arr a b where
-    AddFun :: (Num a, Num b) => (a -> b) -> S_arr a b
+instance (Additive a, Additive b) => Additive (a, b) where
+    zero = (zero, zero)
+    (a, b) <+> (c, d) = (a <+> c, b <+> d)
 
-instance CategoryNum S_arr where
-    idn = AddFun id
-    cpn (AddFun g) (AddFun f) = AddFun (g Prelude.. f)
+class CategoryDom d k => CocartesianDom d k where
+    inl :: (d a, d b) => a `k` (a, b)
+    inr :: (d a, d b) => b `k` (a, b)
+    jam :: d a => (a, a) `k` a
 
-instance MonoidalNum S_arr where
-    crossn (AddFun f) (AddFun g) = AddFun (crossn f g)
+data (->+) :: * -> * -> * where
+    AddFun :: (Additive a, Additive b) => (a -> b) -> a ->+ b
 
-instance CartesianNum S_arr where
-    exln = AddFun exln
-    exrn = AddFun exrn
-    dupn = AddFun dupn
+instance CategoryDom Additive (->+) where
+    id = AddFun (\x -> x)
+    (AddFun g) . (AddFun f) = AddFun (((.) @Additive) g f)
 
-inlF :: (Num a, Num b)  => a -> (a, b)
-inrF :: (Num a, Num b)  => b -> (a, b)
-jamF :: (Num a)         => (a, a) -> a
+instance MonoidalDom Additive (->+) where
+    (AddFun f) >< (AddFun g) = AddFun (((><) @Additive) f g)
 
-inlF = \a -> (a, 0)
-inrF = \b -> (0, b)
-jamF = \(a,b) -> a + b
+instance CartesianDom Additive (->+) where
+    exl = AddFun (exl @Additive)
+    exr = AddFun (exr @Additive)
+    dup = AddFun (dup @Additive)
 
-instance Cocartesian S_arr where
+inlF :: (Additive a, Additive b) => a -> (a, b)
+inrF :: (Additive a, Additive b) => b -> (a, b)
+jamF :: Additive a => (a, a) -> a
+
+inlF = \a -> (a, zero)
+inrF = \b -> (zero, b)
+jamF = \(a,b) -> a <+> b
+
+instance CocartesianDom Additive (->+) where
     inl = AddFun inlF
     inr = AddFun inrF
     jam = AddFun jamF
 
-split :: Cartesian k => k a c -> k a d -> k a (c,d)
-split f g = (cross f g) C.. dup
+split :: (CartesianDom Additive k, Additive a, Additive b, Additive c) => a `k` b -> a `k` c -> a `k` (b,c)
+split f g = ((.) @Additive) (((><) @Additive) f g) (dup @Additive)
+-- split f g = (f >< g) . dup
 
-splitn :: (CartesianNum k, Num a, Num c, Num d) => 
-    k a c -> k a d -> k a (c,d)
-splitn f g = (crossn f g) `cpn` dupn
-
-either :: (MonoidalNum k, Cocartesian k, Num a, Num c, Num d) => 
-    k c a -> k d a -> k (c,d) a
-either f g = jam `cpn` (crossn f g)
+either :: (MonoidalDom Additive k, CocartesianDom Additive k, Additive a, Additive b, Additive c) => 
+    b `k` a -> c `k` a -> (b,c) `k` a
+either f g = ((.) @Additive) (jam @Additive) (((><) @Additive) f g)
+-- either f g = jam . (f >< g)
 
 fork (f,g) = f `split` g
-forkn (f,g) = f `splitn` g
+unfork h = (((.) @Additive) exl h,((.) @Additive) exr h)
+-- unfork h = (exl . h, exr . h)
 
-unfork h = (exl C.. h, exr C.. h)
-unforkn h = (exln `cpn` h, exrn `cpn` h)
+join (f,g) = either f g
+unjoin h = (((.) @Additive) h inl,((.) @Additive) h inr)
+-- unjoin h = (h . inl, h . inr)
 
-join (f,g) = f `Main.either` g
-unjoin h = (h `cpn` inl, h `cpn` inr)
-
-{-# LANGUAGE MultiParamTypeClasses #-}
 
 class NumCat k a where
     negateC :: k a a
@@ -114,13 +102,14 @@ class FloatingCat k a where
     sinC :: k a a
     cosC :: k a a
     expC :: k a a
+--    expBC :: k (a,a) a
 
 instance Num a => NumCat (->) a where
     negateC = negate
     addC    = uncurry (+)
     mulC    = uncurry (*)
 
-instance Num a => NumCat S_arr a where
+instance (Num a, Additive a) => NumCat (->+) a where
     negateC = AddFun negate
     addC    = AddFun $ uncurry (+)
     mulC    = AddFun $ uncurry (*)
@@ -129,11 +118,18 @@ instance Floating a => FloatingCat (->) a where
     sinC = sin 
     cosC = cos
     expC = exp
+--    expBC = uncurry (**)
+
+instance (Floating a, Additive a) => FloatingCat (->+) a where
+    sinC = AddFun sin 
+    cosC = AddFun cos
+    expC = AddFun exp
+--    expBC = AddFun $ uncurry (**)
 
 class Scalable k a where
     scale :: a -> k a a
 
-instance Num a => Scalable S_arr a where
+instance (Num a, Additive a) => Scalable (->+) a where
     scale a = AddFun (\da -> a*da)
 
 newtype D k a b = D (a -> (b, k a b))
@@ -141,52 +137,93 @@ newtype D k a b = D (a -> (b, k a b))
 linearD :: (a -> b) -> (k a b) -> D k a b
 linearD f f' = D (\a -> (f a, f'))
 
-instance CategoryNum k => CategoryNum (D k) where
-    idn = linearD Prelude.id idn
-    (D g) `cpn` (D f) = D (\a -> 
+-- d not in scope?
+instance CategoryDom Additive k => CategoryDom Additive (D k) where
+    id = linearD (\x->x) (id @Additive)
+    (D g) . (D f) = D (\a -> 
         let{(b, f') = f a;
             (c, g') = g b}
-        in (c, g' `cpn` f'))
+        in (c, (.) @Additive g' f'))
 
-instance MonoidalNum k => MonoidalNum (D k) where
-    (D f) `crossn` (D g) = D (\(a,b) -> 
+-- d not in scope?
+instance MonoidalDom Additive k => MonoidalDom Additive (D k) where
+    (D f) >< (D g) = D (\(a,b) -> 
         let{(c, f') = f a;
             (d, g') = g b}
-        in ((c,d), f' `crossn` g'))
+        in ((c,d), (><) @Additive f' g'))
 
-instance CartesianNum k => CartesianNum (D k) where
-    exln = linearD exln exln
-    exrn = linearD exrn exrn
-    dupn = linearD dupn dupn
+-- d not in scope?
+instance CartesianDom Additive k => CartesianDom Additive (D k) where
+    exl = linearD (exl @Additive) (exl @Additive)
+    exr = linearD (exr @Additive) (exr @Additive)
+    dup = linearD (dup @Additive) (dup @Additive)
 
-instance Cocartesian k => Cocartesian (D k) where
-    inl = linearD inlF inl 
-    inr = linearD inrF inr 
-    jam = linearD jamF jam 
+instance CocartesianDom Additive k => CocartesianDom Additive (D k) where
+    inl = linearD inlF (inl @Additive) 
+    inr = linearD inrF (inr @Additive) 
+    jam = linearD jamF (jam @Additive) 
 
-instance (Scalable k s, Num s, NumCat k s, MonoidalNum k, Cocartesian k) => 
+instance (Scalable k s, NumCat k s, Num s, MonoidalDom Additive k, CocartesianDom Additive k, Additive s) => 
         NumCat (D k) s where
     negateC = linearD negateC negateC
     addC = linearD addC addC
-    mulC = D (\(a,b) -> (a*b, (scale b) `Main.either` (scale a)))
+    mulC = D (\(a,b) -> (a*b, (scale b) `either` (scale a)))
 
-instance (Floating s, Scalable k s) => 
+instance (Floating s, Additive s, Scalable k s, MonoidalDom Additive k, CocartesianDom Additive k) => 
         FloatingCat (D k) s where
     sinC = D (\a -> (sinC a, scale (cosC a)))
     cosC = D (\a -> (cosC a, scale (negateC $ sinC a)))
     expC = D (\a -> let e = expC a 
                     in (e, scale e))
+--    expBC = D(\(u,v) -> let l = scale (v*u**(v-1))
+--                            r = scale ((u**v)*(log u))
+--                        in (expBC (u,v), l `either` r))
+
+instance (Num a, Additive a) => Scalable (D (->+)) a where
+    scale a = D (\da -> (da*a, AddFun (\d -> a))) 
+
+-- helpfull syntax --
+ida :: (CategoryDom Additive k, Additive a) => a `k` a
+ida = id @Additive
+
+cpa :: (CategoryDom Additive k, Additive a, Additive b, Additive c) =>
+    b `k` c -> a `k` b -> a `k` c
+cpa = (.) @Additive
+
+exla :: (CartesianDom Additive k, Additive a, Additive b) =>
+    (a, b) `k` a
+exla = exl @Additive
+
+exra :: (CartesianDom Additive k, Additive a, Additive b) =>
+    (a, b) `k` b
+exra = exr @Additive
+
+dupa :: (CartesianDom Additive k, Additive a) =>
+    a `k` (a, a)
+dupa = dup @Additive
+
+constD a = linearD (const a) (AddFun (\x->zero)) 
+---------------------
+
 
 unD (D f) = f
 unAddFun (AddFun f) = f
 
-sqr :: Num a => D S_arr a a
-sqr = mulC `cpn` (idn `splitn` idn)
+sqr :: (Num a, Additive a) => D (->+) a a
+sqr = mulC `cpa` (ida `split` ida)
 
-magSqr :: Num a => D S_arr (a,a) a
-magSqr = addC `cpn` ((mulC `cpn` (exln `splitn` exln)) `splitn` (mulC `cpn` (exrn `splitn` exrn)))
+magSqr :: (Num a, Additive a) => D (->+) (a,a) a
+magSqr = addC `cpa`  
+    (   (mulC `cpa` (exla `split` exla)) 
+        `split`
+        (mulC `cpa` (exra `split` exra))
+    )
 
-cosSinProd :: Floating a => D S_arr (a,a) (a,a)
-cosSinProd = (cosC `splitn` sinC) `cpn` mulC
+cosSinProd :: (Floating a, Additive a) => D (->+) (a,a) (a,a)
+cosSinProd = (cosC `split` sinC) `cpa` mulC
 
-deriv f a = (unAddFun $ snd $ unD f $ a) 1
+--exp2 :: (Floating a, Additive a) => D (->+) a a
+--exp2 = expBC `cpa` ((constD 2.0) `split` ida)
+
+deriv :: Show b => D (->+) a b -> a -> a -> b
+deriv f a s = (unAddFun $ snd $ unD f $ a) s
