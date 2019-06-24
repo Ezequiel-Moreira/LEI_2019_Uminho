@@ -125,13 +125,6 @@ A function $f:\R \to \R$ is differentiable  at $x \in \R$, if there exists a num
 \end{defi}
 
 \pause
-\vspace{-2mm}
-\begin{align*}
-\hspace{-3mm} \lim_{\varepsilon \to 0} \frac{\textit{$f(x+\varepsilon)-f(x)$}}{\varepsilon} - \textit{$f'(x)$} = 0 \hspace{0.5mm} 
-\Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f(x+\varepsilon)-f(x)$} - (\varepsilon \cdotp \textit{$f'(x)$})}{\varepsilon} = 0 
-\end{align*}
-
-\pause
 
 \begin{defi}
 A function $f:\R^{m} \to \R^{n}$ is differentiable  at $x \in \R^{m}$, if there exists a unique linear transformation $\mu:\R^{m} \to \R^{n}$  such that:
@@ -207,7 +200,7 @@ bigDplus f a = (f a, bigD f a)
 \begin{frame}
 \frametitle{Rules for Differentiation - Sequential Composition} 
 \begin{coro}
-	$\mathcal{D}^{+}$ is compositionally efficient in relation to $(\circ)$, that is, in Haskell:
+	$\mathcal{D}^{+}$ is efficiently compositionally efficient in relation to $(\circ)$, that is, in Haskell:
 	\begin{code}
 	bigDplus (g . f) a = let {(b, f') = bigDplus f a; (c, g') = bigDplus g b} 
             in (c, g' . f') 
@@ -253,7 +246,7 @@ f >< g = \(a, b) -> (f a,g b)
 \frametitle{Rules for Differentiation - Parallel Composition} 
 \vspace{15mm}
 \begin{coro}
-	The function $\mathcal{D}^{+}$ is compositional in relation to $(\boldsymbol{\times})$
+	The function $\mathcal{D}^{+}$ is efficiently compositional in relation to $(\boldsymbol{\times})$
 \begin{code}
 	bigDplus (f >< g) (a, b) = let {(c, f') = bigDplus f a; (d, g') = bigDplus g b} 
             in ((c, d), f' >< g') 
