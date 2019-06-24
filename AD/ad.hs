@@ -2,7 +2,7 @@ import qualified Control.Category as C
 import Data.Kind as K
 import Prelude hiding (id, (.), either)
 
-class CategoryDom (d :: Type -> Constraint) (k :: Type -> Type -> *) where
+class CategoryDom (d :: * -> Constraint) (k :: * -> * -> *) where
     id  :: d a => a `k` a
     (.) :: (d a, d b, d c) => b `k` c -> a `k` b -> a `k` c
 
@@ -137,7 +137,9 @@ newtype D k a b = D (a -> (b, k a b))
 linearD :: (a -> b) -> (k a b) -> D k a b
 linearD f f' = D (\a -> (f a, f'))
 
--- d not in scope?
+-- we need to have (d `and` Additive)
+-- :k and
+-- > (* -> Constraint) -> (* -> Constraint) -> * -> Constraint
 instance CategoryDom Additive k => CategoryDom Additive (D k) where
     id = linearD (\x->x) (id @Additive)
     (D g) . (D f) = D (\a -> 
@@ -145,14 +147,12 @@ instance CategoryDom Additive k => CategoryDom Additive (D k) where
             (c, g') = g b}
         in (c, (.) @Additive g' f'))
 
--- d not in scope?
 instance MonoidalDom Additive k => MonoidalDom Additive (D k) where
     (D f) >< (D g) = D (\(a,b) -> 
         let{(c, f') = f a;
             (d, g') = g b}
         in ((c,d), (><) @Additive f' g'))
 
--- d not in scope?
 instance CartesianDom Additive k => CartesianDom Additive (D k) where
     exl = linearD (exl @Additive) (exl @Additive)
     exr = linearD (exr @Additive) (exr @Additive)
