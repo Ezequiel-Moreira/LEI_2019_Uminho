@@ -516,10 +516,10 @@ With this in mind we can express categories as an Haskell class and present an i
 \>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{id}\mathbin{::}(\Varid{a'k'a}){}\<[E]%
+\>[5]{}\Varid{id}\mathbin{::}(\Varid{a}\mathbin{`\Varid{k}`}\Varid{a}){}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b'k'c})\rightarrow (\Varid{a'k'b})\rightarrow (\Varid{a'k'c}){}\<[E]%
+\>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b}\mathbin{`\Varid{k}`}\Varid{c})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{b})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{c}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \vspace{-6mm}
@@ -668,7 +668,7 @@ As noted before we want our algorithm to have parallel composition in it. To do 
 \>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}( \times )\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a} \times \Varid{b})\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d})){}\<[E]%
+\>[5]{}( \times )\mathbin{::}(\Varid{a}\mathbin{`\Varid{k}`}\Varid{c})\rightarrow (\Varid{b}\mathbin{`\Varid{k}`}\Varid{d})\rightarrow ((\Varid{a} \times \Varid{b})\mathbin{`\Varid{k}`}(\Varid{c} \times \Varid{d})){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
 \\
@@ -742,13 +742,13 @@ With that noted we define our categories
 \>[B]{}\mathbf{class}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{exl}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\>[5]{}\Varid{exl}\mathbin{::}(\Varid{a},\Varid{b})\mathbin{`\Varid{k}`}\Varid{a}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{b}{}\<[E]%
+\>[5]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\mathbin{`\Varid{k}`}\Varid{b}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{dup}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
+\>[5]{}\Varid{dup}\mathbin{::}\Varid{a}\mathbin{`\Varid{k}`}(\Varid{a},\Varid{a}){}\<[E]%
 \\[\blanklineskip]%
 \>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
 \\
@@ -763,11 +763,11 @@ With that noted we define our categories
 \\[\blanklineskip]%
 \>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
-\>[B]{}\Varid{inl}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\>[B]{}\Varid{inl}\mathbin{::}\Varid{a}\mathbin{`\Varid{k}`}(\Varid{a},\Varid{b}){}\<[E]%
 \\
-\>[B]{}\Varid{inr}\mathbin{::}\Varid{b}\;\text{\tt 'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\>[B]{}\Varid{inr}\mathbin{::}\Varid{b}\mathbin{`\Varid{k}`}(\Varid{a},\Varid{b}){}\<[E]%
 \\
-\>[B]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\>[B]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\mathbin{`\Varid{k}`}\Varid{a}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 
@@ -841,11 +841,11 @@ After replacing what we have in (1) using what we've determined in (2), we can t
 	\section{Fork and Join}
 	We can derive this two useful operations with just the operators defined earlier.
     
-    \ensuremath{ \Delta \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{d})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d}))}	
+    \ensuremath{ \Delta \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{a}\mathbin{`\Varid{k}`}\Varid{c})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{d})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}(\Varid{c} \times \Varid{d}))}	
     
     \ensuremath{\Varid{f}\; \Delta \;\Varid{g}\mathrel{=}(\Varid{f} \times \Varid{g})\mathbin{\circ}\Varid{dup}}
     
-    \ensuremath{ \nabla \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{c}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{d}\;\text{\tt 'k'}\;\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\;\text{\tt 'k'}\;\Varid{a})}
+    \ensuremath{ \nabla \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{c}\mathbin{`\Varid{k}`}\Varid{a})\rightarrow (\Varid{d}\mathbin{`\Varid{k}`}\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\mathbin{`\Varid{k}`}\Varid{a})}
     
     \ensuremath{\Varid{f}\; \nabla \;\Varid{g}\mathrel{=}\Varid{jam}\mathbin{\circ}(\Varid{f} \times \Varid{g})} 
 	
@@ -955,13 +955,13 @@ After replacing what we have in (1) using what we've determined in (2), we can t
 \>[5]{}\mathbf{class}\;\Conid{NumCat}\;\Varid{k}\;\Varid{a}\;\mathbf{where}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{negateC}\mathbin{::}\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\>[9]{}\Varid{negateC}\mathbin{::}\Varid{a}\mathbin{`\Varid{k}`}\Varid{a}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{addC}\mathbin{::}(\Varid{a} \times \Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\>[9]{}\Varid{addC}\mathbin{::}(\Varid{a} \times \Varid{a})\mathbin{`\Varid{k}`}\Varid{a}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{mulC}\mathbin{::}(\Varid{a} \times \Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\>[9]{}\Varid{mulC}\mathbin{::}(\Varid{a} \times \Varid{a})\mathbin{`\Varid{k}`}\Varid{a}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
 \>[9]{}\mathbin{...}{}\<[E]%
@@ -1008,7 +1008,7 @@ When we observe the mathematical definition for differentiation it can be seen t
 \>[5]{}\mathbf{class}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\;\mathbf{where}{}\<[E]%
 \\
 \>[5]{}\hsindent{4}{}\<[9]%
-\>[9]{}\Varid{scale}\mathbin{::}\Varid{a}\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}){}\<[E]%
+\>[9]{}\Varid{scale}\mathbin{::}\Varid{a}\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{a}){}\<[E]%
 \\[\blanklineskip]%
 \>[5]{}\mathbf{instance}\;\Conid{Num}\;\Varid{a}\Rightarrow\Conid{Scalable}\;(\rightarrow^+ )\;\Varid{a}\;\mathbf{where}{}\<[E]%
 \\
@@ -1079,9 +1079,9 @@ With a compiler plugin referenced in the article we can convert the above expres
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[5]{}\mathbf{newtype}\; D_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})){}\<[E]%
+\>[5]{}\mathbf{newtype}\; D_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\mathbin{`\Varid{k}`}\Varid{b})){}\<[E]%
 \\[\blanklineskip]%
-\>[5]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})\rightarrow  D_k \;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[5]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{b})\rightarrow  D_k \;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
 \>[5]{}\Varid{linearD}\;\Varid{f}\;\Varid{f'}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f'})){}\<[E]%
 \ColumnHook
@@ -1180,11 +1180,11 @@ With a compiler plugin referenced in the article we can convert the above expres
 	
 	These operations that have been mentioned before,
 
-	\ensuremath{\Varid{scale}\mathbin{::}\Varid{a}\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a})}
+	\ensuremath{\Varid{scale}\mathbin{::}\Varid{a}\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{a})}
     
-    \ensuremath{( \nabla )\mathbin{::}(\Varid{c}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a})\rightarrow (\Varid{d}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a})}
+    \ensuremath{( \nabla )\mathbin{::}(\Varid{c}\mathbin{`\Varid{k}`}\Varid{a})\rightarrow (\Varid{d}\mathbin{`\Varid{k}`}\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\mathbin{`\Varid{k}`}\Varid{a})}
 
-    \ensuremath{( \Delta )\mathbin{::}(\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{c})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{d})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}(\Varid{c} \times \Varid{d}))}	
+    \ensuremath{( \Delta )\mathbin{::}(\Varid{a}\mathbin{`\Varid{k}`}\Varid{c})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{d})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}(\Varid{c} \times \Varid{d}))}	
     
 
 	correspond exactly to the three possibilities seen above, where in linear maps, the domain and the co-domain are determined, respectively, by the width and height of the matrix together with the type of matrix elements. This happens if we use the convention of matrix on the left multiplied by a column vector on the right.
@@ -1229,15 +1229,15 @@ In order to achieve an RAD algorithm from our generalised AD we must have it so 
 
 To achieve this we start by converting the way we write morfisms in a category k:
 
-\ensuremath{\Varid{f}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;\Varid{b}\Rightarrow(\mathbin{\circ}\Varid{f})\mathbin{::}(\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})} where r is any object of k.
+\ensuremath{\Varid{f}\mathbin{::}\Varid{a}\mathbin{`\Varid{k}`}\Varid{b}\Rightarrow(\mathbin{\circ}\Varid{f})\mathbin{::}(\Varid{b}\mathbin{`\Varid{k}`}\Varid{r})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{r})} where r is any object of k.
 
 If we build a category based around this concept we'll arrive at our algorithm.
 
 To do that we start by defining a data type and constructing a functor that uses it:
 
-\ensuremath{\mathbf{newtype}\;Cont^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r}))}
+\ensuremath{\mathbf{newtype}\;Cont^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\mathbin{`\Varid{k}`}\Varid{r})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{r}))}
 
-\ensuremath{\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Cont^{r}_{k}\;\Varid{a}\;\Varid{b}}
+\ensuremath{\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\mathbin{`\Varid{k}`}\Varid{b})\rightarrow Cont^{r}_{k}\;\Varid{a}\;\Varid{b}}
 
 \ensuremath{\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f})}
 
@@ -1357,7 +1357,7 @@ Using the construction \ensuremath{Cont^{r}_{k}} from the previous section and t
 
 To this representation we'll call the dual of k:
 
-\ensuremath{\mathbf{newtype}\; Dual_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b}\;\text{\tt 'k'}\;\Varid{a})}
+\ensuremath{\mathbf{newtype}\; Dual_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b}\mathbin{`\Varid{k}`}\Varid{a})}
 
 With this definition we can achieve the dual representations of generalised linear maps by converting them from $Cont_{k}^{S}$ to \ensuremath{ Dual_k } using a functor:
 
@@ -1462,9 +1462,9 @@ To derive a generalised FAD algorithm from the generalised AD algorithm and calc
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;Begin^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{r}\;\text{\tt 'k'}\;\Varid{b})){}\<[E]%
+\>[B]{}\mathbf{newtype}\;Begin^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r}\mathbin{`\Varid{k}`}\Varid{a})\rightarrow (\Varid{r}\mathbin{`\Varid{k}`}\Varid{b})){}\<[E]%
 \\[\blanklineskip]%
-\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Begin^{r}_{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\mathbin{`\Varid{k}`}\Varid{b})\rightarrow Begin^{r}_{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
 \>[B]{}\Varid{begin}\;\Varid{f}\mathrel{=}\Conid{Begin}\;(\Varid{f}\mathbin{\circ}){}\<[E]%
 \ColumnHook
