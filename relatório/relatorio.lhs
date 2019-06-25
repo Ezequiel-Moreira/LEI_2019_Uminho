@@ -989,7 +989,6 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
 	
 	\newpage
 
-\section{Bibliography}
 \bibliographystyle{acm}%{ACM-Reference-Format}
 \bibliography{relatorio}
 
