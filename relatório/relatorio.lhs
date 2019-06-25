@@ -76,8 +76,10 @@
 	\maketitle
 	
 	\section{Introduction}
-	\paragraph{} The objective of this document is to expose the work done for the project of the course \emph{Laboratórios de Engenharia Informática} for the period of 2018/2019 whose major work was the study of an article about
-	Automatic Differentiation \cite{Elliott:2018}, under the guidance of supervisors José Nuno Oliveira and Pedro Patrício. This project was proposed to our group and was chosen thanks to the fact that the article has a semi-implemented Automatic Differentiation algorithm with Correct By Construction techniques, a subject that has been growing in influence the last few years. 
+	\paragraph{} 
+This document reports the outcome of an assignment proposed by our supervisors José Nuno Oliveira and Pedro Patrício as main topic of the MSc course \emph{Laboratórios de Engenharia Informática} (2nd semester 2018/19). The assignment consisted of studying and implementing the ideas put forward in a paper on Automatic Differentiation \cite{Elliott:2018}.
+
+This project was proposed to our group and was chosen thanks to the fact that the article has a semi-implemented Automatic Differentiation algorithm with Correct By Construction techniques, a subject that has been growing in influence the last few years. 
 	\par We have also implemented the ideas expressed in the article with moderate success.
 	
 	
