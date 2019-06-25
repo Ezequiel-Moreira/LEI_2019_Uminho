@@ -986,11 +986,11 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
 
 	\section{Conclusion}
 
-	ML is an ever expanding field, with a great amount of influence(and money) invested in it's growth and development.
+	ML is an ever expanding field, with a great amount of influence (and money) invested in its growth and development.
 
-	Despite this, there is a distinct lack of standard and hard theory behind it's construction, leading to a lack of understanding of the process of automatic learning.
+	Despite this, there is a distinct lack of standard and hard theory behind its construction, leading to a lack of understanding of the process of automatic learning.
 
-	To combat this, the article author has deduced a new method for AD, based on category theory and using Correct By Construction tecnices, creating a more robust,flexible and standard algoritmn for ML.
+	To combat this, the article author has deduced a new method for AD, based on category theory and using Correct By Construction tecnices, creating a more robust, flexible and standard algoritmn for ML.
 
 	From its study our group learned alot about the topics in the article as well as developed an initial version of the algoritmn proposed above, giving us insight into a new way of developing and implementing programs.
 
@@ -1005,7 +1005,7 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
 	This was done because the focus of our group is in studying the theory more then practical application, and the simplified version is easier to understand.
 	With this is mind it is advisable to implement the better version described in the paper in future work.
 
-	Furthermore we note that the concepts used in the article focus on the first derivative of a function.
+	Furthermore, we note that the concepts used in the article focus on the first derivative of a function.
 	An interesting idea for a future study is to explore if these ideas can be used to also calculate second derivatives.
 	
 	
