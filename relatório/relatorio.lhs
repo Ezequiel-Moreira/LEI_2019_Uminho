@@ -274,8 +274,8 @@ Furthermore, there are a couple of categorical laws that must be followed:
 With this in mind we can express categories as an Haskell class and present an instance for |(->)|:
 \begin{code}
 class Category k where
-    id::(a'k'a)
-    (.)::(b'k'c)->(a'k'b)->(a'k'c)
+    id::(a `k` a)
+    (.)::(b `k` c)->(a `k` b)->(a `k` c)
 \end{code}
 \vspace{-6mm}
 \begin{code}
@@ -396,7 +396,7 @@ As noted before we want our algorithm to have parallel composition in it. To do 
 
 
 class Category k => Monoidal k where
-    (><) :: (a 'k' c) -> (b 'k' d) -> ((a >< b) 'k' (c >< d)) 
+    (><) :: (a `k` c) -> (b `k` d) -> ((a >< b) `k` (c >< d)) 
 
 
 instance Monoidal (->) where
@@ -461,9 +461,9 @@ With that noted we define our categories
 \begin{code}
 
 class Monoidal k => Cartesian k where
-    exl :: (a,b)'k'a
-    exr :: (a,b)'k'b
-    dup :: a 'k' (a,a)
+    exl :: (a,b) `k` a
+    exr :: (a,b) `k` b
+    dup :: a `k` (a,a)
 
 instance Cartesian (->) where
     exl = \(a,b) -> a
@@ -471,9 +471,9 @@ instance Cartesian (->) where
     dup = \a -> (a,a)
     
 class Category k => Cocartesian k where
-inl :: a 'k' (a,b)
-inr :: b 'k' (a,b)
-jam :: (a,a) 'k' a
+inl :: a `k` (a,b)
+inr :: b `k` (a,b)
+jam :: (a,a) `k` a
 
 \end{code}
 
@@ -539,11 +539,11 @@ instance Cartesian D where
 	\section{Fork and Join}
 	We can derive this two useful operations with just the operators defined earlier.
     
-    |forku :: Cartesian k => (a 'k' c) -> (a 'k' d) -> (a 'k' (c >< d))|	
+    |forku :: Cartesian k => (a `k` c) -> (a `k` d) -> (a `k` (c >< d))|	
     
     | f forku g = (f >< g) . dup|
     
-    |joinu :: Cartesian k => (c 'k' a) -> (d 'k' a) -> ((c >< d) 'k' a)|
+    |joinu :: Cartesian k => (c `k` a) -> (d `k` a) -> ((c >< d) `k` a)|
     
     | f joinu g = jam . (f >< g)| 
 	
@@ -597,12 +597,12 @@ jamF = \(a, b) -> a + b
 \end{code}
 
 \section{Numeric operations}
-	To describe numerical operations in a k category we can use the definitions above, noting that the same process can be done for the Floating type.
+	To describe numerical operations in a k category we can use the definitions above, noting that the same process can be done for Floating types.
     \begin{code}
     class NumCat k a where
-        negateC :: a ‘k‘ a
-        addC :: (a >< a) ‘k‘ a
-        mulC :: (a >< a) ‘k‘ a
+        negateC :: a `k` a
+        addC :: (a >< a) `k` a
+        mulC :: (a >< a) `k` a
         ...
      \end{code}
      \newpage
@@ -621,13 +621,13 @@ When we observe the mathematical definition for differentiation it can be seen t
     |bigD (u + v) = bigD u + bigD v|\\
     |bigD (u * v) = u * bigD v + v * bigD u|\\
     
-    To make this definition more uniform and simple we can differentiate not the expression but the operations themselves. For example the \textit{negate} and the \textit{+} can be seen as linear because they don't require the inputs from the expression, but the \textit{*} operation cannot, and has such requires an alternative definition such as: 
+    To make this definition more uniform and simple we can differentiate not the expression but the operation itself. For example the \textit{negate} and the \textit{+} can be seen as linear because they don't require the inputs from the expression, but the \textit{*} operation cannot, and has such requires an alternative definition such as: 
 
     |bigD  mulC (a, b) = scale b joinu scale a|
 
 \begin{code}
     class Scalable k a where
-        scale :: a -> (a ‘k‘ a)
+        scale :: a -> (a `k` a)
      
     instance Num a => Scalable (->+) a where
         scale a = AddFun (\da -> a * da)
@@ -658,7 +658,7 @@ Some examples of functions:
     cosSinProd (x, y) = (cos z, sin z) where z=x*y
 \end{code}
 
-With a compiler plugin referenced in the article we can convert the above to our derived instances of categories:
+With a compiler plugin referenced in the article we can convert the above expressions to our expressions instanciated earlier:
     
 |sqr = mulC . (id forku id)|
 
@@ -672,9 +672,9 @@ With a compiler plugin referenced in the article we can convert the above to our
 	In the other sections we've used the definition of |bigD| with the $\multimap$, but how do we define a linear map? To be more expressive we can define |bigD| for any given "linear" category k.
     
 \begin{code}
-    newtype Dk a b = D (a -> b >< (a ‘k‘ b))
+    newtype Dk a b = D (a -> b >< (a `k` b))
 
-    linearD :: (a -> b) -> (a ‘k‘ b) -> Dk a b
+    linearD :: (a -> b) -> (a `k` b) -> Dk a b
     linearD f f'= D (\a -> (f a, f'))
 \end{code}
 \vspace{-6mm}   
@@ -727,11 +727,11 @@ instance Category k => Cocartesian k where
 	
 	These operations that have been mentioned before,
 
-	|scale :: a -> (a ‘k‘ a)|
+	|scale :: a -> (a `k` a)|
     
-    |(joinu) :: (c ‘k‘ a) -> (d ‘k‘ a) -> ((c >< d) ‘k‘ a)|
+    |(joinu) :: (c `k` a) -> (d `k` a) -> ((c >< d) `k` a)|
 
-    |(forku) :: (a ‘k‘ c) -> (a ‘k‘ d) -> (a ‘k‘ (c >< d))|	
+    |(forku) :: (a `k` c) -> (a `k` d) -> (a `k` (c >< d))|	
     
 
 	correspond exactly to the three possibilities seen above, where in linear maps, the domain and the co-domain are determined, respectively, by the width and height of the matrix together with the type of matrix elements. This happens if we use the convention of matrix on the left multiplied by a column vector on the right.
@@ -776,15 +776,15 @@ In order to achieve an RAD algorithm from our generalised AD we must have it so 
 
 To achieve this we start by converting the way we write morfisms in a category k:
 
-|f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| where r is any object of k.
+|f :: a `k` b => (. f) :: (b `k` r) -> (a `k` r)| where r is any object of k.
 
 If we build a category based around this concept we'll arrive at our algorithm.
 
 To do that we start by defining a data type and constructing a functor that uses it:
 
-|newtype Contkr a b = Cont((b 'k' r) -> (a 'k' r))|
+|newtype Contkr a b = Cont((b `k` r) -> (a `k` r))|
 
-|cont :: Category k => (a 'k' b) -> Contkr a b|
+|cont :: Category k => (a `k` b) -> Contkr a b|
 
 |cont f = Cont(. f)|
 
@@ -852,7 +852,7 @@ Using the construction |Contkr| from the previous section and taking |r| to be t
 
 To this representation we'll call the dual of k:
 
-|newtype Dualk a b = Dual(b 'k' a)|
+|newtype Dualk a b = Dual(b `k` a)|
 
 With this definition we can achieve the dual representations of generalised linear maps by converting them from $Cont_{k}^{S}$ to |Dualk| using a functor:
 
@@ -910,16 +910,16 @@ As final notes to this chapter we have that |(joinu)| and |(forku)| mutually dua
 To derive a generalised FAD algorithm from the generalised AD algorithm and calculate gradients from it all that needs to be done has already been show in the previous 2 sections, taking into account we can simply consider 
 
 \begin{code}
-newtype Beginkr a b = Begin((r 'k' a) -> (r 'k' b))
+newtype Beginkr a b = Begin((r `k` a) -> (r `k` b))
 
-begin :: Category k => (a 'k' b) -> Beginkr a b
+begin :: Category k => (a `k` b) -> Beginkr a b
 begin f = Begin(f .)
 \end{code}
 
 for the instance deduction and that we can choose |r| to be the scalar field |s| knowing that |s| $\multimap$ |a| is isomorphic to |a| for the gradient calculation.
 
 %15-end
-
+\newpage
 \section{Scaling Up}
 	A practical application of differentiation often involves high-dimensional spaces (we can see this in Artificial Neural Networks). \\
 	With this in mind, we easily observe that binary products are a very unwieldy and inefficient way of encoding high-dimensional spaces.\\
@@ -969,7 +969,7 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
 		\item 
 		The first thing we thought was to use the already made Category in \textit{Control.Category}, but that proved to not be enough because in the article the author indicates the object types of a Category.
         
-		In the already made Category, we could do something with Kinds to achieve this, but it would be strange to specify a Kind Additive with Data Kinds. So we decided to create a new Category, named CategoryDom, with kind (* \RAP Constraint) \RAP (* \RAP * \RAP *) \RAP Constraint, that receives a class which restricts the objects of a Category and the Category itself. Furthermore, the |id| and |(.)| are restricted by the first argument.
+		In the already made Category, we could do something with Kinds to achieve this, but it would be strange to specify a Kind Additive with Data Kinds. So we decided to create a new Category, named CategoryDom, with kind |(* -> Constraint) -> (* -> * -> *) -> Constraint|, that receives a class which restricts the objects of a Category and the Category itself. Furthermore, the |id| and |(.)| are restricted by the first argument.
 		\item
 		The Additive also needed to have an instance with pair of Additive objects, so we could utilise dup without problems.
 		\item 
