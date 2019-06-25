@@ -1,0 +1,1600 @@
+\documentclass[11pt,a4]{article}
+\usepackage[utf8x]{inputenc}
+
+\usepackage[]{hyperref}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0.5em}
+
+\usepackage{csquotes}
+\usepackage{amsmath,amssymb,mathrsfs,amsthm}
+\usepackage{array}
+\usepackage{cite}
+
+\usepackage{epstopdf}
+\usepackage[T1]{fontenc}
+
+\usepackage[all]{xy}
+
+\usepackage{hyperref}
+\usepackage{stmaryrd}
+\usepackage{graphicx,color}
+\usepackage{url}
+\textwidth 15cm
+\textheight 22cm
+\hoffset -1.5cm
+\voffset -1cm
+\def\N{\mathbb{N}}
+\def\R{\mathbb{R}}
+\def\C{\mathbb{C}}
+\def \RAP {$\rightarrow^{+}$}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+%---------- lhs2tex ---------------------------------
+%% ODER: format ==         = "\mathrel{==}"
+%% ODER: format /=         = "\neq "
+%
+%
+\makeatletter
+\@ifundefined{lhs2tex.lhs2tex.sty.read}%
+  {\@namedef{lhs2tex.lhs2tex.sty.read}{}%
+   \newcommand\SkipToFmtEnd{}%
+   \newcommand\EndFmtInput{}%
+   \long\def\SkipToFmtEnd#1\EndFmtInput{}%
+  }\SkipToFmtEnd
+
+\newcommand\ReadOnlyOnce[1]{\@ifundefined{#1}{\@namedef{#1}{}}\SkipToFmtEnd}
+\usepackage{amstext}
+\usepackage{amssymb}
+\usepackage{stmaryrd}
+\DeclareFontFamily{OT1}{cmtex}{}
+\DeclareFontShape{OT1}{cmtex}{m}{n}
+  {<5><6><7><8>cmtex8
+   <9>cmtex9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmtex10}{}
+\DeclareFontShape{OT1}{cmtex}{m}{it}
+  {<-> ssub * cmtt/m/it}{}
+\newcommand{\texfamily}{\fontfamily{cmtex}\selectfont}
+\DeclareFontShape{OT1}{cmtt}{bx}{n}
+  {<5><6><7><8>cmtt8
+   <9>cmbtt9
+   <10><10.95><12><14.4><17.28><20.74><24.88>cmbtt10}{}
+\DeclareFontShape{OT1}{cmtex}{bx}{n}
+  {<-> ssub * cmtt/bx/n}{}
+\newcommand{\tex}[1]{\text{\texfamily#1}}	% NEU
+
+\newcommand{\Sp}{\hskip.33334em\relax}
+
+
+\newcommand{\Conid}[1]{\mathit{#1}}
+\newcommand{\Varid}[1]{\mathit{#1}}
+\newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
+\newcommand{\plus}{\mathbin{+\!\!\!+}}
+\newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
+\newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
+\newcommand{\sequ}{\mathbin{>\!\!\!>}}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+\usepackage{polytable}
+
+%mathindent has to be defined
+\@ifundefined{mathindent}%
+  {\newdimen\mathindent\mathindent\leftmargini}%
+  {}%
+
+\def\resethooks{%
+  \global\let\SaveRestoreHook\empty
+  \global\let\ColumnHook\empty}
+\newcommand*{\savecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\savecolumns[#1]}}
+\newcommand*{\restorecolumns}[1][default]%
+  {\g@addto@macro\SaveRestoreHook{\restorecolumns[#1]}}
+\newcommand*{\aligncolumn}[2]%
+  {\g@addto@macro\ColumnHook{\column{#1}{#2}}}
+
+\resethooks
+
+\newcommand{\onelinecommentchars}{\quad-{}- }
+\newcommand{\commentbeginchars}{\enskip\{-}
+\newcommand{\commentendchars}{-\}\enskip}
+
+\newcommand{\visiblecomments}{%
+  \let\onelinecomment=\onelinecommentchars
+  \let\commentbegin=\commentbeginchars
+  \let\commentend=\commentendchars}
+
+\newcommand{\invisiblecomments}{%
+  \let\onelinecomment=\empty
+  \let\commentbegin=\empty
+  \let\commentend=\empty}
+
+\visiblecomments
+
+\newlength{\blanklineskip}
+\setlength{\blanklineskip}{0.66084ex}
+
+\newcommand{\hsindent}[1]{\quad}% default is fixed indentation
+\let\hspre\empty
+\let\hspost\empty
+\newcommand{\NB}{\textbf{NB}}
+\newcommand{\Todo}[1]{$\langle$\textbf{To do:}~#1$\rangle$}
+
+\EndFmtInput
+\makeatother
+%
+%
+%
+%
+%
+%
+% This package provides two environments suitable to take the place
+% of hscode, called "plainhscode" and "arrayhscode". 
+%
+% The plain environment surrounds each code block by vertical space,
+% and it uses \abovedisplayskip and \belowdisplayskip to get spacing
+% similar to formulas. Note that if these dimensions are changed,
+% the spacing around displayed math formulas changes as well.
+% All code is indented using \leftskip.
+%
+% Changed 19.08.2004 to reflect changes in colorcode. Should work with
+% CodeGroup.sty.
+%
+\ReadOnlyOnce{polycode.fmt}%
+\makeatletter
+
+\newcommand{\hsnewpar}[1]%
+  {{\parskip=0pt\parindent=0pt\par\vskip #1\noindent}}
+
+% can be used, for instance, to redefine the code size, by setting the
+% command to \small or something alike
+\newcommand{\hscodestyle}{}
+
+% The command \sethscode can be used to switch the code formatting
+% behaviour by mapping the hscode environment in the subst directive
+% to a new LaTeX environment.
+
+\newcommand{\sethscode}[1]%
+  {\expandafter\let\expandafter\hscode\csname #1\endcsname
+   \expandafter\let\expandafter\endhscode\csname end#1\endcsname}
+
+% "compatibility" mode restores the non-polycode.fmt layout.
+
+\newenvironment{compathscode}%
+  {\par\noindent
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \let\hspre\(\let\hspost\)%
+   \pboxed}%
+  {\endpboxed\)%
+   \par\noindent
+   \ignorespacesafterend}
+
+\newcommand{\compaths}{\sethscode{compathscode}}
+
+% "plain" mode is the proposed default.
+% It should now work with \centering.
+% This required some changes. The old version
+% is still available for reference as oldplainhscode.
+
+\newenvironment{plainhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\hspre\(\let\hspost\)%
+   \pboxed}%
+  {\endpboxed%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+\newenvironment{oldplainhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \(\pboxed}%
+  {\endpboxed\)%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+% Here, we make plainhscode the default environment.
+
+\newcommand{\plainhs}{\sethscode{plainhscode}}
+\newcommand{\oldplainhs}{\sethscode{oldplainhscode}}
+\plainhs
+
+% The arrayhscode is like plain, but makes use of polytable's
+% parray environment which disallows page breaks in code blocks.
+
+\newenvironment{arrayhscode}%
+  {\hsnewpar\abovedisplayskip
+   \advance\leftskip\mathindent
+   \hscodestyle
+   \let\\=\@normalcr
+   \(\parray}%
+  {\endparray\)%
+   \hsnewpar\belowdisplayskip
+   \ignorespacesafterend}
+
+\newcommand{\arrayhs}{\sethscode{arrayhscode}}
+
+% The mathhscode environment also makes use of polytable's parray 
+% environment. It is supposed to be used only inside math mode 
+% (I used it to typeset the type rules in my thesis).
+
+\newenvironment{mathhscode}%
+  {\parray}{\endparray}
+
+\newcommand{\mathhs}{\sethscode{mathhscode}}
+
+% texths is similar to mathhs, but works in text mode.
+
+\newenvironment{texthscode}%
+  {\(\parray}{\endparray\)}
+
+\newcommand{\texths}{\sethscode{texthscode}}
+
+% The framed environment places code in a framed box.
+
+\def\codeframewidth{\arrayrulewidth}
+\RequirePackage{calc}
+
+\newenvironment{framedhscode}%
+  {\parskip=\abovedisplayskip\par\noindent
+   \hscodestyle
+   \arrayrulewidth=\codeframewidth
+   \tabular{@{}|p{\linewidth-2\arraycolsep-2\arrayrulewidth-2pt}|@{}}%
+   \hline\framedhslinecorrect\\{-1.5ex}%
+   \let\endoflinesave=\\
+   \let\\=\@normalcr
+   \(\pboxed}%
+  {\endpboxed\)%
+   \framedhslinecorrect\endoflinesave{.5ex}\hline
+   \endtabular
+   \parskip=\belowdisplayskip\par\noindent
+   \ignorespacesafterend}
+
+\newcommand{\framedhslinecorrect}[2]%
+  {#1[#2]}
+
+\newcommand{\framedhs}{\sethscode{framedhscode}}
+
+% The inlinehscode environment is an experimental environment
+% that can be used to typeset displayed code inline.
+
+\newenvironment{inlinehscode}%
+  {\(\def\column##1##2{}%
+   \let\>\undefined\let\<\undefined\let\\\undefined
+   \newcommand\>[1][]{}\newcommand\<[1][]{}\newcommand\\[1][]{}%
+   \def\fromto##1##2##3{##3}%
+   \def\nextline{}}{\) }%
+
+\newcommand{\inlinehs}{\sethscode{inlinehscode}}
+
+% The joincode environment is a separate environment that
+% can be used to surround and thereby connect multiple code
+% blocks.
+
+\newenvironment{joincode}%
+  {\let\orighscode=\hscode
+   \let\origendhscode=\endhscode
+   \def\endhscode{\def\hscode{\endgroup\def\@currenvir{hscode}\\}\begingroup}
+   %\let\SaveRestoreHook=\empty
+   %\let\ColumnHook=\empty
+   %\let\resethooks=\empty
+   \orighscode\def\hscode{\endgroup\def\@currenvir{hscode}}}%
+  {\origendhscode
+   \global\let\hscode=\orighscode
+   \global\let\endhscode=\origendhscode}%
+
+\makeatother
+\EndFmtInput
+%
+%----------------------------------------------------
+
+
+\title{Studying Automatic Differentiation}
+\author{Group 114:\\
+	Artur Queiroz PG38014, Ezequiel Moreira PG38413, Nelson Loureiro PG37020}
+\date{June 2019}
+
+\newtheorem{teor}{Theorem}[section]
+\newtheorem{propo}{Proposi\c c\~ao}[section]
+\newtheorem{coro}{Corollary}[section]
+\newtheorem{lema}{Lema}[section]
+\theoremstyle{definition}
+\newtheorem{defi}{Definition}[section]
+\theoremstyle{Definition}
+\newtheorem{exemplo}{Example}[section]
+\theoremstyle{Definition}
+\newtheorem{nota}{Note}[section]
+
+\begin{document}
+	
+	\maketitle
+	
+	\section{Introduction}
+	\paragraph{} The objective of this document is to expose the work done for the project of the course \emph{Laboratórios de Engenharia Informática} for the period of 2018/2019 whose major work was the study of an article about
+	Automatic Differentiation (\cite{Elliott:2018}), under the guidance of supervisors José Nuno Oliveira and Pedro Patrício. This project was proposed to our group and was chosen thanks to the fact that the article has a semi-implemented Automatic Differentiation algorithm with Correct By Construction techniques, a subject that has been growing in influence the last few years. 
+	\par We have also implemented the ideas expressed in the article with moderate success.
+	
+	
+	%1-3
+	
+\section{Differentiable function}
+	
+	Since automatic differentiation (AD) has to do with computing derivatives, let’s begin by considering
+	what derivatives are. Using the definitions from chapter 2 of Michael Spivak's book (\cite{Elliott:2017}):
+	
+	\begin{defi}
+		A function $f:\R \to \R$ is differentiable at $x \in \R$, if there exists a real \newline $f $$'$ $(x)$ such that
+		\begin{align*}
+		\lim_{\varepsilon \to 0} \frac{\textit{$f(x+\varepsilon)-f(x)$}}{\varepsilon} \ = \textit{$f'(x)$}  
+		\end{align*}
+	\end{defi}
+	
+	This is, we can say that the derivate of $f$ at $x$, represented as $f $$'$ $(x)$, is a local linear approximation of $f$ at $x$.
+	But this definition is one case of a more general definition. \par 
+	Using simple transformations in the above equation, we have the following \newline equivalences:
+		\begin{align*}
+		\hspace{-3mm} \lim_{\varepsilon \to 0} \frac{\textit{$f(x+\varepsilon)-f(x)$}}{\varepsilon} - \textit{$f'(x)$} = 0 \hspace{0.5mm} 
+		\Leftrightarrow \hspace{0.5mm} \lim_{\varepsilon \to 0} \frac{\textit{$f(x+\varepsilon)-f(x)$} - (\varepsilon \cdotp \textit{$f'(x)$})}{\varepsilon} = 0 
+		\end{align*}
+	And with this, we can show the referred more general definition.
+	\begin{defi}
+		A function $f:\R^{m} \to \R^{n}$ is differentiable at $x \in \R^{m}$, if there exists
+		a unique linear transformation $\mu:\R^{m} \to \R^{n}$ such that
+		\begin{align*}
+		\lim_{\varepsilon \to 0} \frac{ \norm{ \textit{$f(x+\varepsilon)-f(x)-$} \mu (\varepsilon) } }{ \norm{ \varepsilon }} = 0
+		\end{align*}
+	\end{defi}
+	
+	Since $f $$'$ $(x)$ is a linear transformation, we can represent the derivative of a function as a Jacobian Matrix, where in the Definition 2.1, we can represent the derivative as a matrix with a single element. We reached a good generalization and let's now move on to an implementation in Haskell.
+	
+	\subsection{First Definition of Derivative}
+	
+	Let $f::a \to b$ be a function, where $a$ and $b$ are vectorial spaces that share a common underlying field. The derivative of $f$ at some value in $a$ is a linear transformation from $a$ to $b$, which we will write as \enquote*{$a \multimap b$}. The numbers, vectors and matrices mentioned above are all different representations of linear maps.
+	Written in Haskell style:
+	
+	\quad $\mathcal{D} :: (a \to b) \to (a \to (a \multimap b))$
+	
+	where the function $\mathcal{D}$ receives a function of type ($a \to b$) and a value of its domain has its input and yields a linear transformation of type $(a \multimap b)$. 
+	
+	If we differentiate two times, we have:
+	
+	\quad $ \mathcal{D}^{2} = \mathcal{D} \circ \mathcal{D} :: (a \to b) \to (a \to (a \multimap a \multimap b ))$
+	
+	The type ($a \multimap a \multimap b$) is a linear map that yields a linear map, which is the curried form of
+	a bilinear map.
+	
+	\subsection{Sequential Composition}
+	Turning now to the composition of functions, we have the following Theorem, known as Chain Rule.
+	\begin{teor}
+		
+		Let  $f:: a \to b$ and $g:: b \to c$ be two functions. Then the derivative of the composition between $f$ and $g$ is
+		\begin{align*}
+		\mathcal{D} \ (g \circ f ) \ a= \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.6mm} \circ \hspace{0.6mm} \mathcal{D} \hspace{0.6mm} f \ a
+		\end{align*}
+	\end{teor}
+	
+	\begin{nota}
+		From the definition of composition, we know that $g \circ f$ has type ($a \to c$), then $\mathcal{D} \ (g \hspace{0.5mm} \circ f) \ a $\hspace{0.5mm} has type ($a \multimap c$). We also know that $\mathcal{D} \hspace{0.6mm} f \ a$ has type ($a \multimap b$) and $\mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.6mm}$ has type ($b \multimap c$), so the composition of these two functions has type ($a \multimap c$). Thus, both sides of the
+		equation have the same type.
+	\end{nota}
+	
+	Unfortunately, Theorem 2.1 does not give us a good compositional recipe for differentiating sequential compositions because $\mathcal{D} \ (g \circ f )$ is not constructed solely from $\mathcal{D} \hspace{0.5mm} f$ and $\mathcal{D} \hspace{0.5mm} g$, it also needs $f$ itself.
+	
+	For that reason it would be better to propose a second derivative definition.
+	\vspace{13mm}
+	\subsection{Second Derivative Definition}
+	
+	The second derivative definition is the following:
+	
+	$\mathcal{D}_{0}^{+} :: (a \to b) \to ((a \to b) \times (a \to (a \multimap b)))$ 
+	
+	$\mathcal{D}_{0}^{+} \hspace{0.5mm} f =(f,\hspace{0.5mm} \mathcal{D} f)$
+	
+	As desired, this altered specification is compositional:
+	
+	$\mathcal{D}_{0}^{+} \hspace{0.5mm} (g \circ f)= $ 
+	
+	\{definition of $\mathcal{D}_{0}^{+}$\}
+	
+	$= (g \circ f,\hspace{0.2mm} \mathcal{D} \hspace{0.5mm} (g \circ f) \hspace{0.5mm})$ \hspace{3.3cm} 
+	
+	\{theorem 2.1 and definition of $g \circ f$\}
+	
+	$= (\lambda a \to g (f \hspace{0.5mm} a),\hspace{0.2mm} \lambda a \to \mathcal{D} \hspace{0.9mm} g \hspace{1.0mm}  (f \hspace{0.5mm} a)   \hspace{0.5mm} \circ \hspace{0.5mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )$ \hspace{1.5mm} 
+	
+	
+	The derivative of the composition $\mathcal{D}_{0}^{+} \hspace{0.5mm} (g \circ f) $ is entirely obtained from the components of $\mathcal{D}_{0}^{+} \hspace{0.5mm} g $ and $\mathcal{D}_{0}^{+} \hspace{0.5mm} f $. Note that the two components of the definition use $(f \hspace{0.1mm} a)$, requiring redundant work, resulting in an impractically expensive algorithm. Because of this we need a new derivative specification.
+	
+	
+	\subsection{Third Derivative Definition}
+	
+	The third derivative definition is the following:
+	
+	$\mathcal{D}^{+} :: (a \to b) \to (a \to b \times (a \multimap b))$
+	
+	$\mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a = (f \hspace{0.5mm} a,\hspace{0.5mm} \mathcal{D} \hspace{0.5mm} f \hspace{0.5mm} a )$
+	
+	With this last optimization we have the following Corollary: 
+	
+	\begin{coro}
+		$\mathcal{D}^{+}$ is (efficiently) compositional with 
+		respect to $(\circ)$. Specifically, in \newline Haskell,
+		
+		\quad $\mathcal{D}^{+} \hspace{0.5mm} (g \circ f) \hspace{0.9mm} a$ = $\bf let$  $\{(b,\hspace{0.5mm} f') = \mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a; \hspace{0.5mm} (c,\hspace{0.5mm} g')=\mathcal{D}^{+} \hspace{0.5mm} g \hspace{0.9mm} b \}$ $\bf in$  $(c,\hspace{0.5mm} g' \circ f') $
+	\end{coro}
+	
+	\subsection{Parallel Composition}
+	
+	Now let's introduce another important way of combining functions, the \ \enquote*{cross} operation, that combines two functions in parallel. The cross operation is as follows:
+	
+	$(\boldsymbol{\times}) :: (a \to c) \to (b \to d) \to (a \times b \to c \times d)$
+	
+	$f \boldsymbol{\times} g = \lambda(a,\hspace{0.5mm} b) \to (f \hspace{0.5mm} a,\hspace{0.5mm} g \hspace{0.5mm} b) $
+	
+	
+	The following Theorem, designated Cross Rule, combines the above derivative definition and the cross operation.
+	
+	\begin{teor}
+		Let $f :: a \to c$ and $g :: b \to d$ be two functions. Then the cross rule is the following:
+		\begin{align*}
+		\mathcal{D} \hspace{0.5mm} (f \boldsymbol{\times} g) \hspace{0.5mm} (a,\hspace{0.5mm} b) = \mathcal{D} \hspace{0.5mm} f \hspace{0.9mm} a \boldsymbol{\times} \mathcal{D} \hspace{0.5mm} g \hspace{0.9mm} b
+		\end{align*}
+	\end{teor}
+	
+	\begin{nota}
+		
+		The function $\mathcal{D} \hspace{0.6mm} f \ a$ has the type ($a \multimap c$) and $\mathcal{D} \hspace{0.6mm} g \ b$ has the type ($b \multimap d$), so both sides of the equation are of the type $(a \times b \multimap c \times d)$.
+	\end{nota}
+	
+	The Theorem 2.2 gives us what is necessary to write the next Corollary.
+	
+	\begin{coro}
+		The function $\mathcal{D}^{+}$ is compositional with respect to $(\boldsymbol{\times})$. Specifically,
+		
+		\quad $\mathcal{D}^{+} \hspace{0.5mm} (f \boldsymbol{\times} g) \hspace{0.9mm} (a,\hspace{0.5mm} b)$ = $\bf let$ $\{(c,\hspace{0.5mm} f') = \mathcal{D}^{+} \hspace{0.5mm} f \hspace{0.9mm} a; \hspace{0.5mm} (d,\hspace{0.5mm} g')=\mathcal{D}^{+} \hspace{0.5mm} g \hspace{0.9mm} b \}$ $\bf in$  $((c,\hspace{0.5mm} d), \hspace{0.5mm} f' \boldsymbol{\times} g' ) $
+		
+	\end{coro}
+	
+	The compositions we've talked about thus far preserve linearity, which we'll explain  in greater detail next section. 
+	
+	\subsection{Linear Functions}
+	A function $f$ is said to be linear when it distributes over (preserves the structure of) vector addition
+	and scalar multiplication, i.e.,
+	
+	\quad $f(a + a')= f \hspace{0.5mm} a + f \hspace{0.5mm} a'$
+	
+	\quad $f(s \cdot a)= s \cdot f \hspace{0.5mm} a$
+	
+	\begin{teor}
+		For all linear functions $f$, $\mathcal{D} \hspace{0.5mm} f \hspace{0.9mm} a = f $.
+	\end{teor}
+	
+	Since the derivative of a function is a local linear approximation of $f$ at $a$, this Theorem tells us that linear functions are their own perfect linear approximations.
+	
+	For example, considering the function $id =  \lambda a \to a $, the previous Theorem tells us that $\mathcal{D} \hspace{0.5mm} id \hspace{0.9mm} a = id $. Expressing in matrix form, the derivative of $id$ can be represented by the matrix [$1$] (matrix with the single element $1$) or by an identity matrix.
+	
+	The following Corollary of Theorem 2.3 tells us how to construct $\mathcal{D}^{+} \hspace{0.5mm} f$ for all linear functions.
+	
+	\begin{coro}
+		For all linear functions $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
+	\end{coro}
+
+	
+	
+	
+	
+	%4.1-4.4
+	
+	\newpage
+    
+    \section{Automatic Differentiation(AD) algorithm}
+
+In order to achieve the major goal of the article we must implement \ensuremath{\mathcal{D}^{+}}.
+But there's a problem: \ensuremath{\mathcal{D}} is not computable.
+
+However through the use of the corollaries we've defined so far we can deduce an alternative implementation using category theory as its basis.
+
+\subsection{Category and respective functor}
+
+A category consists in a collection of objects (generalisation of sets and types) and morphisms (operations between objects).
+
+Every category has defined in it \ensuremath{\Varid{id}\mathbin{::}\Varid{a}\rightarrow \Varid{a}} (identity for objects of a category) and morphism composition \ensuremath{(\mathbin{\circ})}, such that for 2 morphisms \ensuremath{\Varid{f}\mathbin{::}\Varid{a}\rightarrow \Varid{b}} and \ensuremath{\Varid{g}\mathbin{::}\Varid{b}\rightarrow \Varid{c}} of a given category we can define \ensuremath{\Varid{g}\mathbin{\circ}\Varid{f}\mathbin{::}\Varid{a}\rightarrow \Varid{c}}.
+Furthermore, there are a couple of categorical laws that must be followed: 
+\begin{itemize}
+    \item (C.1) $id \circ f = f \circ id = f$ 
+    \item (C.2) $f \circ (g \circ h) = (f \circ g) \circ h$
+\end{itemize}
+
+With this in mind we can express categories as an Haskell class and present an instance for \ensuremath{(\rightarrow )}:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathbin{::}(\Varid{a'k'a}){}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b'k'c})\rightarrow (\Varid{a'k'b})\rightarrow (\Varid{a'k'c}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-6mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathrel{=}\lambda \Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{g}\mathbin{\circ}\Varid{f}\mathrel{=}\lambda \Varid{a}\rightarrow \Varid{g}\;(\Varid{f}\;\Varid{a}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+An F functor between \ensuremath{\mathcal{U}} and \ensuremath{\mathcal{V}} categories is such that a) for each u object of \ensuremath{\mathcal{U}} we have that F u is an object in \ensuremath{\mathcal{V}} and b) for a morphism \ensuremath{\Varid{f}\mathbin{::}\Varid{a}\rightarrow \Varid{b}} of \ensuremath{\mathcal{U}} there exists \ensuremath{\Conid{F}\;\Varid{f}\mathbin{::}\Conid{F}\;\Varid{a}\rightarrow \Conid{F}\;\Varid{b}} morphism in \ensuremath{\mathcal{V}} .
+
+In addition to this a functor must preserve categorical structure.
+For this particular case, F id $\in$ \ensuremath{\mathcal{U}} = id ($\in$ \ensuremath{\mathcal{V}}) and F (f $\circ$ g) = F f $\circ$ F g must be true for F functor.
+
+Given the prior definitions and taking into account the various corollaries we'll deduce how to implement \ensuremath{\mathcal{D}^{+}}.
+
+\subsubsection{Instance deduction}
+
+To do this we first define a new type of data:
+
+\ensuremath{\mathbf{newtype}\;\mathcal{D}\;\Varid{a}\;\Varid{b}\mathrel{=}\mathcal{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\;\multimap \;\Varid{b}))}
+
+With this new type we adapt \ensuremath{\mathcal{D}^{+}} definition to use it, creating \ensuremath{\mathcal{\hat{D}}}:
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathcal{\hat{D}}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+With this in mind we must now deduce a categorical instance for \ensuremath{\mathcal{D}} such that \ensuremath{\mathcal{\hat{D}}} is a valid functor.
+
+
+(1) \ensuremath{\mathcal{\hat{D}}} functor is equivalent to, for all f and g morphisms of appropriate type,
+
+    \ensuremath{\Varid{id}\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{id})}
+
+    \ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\circ}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\circ}\Varid{f})\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;(\Varid{g}\mathbin{\circ}\Varid{f}))}
+    
+(2) From corollaries 2.3 and 2.1 we know that
+
+\begin{itemize}
+    \item \ensuremath{\mathcal{D}^{+}\;\Varid{id}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{id}\;\Varid{a},\Varid{id})}
+    \item  \ensuremath{\mathcal{D}^{+}\;(\Varid{g}\mathbin{\circ}\Varid{f})\mathrel{=}\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'})}
+\end{itemize}
+
+Replacing what we have in (1) using what we've determined in (2) we can conclude that
+
+\ensuremath{\Varid{id}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{id}\;\Varid{a},\Varid{id}))}
+
+\ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\circ}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'}))}
+
+From this we can trivially obtain the identity definition for our instance, but morphism composition needs further work.
+
+In order to use the morphism composition we'll first generalise the condition derived above:
+
+\ensuremath{\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'}))}
+
+As we can see, this condition can be used directly in our new instance, and as such we've arrived at our new instance.
+
+
+\subsubsection{Deduced Instance}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{id}\mathrel{=}\Varid{linearD}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+where \ensuremath{\Varid{linearD}} is equivalent to the definition of \ensuremath{\mathcal{\hat{D}}} for linear functions:
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow \mathcal{D}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{linearD}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection{Instance proof}
+
+In order to prove that the instance we've arrived at is well constructed we must prove that it follows laws (C.1) and (C.2).
+
+In order to simplify these proofs we assume that \ensuremath{\mathcal{D}^{+}} is a functor. In order to do this we must make a concession: all morphisms we're considering arise from \ensuremath{\mathcal{D}^{+}}, i.e., we only use \ensuremath{\Varid{f'}\mathbin{::}\mathcal{D}\;\Varid{a}\;\Varid{b}} where \ensuremath{\Varid{f'}\mathrel{=}\mathcal{\hat{D}}\;\Varid{f}} for some \ensuremath{\Varid{f}\mathbin{::}\Varid{a}\rightarrow \Varid{b}} morphism of \ensuremath{\mathcal{D}}.
+
+This becomes possible by making \ensuremath{\mathcal{D}} a b an abstract type.
+
+With this in mind we can now prove that our instance obeys the rules:
+
+\subsubsection{C.1 proof}
+
+\ensuremath{\Varid{id}} $\circ$ \ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{f}} \\
+\{ functor law for \ensuremath{\Varid{id}} (specification of \ensuremath{\mathcal{\hat{D}}} \}\\
+= \ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{id}} $\circ$ \ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{f}}\ \\
+\{ functor law for ($\circ$) \}\\
+= \ensuremath{\mathcal{\hat{D}}} (\ensuremath{\Varid{id}} $\circ$ \ensuremath{\Varid{f}}) \\
+\{ categorical law \}\\
+= \ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{f}} 
+
+
+\subsubsection{C.2 proof}
+
+\ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{h}} $\circ$ (\ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{g}} $\circ$ \ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{f}})\\
+\{ 2x functor law for ($\circ$) \}\\
+= \ensuremath{\mathcal{\hat{D}}} (\ensuremath{\Varid{h}} $\circ$ (\ensuremath{\Varid{g}} $\circ$ \ensuremath{\Varid{f}}))\\ 
+\{ categorical law \}\\
+= \ensuremath{\mathcal{\hat{D}}} ((\ensuremath{\Varid{h}} $\circ$ \ensuremath{\Varid{g}}) $\circ$ \ensuremath{\Varid{f}})\\
+\{ 2x functor law for ($\circ$) \}\\
+= (\ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{h}} $\circ$ \ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{g}}) $\circ$ \ensuremath{\mathcal{\hat{D}}} \ensuremath{\Varid{f}}
+
+As a final note these proofs required nothing from \ensuremath{\mathcal{D}} and \ensuremath{\mathcal{\hat{D}}} besides the functor laws, meaning we can avoid presenting this proof for all other categorical instances arising from a functor.
+
+\newpage
+
+\subsection{Monoidal category and respective functor}
+
+As noted before we want our algorithm to have parallel composition in it. To do this we must use a new type of category: the monoidal category.
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}( \times )\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a} \times \Varid{b})\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d})){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{f} \times \Varid{g}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{f}\;\Varid{a},\Varid{g}\;\Varid{b}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+We also define the monoidal functor in the same manner as the previous category type, noting that it must obey the following rules:
+
+\begin{itemize}
+    \item F is a functor
+    \item F (\ensuremath{\Varid{f}} $\times$ \ensuremath{\Varid{g}}) = F \ensuremath{\Varid{f}} $\times$ F \ensuremath{\Varid{g}}
+\end{itemize}
+
+\subsubsection{Instance deduction}
+
+Deducing a instance of our new category type is done using the same method as before:
+
+(1) \ensuremath{\mathcal{\hat{D}}} monoidal functor is equivalent to, for all \ensuremath{\Varid{f}} and \ensuremath{\Varid{g}} morphisms of appropriate type,
+
+\ensuremath{\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{f}) \times \mathcal{D}\;(\mathcal{D}^{+}\;\Varid{g})\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;(\Varid{f} \times \Varid{g}))}
+
+\smallskip
+
+(2) From corollary 2.1 we know that
+
+\ensuremath{\mathcal{D}^{+}\;(\Varid{f} \times \Varid{g})\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\mathcal{D}^{+}\;\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\mathcal{D}^{+}\;\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'})}
+
+\smallskip
+
+Replacing what we have in (1) using what we've determined in (2) we can conclude that
+
+\ensuremath{\mathcal{D}\;\Varid{f} \times \mathcal{D}\;\Varid{g}\mathrel{=}}
+
+\ensuremath{\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'}))}
+
+\smallskip
+
+and we can use this directly in our new instance.
+
+\subsubsection{Deduced Instance}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\mathcal{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{f} \times \mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\newpage
+
+\subsection{Cartesian and Cocartesian  category and respective functors}
+
+Monoidal category gives us the ability to combine functions, but not to split data, nor does it give us a way to duplicate or remove it.
+
+In order to add  these functionalities we must use 2 new types of categories: cartesian and cocartesian categories, noting that these 2 types of categories are dual to one another.
+
+We also take note that for this paper co-products coincide with categorical products. As such, we cannot instantiate for \ensuremath{(\rightarrow )} in the cocartesian category type as we've done before.
+
+With that noted we define our categories 
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{b}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{a},\Varid{a}){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\Varid{inl}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\Varid{inr}\mathbin{::}\Varid{b}\;\text{\tt 'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+and note the following properties must be followed by the respective functors:
+
+\subsubsection{Cartesian functor properties}
+
+\begin{itemize}
+    \item F is a monoidal functor
+    \item F exl = exl
+    \item F exp = exp
+    \item F dup = dup
+\end{itemize}
+
+
+\subsubsection{Cocartesian functor properties}
+
+\begin{itemize}
+    \item F is a functor
+    \item F inl = inl
+    \item F inr = inr
+    \item F jam = jam
+\end{itemize}
+
+We note that due to the duality of the 2 categories we'll only show the deduction for the cartesian category.
+
+
+\subsubsection{Instance deduction}
+
+We follow the same process as before:
+
+(1) \ensuremath{\mathcal{\hat{D}}} cartesian functor is equivalent to
+
+\ensuremath{\Varid{exl}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{exl})}
+
+\ensuremath{\Varid{exr}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{exr})}
+
+\ensuremath{\Varid{dup}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{dup})}
+
+(2) From corollary 3.1 and exl, exr and dup's linearity we deduce that
+
+\ensuremath{\mathcal{D}^{+}\;\Varid{exl}\mathrel{=}\lambda \Varid{p}\rightarrow (\Varid{exl}\;\Varid{p},\Varid{exl})}
+
+\ensuremath{\mathcal{D}^{+}\;\Varid{exr}\mathrel{=}\lambda \Varid{p}\rightarrow (\Varid{exr}\;\Varid{p},\Varid{exr})}
+
+\ensuremath{\mathcal{D}^{+}\;\Varid{dup}\mathrel{=}\lambda \Varid{p}\rightarrow (\Varid{dup}\;\Varid{a},\Varid{dup})}
+
+After replacing what we have in (1) using what we've determined in (2), we can take the result and directly use it in our new instance.
+
+\subsubsection{Deduced Instance}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\Varid{linearD}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\Varid{linearD}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\Varid{linearD}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+	%4.5-7
+	
+	\section{Fork and Join}
+	We can derive this two useful operations with just the operators defined earlier.
+    
+    \ensuremath{ \Delta \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{d})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d}))}	
+    
+    \ensuremath{\Varid{f}\; \Delta \;\Varid{g}\mathrel{=}(\Varid{f} \times \Varid{g})\mathbin{\circ}\Varid{dup}}
+    
+    \ensuremath{ \nabla \mathbin{::}\Conid{Cartesian}\;\Varid{k}\Rightarrow(\Varid{c}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{d}\;\text{\tt 'k'}\;\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\;\text{\tt 'k'}\;\Varid{a})}
+    
+    \ensuremath{\Varid{f}\; \nabla \;\Varid{g}\mathrel{=}\Varid{jam}\mathbin{\circ}(\Varid{f} \times \Varid{g})} 
+	
+    \newpage
+	
+	\section{Instance of \ensuremath{\rightarrow^+ }}
+    We can now describe Additive Functions: functions that transform something that is Additive to something that is also Additive, and using these we can derive instances for every categorical type discussed before for (\ensuremath{\rightarrow^+ })
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{newtype}\;\Varid{a}\rightarrow^+ \Varid{b}\mathrel{=}\Conid{AddFun}\;(\Varid{a}\rightarrow \Varid{b}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\mathbf{type}\;\Conid{Obj}\;(\rightarrow^+ )\mathrel{=}\Conid{Additive}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{id}\mathrel{=}\Conid{AddFun}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Conid{AddFun}\;\Varid{g}\mathbin{\circ}\Conid{AddFun}\;\Varid{f}\mathrel{=}\Conid{AddFun}\;(\Varid{g}\mathbin{\circ}\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Conid{AddFun}\;\Varid{f} \times \Conid{AddFun}\;\Varid{g}\mathrel{=}\Conid{AddFun}\;(\Varid{f} \times \Varid{g}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{4}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{exl}\mathrel{=}\Conid{AddFun}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{exr}\mathrel{=}\Conid{AddFun}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{4}{}\<[4]%
+\>[4]{}\Varid{dup}\mathrel{=}\Conid{AddFun}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+ \begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;(\rightarrow^+ )\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inl}\mathrel{=}\Conid{AddFun}\;\Varid{inlF}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inr}\mathrel{=}\Conid{AddFun}\;\Varid{inrF}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{jam}\mathrel{=}\Conid{AddFun}\;\Varid{jamF}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{inlF}\mathbin{::}\Conid{Additive}\;\Varid{b}\Rightarrow\Varid{a}\rightarrow \Varid{a} \times \Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{inrF}\mathbin{::}\Conid{Additive}\;\Varid{a}\Rightarrow\Varid{b}\rightarrow \Varid{a} \times \Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{jamF}\mathbin{::}\Conid{Additive}\;\Varid{a}\Rightarrow\Varid{a} \times \Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{inlF}\mathrel{=}\lambda \Varid{a}\rightarrow (\Varid{a},\mathrm{0}){}\<[E]%
+\\
+\>[B]{}\Varid{inrF}\mathrel{=}\lambda \Varid{b}\rightarrow (\mathrm{0},\Varid{b}){}\<[E]%
+\\
+\>[B]{}\Varid{jamF}\mathrel{=}\lambda (\Varid{a},\Varid{b})\rightarrow \Varid{a}\mathbin{+}\Varid{b}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\section{Numeric operations}
+	To describe numerical operations in a k category we can use the definitions above, noting that the same process can be done for the Floating type.
+    \begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{NumCat}\;\Varid{k}\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{negateC}\mathbin{::}\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{addC}\mathbin{::}(\Varid{a} \times \Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{mulC}\mathbin{::}(\Varid{a} \times \Varid{a})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbin{...}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+     \newpage
+
+     \begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{instance}\;\Conid{Num}\;\Varid{a}\Rightarrow\Conid{NumCat}\;(\rightarrow )\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{negateC}\mathrel{=}\Varid{negate}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{addC}\mathrel{=}\Varid{uncurry}\;(\mathbin{+}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{mulC}\mathrel{=}\Varid{uncurry}\;(\mathbin{*}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbin{...}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+When we observe the mathematical definition for differentiation it can be seen that neither u or v is defined in a concrete way, and they can mean different things in different contexts, like functions, numbers, tuples, etc. This requires us to define each one of them separately.
+
+    \ensuremath{\mathcal{D}\;(\Varid{negate}\;\Varid{u})\mathrel{=}\Varid{negate}\;(\mathcal{D}\;\Varid{u})}\\
+    \ensuremath{\mathcal{D}\;(\Varid{u}\mathbin{+}\Varid{v})\mathrel{=}\mathcal{D}\;\Varid{u}\mathbin{+}\mathcal{D}\;\Varid{v}}\\
+    \ensuremath{\mathcal{D}\;(\Varid{u}\mathbin{*}\Varid{v})\mathrel{=}\Varid{u}\mathbin{*}\mathcal{D}\;\Varid{v}\mathbin{+}\Varid{v}\mathbin{*}\mathcal{D}\;\Varid{u}}\\
+    
+    To make this definition more uniform and simple we can differentiate not the expression but the operations themselves. For example the \textit{negate} and the \textit{+} can be seen as linear because they don't require the inputs from the expression, but the \textit{*} operation cannot, and has such requires an alternative definition such as: 
+
+    \ensuremath{\mathcal{D}\;\Varid{mulC}\;(\Varid{a},\Varid{b})\mathrel{=}\Varid{scale}\;\Varid{b}\; \nabla \;\Varid{scale}\;\Varid{a}}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{scale}\mathbin{::}\Varid{a}\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Num}\;\Varid{a}\Rightarrow\Conid{Scalable}\;(\rightarrow^+ )\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{scale}\;\Varid{a}\mathrel{=}\Conid{AddFun}\;(\lambda \Varid{da}\rightarrow \Varid{a}\mathbin{*}\Varid{da}){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{NumCat}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{negateC}\mathrel{=}\Varid{linearD}\;\Varid{negateC}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{addC}\mathrel{=}\Varid{linearD}\;\Varid{addC}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{mulC}\mathrel{=}\Conid{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{a}\mathbin{*}\Varid{b},\Varid{scale}\;\Varid{b}\; \nabla \;\Varid{scale}\;\Varid{a})){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{FloatingCat}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{sinC}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{sin}\;\Varid{a},\Varid{scale}\;(\Varid{cos}\;\Varid{a}))){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{cosC}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{cos}\;\Varid{a},\Varid{scale}\;(\mathbin{-}\Varid{sin}\;\Varid{a}))){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{expC}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\Varid{e}\mathrel{=}\Varid{exp}\;\Varid{a}\;\mathbf{in}\;(\Varid{e},\Varid{scale}\;\Varid{e})){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbin{...}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\newpage
+Some examples of functions:
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\Varid{sqr}\mathbin{::}\Conid{Num}\;\Varid{a}\Rightarrow\Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[5]{}\Varid{sqr}\;\Varid{a}\mathrel{=}\Varid{a}\mathbin{*}\Varid{a}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\Varid{magSqr}\mathbin{::}\Conid{Num}\;\Varid{a}\Rightarrow\Varid{a} \times \Varid{a}\rightarrow \Varid{a}{}\<[E]%
+\\
+\>[5]{}\Varid{magSqr}\;(\Varid{a},\Varid{b})\mathrel{=}\Varid{sqr}\;\Varid{a}\mathbin{+}\Varid{sqr}\;\Varid{b}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\Varid{cosSinProd}\mathbin{::}\Conid{Floating}\;\Varid{a}\Rightarrow\Varid{a} \times \Varid{a}\rightarrow \Varid{a} \times \Varid{a}{}\<[E]%
+\\
+\>[5]{}\Varid{cosSinProd}\;(\Varid{x},\Varid{y})\mathrel{=}(\Varid{cos}\;\Varid{z},\Varid{sin}\;\Varid{z})\;\mathbf{where}\;\Varid{z}\mathrel{=}\Varid{x}\mathbin{*}\Varid{y}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+With a compiler plugin referenced in the article we can convert the above to our derived instances of categories:
+    
+\ensuremath{\Varid{sqr}\mathrel{=}\Varid{mulC}\mathbin{\circ}(\Varid{id}\; \Delta \;\Varid{id})}
+
+\ensuremath{\Varid{magSqr}\mathrel{=}\Varid{addC}\mathbin{\circ}(\Varid{mulC}\mathbin{\circ}(\Varid{exl}\; \Delta \;\Varid{exl})\; \Delta \;\Varid{mulC}\mathbin{\circ}(\Varid{exr}\; \Delta \;\Varid{exr}))}
+
+\ensuremath{\Varid{cosSinProd}\mathrel{=}(\Varid{cosC}\; \Delta \;\Varid{sinC})\mathbin{\circ}\Varid{mulC}}
+
+\newpage
+
+\section{Generalising Automatic Differentiation}
+	In the other sections we've used the definition of \ensuremath{\mathcal{D}} with the $\multimap$, but how do we define a linear map? To be more expressive we can define \ensuremath{\mathcal{D}} for any given "linear" category k.
+    
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{newtype}\; D_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{D}\;(\Varid{a}\rightarrow \Varid{b} \times (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\Varid{linearD}\mathbin{::}(\Varid{a}\rightarrow \Varid{b})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})\rightarrow  D_k \;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[5]{}\Varid{linearD}\;\Varid{f}\;\Varid{f'}\mathrel{=}\Conid{D}\;(\lambda \Varid{a}\rightarrow (\Varid{f}\;\Varid{a},\Varid{f'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-6mm}   
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\; D_k \;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathbf{type}\;\Conid{Obj}\; D_k \mathrel{=}\Conid{Additive}\mathbin{∧}\Conid{Obj}\;\Varid{k}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{id}\mathrel{=}\Varid{linearD}\;\Varid{id}\;\Varid{id}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\mathcal{D}\;\Varid{g}\mathbin{\circ}\mathcal{D}\;\Varid{f}\mathrel{=}\mathcal{D}\;(\lambda \Varid{a}\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{b},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{c},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;(\Varid{c},\Varid{g'}\mathbin{\circ}\Varid{f'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-6mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\; D_k \;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\mathcal{D}\;\Varid{f} \times \mathcal{D}\;\Varid{g}\mathrel{=}\mathcal{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow \mathbf{let}\;\{\mskip1.5mu (\Varid{c},\Varid{f'})\mathrel{=}\Varid{f}\;\Varid{a};(\Varid{d},\Varid{g'})\mathrel{=}\Varid{g}\;\Varid{b}\mskip1.5mu\}\;\mathbf{in}\;((\Varid{c},\Varid{d}),\Varid{f'} \times \Varid{g'})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-6mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\; D_k \;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exl}\mathrel{=}\Varid{linearD}\;\Varid{exl}\;\Varid{exl}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{exr}\mathrel{=}\Varid{linearD}\;\Varid{exr}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{dup}\mathrel{=}\Varid{linearD}\;\Varid{dup}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-6mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inl}\mathrel{=}\Varid{linearD}\;\Varid{inlF}\;\Varid{inl}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{inr}\mathrel{=}\Varid{linearD}\;\Varid{inrF}\;\Varid{inr}{}\<[E]%
+\\
+\>[B]{}\hsindent{5}{}\<[5]%
+\>[5]{}\Varid{jam}\mathrel{=}\Varid{linearD}\;\Varid{jamF}\;\Varid{jam}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-6mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{instance}\;\Conid{NumCat}\;\Conid{D}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{negateC}\mathrel{=}\Varid{linearD}\;\Varid{negateC}\;\Varid{negateC}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{addC}\mathrel{=}\Varid{linearD}\;\Varid{addC}\;\Varid{addC}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{mulC}\mathrel{=}\Conid{D}\;(\lambda (\Varid{a},\Varid{b})\rightarrow (\Varid{a}\mathbin{*}\Varid{b},\Varid{scale}\;\Varid{b}\; \nabla \;\Varid{scale}\;\Varid{a})){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+	\newpage
+	
+	\section{Matrices}
+	Let us now consider matrices. There are three non-exclusive possibilities for a non-zero $W$ matrix:
+	\begin{itemize}
+		\item width $W$ = height $W$ = $1$;
+		\item W is the horizontal juxtaposition of two matrices $U$ and $V$, where height $W$ =\newline height $U$ = height $V$ and width $W$ = width $U$ $+$ width $V$;
+		\item W is the vertical juxtaposition of two matrices $U$ and $V$, where width $W$ =\newline width $U$ = width $V$ and height $W$ = height $U$ $+$ height $V$.
+	\end{itemize}
+	
+	These operations that have been mentioned before,
+
+	\ensuremath{\Varid{scale}\mathbin{::}\Varid{a}\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a})}
+    
+    \ensuremath{( \nabla )\mathbin{::}(\Varid{c}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a})\rightarrow (\Varid{d}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a})\rightarrow ((\Varid{c} \times \Varid{d})\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a})}
+
+    \ensuremath{( \Delta )\mathbin{::}(\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{c})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{d})\rightarrow (\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}(\Varid{c} \times \Varid{d}))}	
+    
+
+	correspond exactly to the three possibilities seen above, where in linear maps, the domain and the co-domain are determined, respectively, by the width and height of the matrix together with the type of matrix elements. This happens if we use the convention of matrix on the left multiplied by a column vector on the right.
+	
+	\subsection{Extracting a Data Representation}
+	
+	In addition to what we have used so far, we will also need a data representation for the linear map.
+	
+	For example, in machine learning gradient-based optimisation works by searching for local
+	minima in the domain of a differentiable function $f$. Each step in the search is in the direction opposite of the gradient of $f$ ,
+	which is a vector form of $\mathcal{D} f$.
+	
+	Given a linear map $f' :: U \multimap V$ represented as a function, it is possible to extract a Jacobian matrix by applying $f'$ to every vector in a basis of $U$. If $U$ has dimension $m$ (for example $U=\R^n$), this sampling requires $m$ passes. 
+	\par In the case where $m$ is a relatively small number, then the method of Jacobian matrix extraction is reasonably efficient. The problem is that it worsens significantly as dimension grows. In particular, many useful problems involve gradient-based optimization over very high-dimensional spaces, which makes this technique inefficient. The next section gives us an alternative.
+	
+	\newpage
+	
+	\subsection{Generalised Matrices}
+	
+	Rather than representing derivatives as functions and then extracting a (Jacobian) matrix, a more
+	conventional alternative is to construct and combine matrices in the first place.These matrices are
+	usually rectangular arrays that represent $ \R^m \multimap \R^n$. The problem with this alternative is that interferes with the composability we get from organising around binary cartesian products.
+	\par There is, however, an especially convenient perspective on linear algebra: free vector spaces. Given a scalar field $s$, any free vector space has the form $p \to s$, for some $p$, where the cardinality of $p$ is the dimension of the vector space (and only finitely many $p$ values can have non-zero images). Scaling a vector $v :: p \to s$ or adding two such vectors is defined in the usual way for functions.
+	
+	\par Thus, rather than directly using functions as representations, we can alternatively use any representation isomorphic to such a function. In particular, we can represent vector spaces over a given field as a representable functor, i.e., a functor $F$ such that
+	
+	$\exists p$ $\forall s$ $F$ $s$ $\cong$ $p \to s$.
+	
+	This method is convenient in a richly typed functional language like Haskell, which comes with libraries of functor-level building blocks. Four such building blocks are functor product, functor composition and their corresponding identities, which are the unit functor (containing no elements) and the identity functor (containing one element).
+	\par All of these functors give data representations of functions that save recomputation over a native
+	function representation. They also provide a composable, type-safe alternative to the more commonly used multi-dimensional arrays (often called \enquote*{tensors}) in machine learning libraries.
+
+%12-14    
+    
+\newpage
+    
+\section{Generalised RAD algorithm}
+
+Earlier in this document we derived and generalised an AD (automatic differentiation) algorithm, and now we desire a generalisation for an RAD (reverse-mode AD) and FAD (forward mode AD) algorithm derived from this more generic one. Let's start with RAD.
+
+In order to achieve an RAD algorithm from our generalised AD we must have it so all compositions of morfisms are left-associated. 
+
+To achieve this we start by converting the way we write morfisms in a category k:
+
+\ensuremath{\Varid{f}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;\Varid{b}\Rightarrow(\mathbin{\circ}\Varid{f})\mathbin{::}(\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})} where r is any object of k.
+
+If we build a category based around this concept we'll arrive at our algorithm.
+
+To do that we start by defining a data type and constructing a functor that uses it:
+
+\ensuremath{\mathbf{newtype}\;Cont^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r}))}
+
+\ensuremath{\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Cont^{r}_{k}\;\Varid{a}\;\Varid{b}}
+
+\ensuremath{\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f})}
+
+From these we do the same we've done before for \ensuremath{\mathcal{D}} and \ensuremath{\mathcal{\hat{D}}}, and we derive all the various instances for our new data type of the numerous categorical types.
+
+\subsection{Deduced Instances}
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\;Cont^{r}_{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{id}\mathrel{=}\Conid{Cont}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Conid{Cont}\;\Varid{g}\mathbin{\circ}\Conid{Cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}  
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;Cont^{r}_{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Conid{Conf}\;\Varid{f} \times \Conid{Cont}\;\Varid{g}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}(\Varid{f} \times \Varid{g})\mathbin{\circ}\Varid{unjoin}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;Cont^{r}_{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{exl}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{inl}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{exr}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{inr}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{dup}\mathrel{=}\Conid{Cont}\;(\Varid{jam}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;Cont^{r}_{k}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{inl}\mathrel{=}\Conid{Cont}\;(\Varid{exl}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{inr}\mathrel{=}\Conid{Cont}\;(\Varid{exr}\mathbin{\circ}\Varid{unjoin}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{jam}\mathrel{=}\Conid{Cont}\;(\Varid{join}\mathbin{\circ}\Varid{dup}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\;\Varid{a}\Rightarrow\Conid{Scalable}\;Cont^{r}_{k}\;\Varid{a}\;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Cont}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+With these instances derived we have created a generalised RAD algorithm.
+
+\section{Gradients and duality}
+
+
+Due to its widespread use in machine learning we'll talk about a specific case of an AD algorithm: computing gradients (derivatives of functions with scalar co-domains).
+
+A vector space A over a scalar field s has A $\multimap$ s as its dual, and the dual space of A is not only a vector space but also isomorphic to A if it has finite dimension.
+
+As such we can represent each linear map in A $\multimap$ s using the form  dot u for some u :: A where
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{class}\;\Conid{HasDot}\;(\Conid{S})\;\Varid{u}\;\mathbf{where}\;\Varid{dot}\mathbin{::}\Varid{u}\rightarrow (\Varid{u}\;\multimap \;\Varid{s}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{HasDot}\;(\Conid{IR})\;\Conid{IR}\;\mathbf{where}\;\Varid{dot}\mathrel{=}\Varid{scale}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b})\Rightarrow\Conid{HasDot}\;(\Conid{S})\;(\Varid{a} \times \Varid{b}){}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\mathbf{where}\;\Varid{dot}\;(\Varid{u},\Varid{v})\mathrel{=}\Varid{dot}\;\Varid{u}\; \Delta \;\Varid{dot}\;\Varid{v}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\subsection{Duality}
+
+Using the construction \ensuremath{Cont^{r}_{k}} from the previous section and taking \ensuremath{\Varid{r}} to be the scalar field s, we observe that the internal representation of $Cont_{\multimap}^{s}$ a b is (b $\multimap$ s) \ensuremath{\rightarrow } (a $\multimap$ s) , which is isomorphic to (a \ensuremath{\rightarrow } b).
+
+To this representation we'll call the dual of k:
+
+\ensuremath{\mathbf{newtype}\; Dual_k \;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Dual}\;(\Varid{b}\;\text{\tt 'k'}\;\Varid{a})}
+
+With this definition we can achieve the dual representations of generalised linear maps by converting them from $Cont_{k}^{S}$ to \ensuremath{ Dual_k } using a functor:
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{asDual}\mathbin{::}(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b})\Rightarrow((\Varid{b}\;\multimap \;\Varid{s})\rightarrow (\Varid{a}\;\multimap \;\Varid{s}))\rightarrow (\Varid{b}\;\multimap \;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\Varid{asDual}\;(\Conid{Cont}\;\Varid{f})\mathrel{=}\Conid{Dual}\;(\Varid{onDot}\;\Varid{f}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-1mm}
+where
+\vspace{-1mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\Varid{onDot}\mathbin{::}(\Conid{HasDot}\;(\Conid{S})\;\Varid{a},\Conid{HasDot}\;(\Conid{S})\;\Varid{b})\Rightarrow((\Varid{b}\;\multimap \;\Varid{s})\rightarrow (\Varid{a}\;\multimap \;\Varid{s}))\rightarrow (\Varid{b}\;\multimap \;\Varid{a}){}\<[E]%
+\\
+\>[B]{}\Varid{onDot}\;\Varid{f}\mathrel{=}\Varid{dot}^{-1}\mathbin{\circ}\Varid{f}\mathbin{\circ}\Varid{dot}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\newpage
+
+From the new data type and the functor derived from it we can now do the same process as before and determine the instances for our new category:
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Category}\; Dual_k \;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{id}\mathrel{=}\Conid{Dual}\;\Varid{id}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Conid{Dual}\;\Varid{g}\mathbin{\circ}\Conid{Dual}\;\Varid{f}\mathrel{=}\Conid{Dual}\;(\Varid{f}\mathbin{\circ}\Varid{g}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Monoidal}\; Dual_k \;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Conid{Dual}\;\Varid{f} \times \Conid{Dual}\;\Varid{g}\mathrel{=}\Conid{Dual}\;(\Varid{f} \times \Varid{g}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{21}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cartesian}\;\Varid{k}\Rightarrow\Conid{Cartesian}\; Dual_k \;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{exl}\mathrel{=}\Conid{Dual}\;\Varid{inl};{}\<[21]%
+\>[21]{}\Varid{exr}\mathrel{=}\Conid{Dual}\;\Varid{inr}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{dup}\mathrel{=}\Conid{Dual}\;\Varid{jam}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Cocartesian}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\; Dual_k \;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{inl}\mathrel{=}\Conid{Dual}\;\Varid{exl};\Varid{inr}\mathrel{=}\Conid{Dual}\;\Varid{exr}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{jam}\mathrel{=}\Conid{Dual}\;\Varid{dup}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-10mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{3}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{instance}\;\Conid{Scalable}\;\Varid{k}\Rightarrow\Conid{Scalable}\; Dual_k \;\mathbf{where}{}\<[E]%
+\\
+\>[B]{}\hsindent{3}{}\<[3]%
+\>[3]{}\Varid{scale}\;\Varid{s}\mathrel{=}\Conid{Dual}\;(\Varid{scale}\;\Varid{s}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+This new instances dualize a computation exactly.
+
+As final notes to this chapter we have that \ensuremath{( \nabla )} and \ensuremath{( \Delta )} mutually dualize and that by that using the first definition of matrices that was derived in this paper,  dualizing a matrix is equivalent to transposing it, with the advantage of not requiring any matrix computations unless k requires them.
+
+\section{Generalised FAD algorithm}
+
+To derive a generalised FAD algorithm from the generalised AD algorithm and calculate gradients from it all that needs to be done has already been show in the previous 2 sections, taking into account we can simply consider 
+
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[B]{}\mathbf{newtype}\;Begin^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Begin}\;((\Varid{r}\;\text{\tt 'k'}\;\Varid{a})\rightarrow (\Varid{r}\;\text{\tt 'k'}\;\Varid{b})){}\<[E]%
+\\[\blanklineskip]%
+\>[B]{}\Varid{begin}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Begin^{r}_{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\\
+\>[B]{}\Varid{begin}\;\Varid{f}\mathrel{=}\Conid{Begin}\;(\Varid{f}\mathbin{\circ}){}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+for the instance deduction and that we can choose \ensuremath{\Varid{r}} to be the scalar field \ensuremath{\Varid{s}} knowing that \ensuremath{\Varid{s}} $\multimap$ \ensuremath{\Varid{a}} is isomorphic to \ensuremath{\Varid{a}} for the gradient calculation.
+
+%15-end
+
+\section{Scaling Up}
+	A practical application of differentiation often involves high-dimensional spaces (we can see this in Artificial Neural Networks). \\
+	With this in mind, we easily observe that binary products are a very unwieldy and inefficient way of encoding high-dimensional spaces.\\
+	A practical alternative is to consider n-ary product as representable functors.
+    
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{crossI}\mathbin{::}\Varid{h}\;(\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{b})\rightarrow (\Varid{h}\;\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{h}\;\Varid{b}){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;\Conid{Zip}\;\Varid{h}\Rightarrow\Conid{MonoidalI}\;(\rightarrow )\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{crossI}\mathrel{=}\Varid{zipWith}\;\Varid{id}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-8mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{13}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{17}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\Rightarrow\Conid{CartesianI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{exI}{}\<[17]%
+\>[17]{}\mathbin{::}\Varid{h}\;(\Varid{h}\;\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{replI}{}\<[17]%
+\>[17]{}\mathbin{::}\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{h}\;\Varid{a}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{Representable}\;\Varid{h},\Conid{Zip}\;\Varid{h},\Conid{Pointed}\;\Varid{h})\Rightarrow{}\<[E]%
+\\
+\>[5]{}\hsindent{8}{}\<[13]%
+\>[13]{}\Conid{CartesianI}\;(\rightarrow )\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{exI}\mathrel{=}\Varid{tabulate}\;(\Varid{flip}\;\Varid{index}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{replI}\mathrel{=}\Varid{point}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+\vspace{-8mm}
+\begin{hscode}\SaveRestoreHook
+\column{B}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{5}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{9}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{32}{@{}>{\hspre}l<{\hspost}@{}}%
+\column{E}{@{}>{\hspre}l<{\hspost}@{}}%
+\>[5]{}\mathbf{class}\;\Conid{MonoidalI}\;\Varid{k}\;\Varid{h}\Rightarrow\Conid{CocartesianI}\;\Varid{k}\;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{inI}\mathbin{::}\Varid{h}\;(\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{h}\;\Varid{a}){}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{jamI}\mathbin{::}\Varid{h}\;\Varid{a}\mathbin{‘}\Varid{k}\mathbin{‘}\Varid{a}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{MonoidalI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow\Conid{MonoidalI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{crossI}\;\Varid{fs}\mathrel{=}\Conid{D}\;((\Varid{id} \times \Varid{crossI})\mathbin{\circ}\Varid{unzip}\mathbin{\circ}\Varid{crossI}\;(\Varid{fmap}\;\Varid{unD}\;\Varid{fs})){}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{CocartesianI}\;(\rightarrow )\;\Varid{h},\Conid{CartesianI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow\Conid{CartesianI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{exI}\mathrel{=}\Varid{linearD}\;\Varid{exI}\;\Varid{exI}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{replI}\mathrel{=}\Varid{zipWith}\;\Varid{linearD}\;\Varid{replI}\;\Varid{replI}{}\<[E]%
+\\[\blanklineskip]%
+\>[5]{}\mathbf{instance}\;(\Conid{CocartesianI}\;\Varid{k}\;\Varid{h},\Conid{Zip}\;\Varid{h})\Rightarrow\Conid{CocartesianI}\; D_k \;\Varid{h}\;\mathbf{where}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{inI}\mathrel{=}\Varid{zipWith}\;\Varid{linearD}\;{}\<[32]%
+\>[32]{}\Varid{inIF}\;\Varid{inl}{}\<[E]%
+\\
+\>[5]{}\hsindent{4}{}\<[9]%
+\>[9]{}\Varid{jamI}\mathrel{=}\Varid{linearD}\;\Varid{sum}\;\Varid{jamI}{}\<[E]%
+\ColumnHook
+\end{hscode}\resethooks
+
+\section{Implementation}
+	\paragraph{} In order to implement several ideas of the article we've had to use a few language extensions.
+	\paragraph{} The majority of the \textit{pseudo-code} in the article was already valid in Haskell with the aforementioned language extensions, but there were still things we had to add to the code.
+	\begin{enumerate}
+		\item 
+		The first thing we thought was to use the already made Category in \textit{Control.Category}, but that proved to not be enough because in the article the author indicates the object types of a Category.
+        
+		In the already made Category, we could do something with Kinds to achieve this, but it would be strange to specify a Kind Additive with Data Kinds. So we decided to create a new Category, named CategoryDom, with kind (* \RAP Constraint) \RAP (* \RAP * \RAP *) \RAP Constraint, that receives a class which restricts the objects of a Category and the Category itself. Furthermore, the \ensuremath{\Varid{id}} and \ensuremath{(\mathbin{\circ})} are restricted by the first argument.
+		\item
+		The Additive also needed to have an instance with pair of Additive objects, so we could utilise dup without problems.
+		\item 
+		We've had to add Constraints in the context of some instances and change some code to fix certain subtle errors.
+	\end{enumerate}
+	\paragraph{} The code for the implementation can be found in the git project(\cite{project})
+	
+	\section{Future Work}
+	\begin{itemize}
+		\item 
+		Generalise the idea to calculate second derivatives.
+		\item 
+		Implement the more efficient way that was introduced.
+	\end{itemize}
+	
+	
+	
+	\newpage
+
+\section{Bibliography}
+\bibliographystyle{acm}%{ACM-Reference-Format}
+\bibliography{relatorio}
+
+    \end{document}
+	
+    
