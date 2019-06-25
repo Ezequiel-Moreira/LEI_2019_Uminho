@@ -977,14 +977,36 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
 	\end{enumerate}
 	\paragraph{} The code for the implementation can be found in the git project(\cite{project})
 	
-	\section{Future Work}
-	\begin{itemize}
-		\item 
-		Generalise the idea to calculate second derivatives.
-		\item 
-		Implement the more efficient way that was introduced.
-	\end{itemize}
 	
+	\newpage
+
+	\section{Conclusion}
+
+	Esboço:
+
+	ML is an ever expanding field, now more then ever, but there still is a lack of hard theory behind it's construction.
+
+	This article deduces new algoritms for this field incorporating Correct By Construction tecniques, allowing a more robust and flexible alternative for automatic learning.
+
+	After it's study we've learned a great deal about category theory and how it can be used for ML.
+
+	Furthermore, from the implementation, we've started the process of replicating the ML derived in the paper.
+
+	...
+
+
+	\section{Future Work}
+
+	Esboço:
+
+	The work that was done to understand the article has permitted us to implement the fundamentals of the paper.
+
+	However, the implementation is still not final, with a more efficient existing in the paper.
+
+	Furthermore the article only ponders on the calculation of the first derivative.
+	A future study should be conducted to determine if it's possible to use the same ideas for second derivatives.
+
+	...
 	
 	
 	\newpage
