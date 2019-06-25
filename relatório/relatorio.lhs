@@ -597,7 +597,7 @@ jamF = \(a, b) -> a + b
 \end{code}
 
 \section{Numeric operations}
-	To describe numerical operations in a k category we can use the definitions above, noting that the same process can be done for the Floating type.
+	To describe numerical operations in a k category we can use the definitions above, noting that the same process can be done for Floating types.
     \begin{code}
     class NumCat k a where
         negateC :: a ‘k‘ a
@@ -621,7 +621,7 @@ When we observe the mathematical definition for differentiation it can be seen t
     |bigD (u + v) = bigD u + bigD v|\\
     |bigD (u * v) = u * bigD v + v * bigD u|\\
     
-    To make this definition more uniform and simple we can differentiate not the expression but the operations themselves. For example the \textit{negate} and the \textit{+} can be seen as linear because they don't require the inputs from the expression, but the \textit{*} operation cannot, and has such requires an alternative definition such as: 
+    To make this definition more uniform and simple we can differentiate not the expression but the operation itself. For example the \textit{negate} and the \textit{+} can be seen as linear because they don't require the inputs from the expression, but the \textit{*} operation cannot, and has such requires an alternative definition such as: 
 
     |bigD  mulC (a, b) = scale b joinu scale a|
 
@@ -658,7 +658,7 @@ Some examples of functions:
     cosSinProd (x, y) = (cos z, sin z) where z=x*y
 \end{code}
 
-With a compiler plugin referenced in the article we can convert the above to our derived instances of categories:
+With a compiler plugin referenced in the article we can convert the above expressions to our expressions instanciated earlier:
     
 |sqr = mulC . (id forku id)|
 
@@ -919,7 +919,7 @@ begin f = Begin(f .)
 for the instance deduction and that we can choose |r| to be the scalar field |s| knowing that |s| $\multimap$ |a| is isomorphic to |a| for the gradient calculation.
 
 %15-end
-
+\newpage
 \section{Scaling Up}
 	A practical application of differentiation often involves high-dimensional spaces (we can see this in Artificial Neural Networks). \\
 	With this in mind, we easily observe that binary products are a very unwieldy and inefficient way of encoding high-dimensional spaces.\\
@@ -969,7 +969,7 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
 		\item 
 		The first thing we thought was to use the already made Category in \textit{Control.Category}, but that proved to not be enough because in the article the author indicates the object types of a Category.
         
-		In the already made Category, we could do something with Kinds to achieve this, but it would be strange to specify a Kind Additive with Data Kinds. So we decided to create a new Category, named CategoryDom, with kind (* \RAP Constraint) \RAP (* \RAP * \RAP *) \RAP Constraint, that receives a class which restricts the objects of a Category and the Category itself. Furthermore, the |id| and |(.)| are restricted by the first argument.
+		In the already made Category, we could do something with Kinds to achieve this, but it would be strange to specify a Kind Additive with Data Kinds. So we decided to create a new Category, named CategoryDom, with kind |(* -> Constraint) -> (* -> * -> *) -> Constraint|, that receives a class which restricts the objects of a Category and the Category itself. Furthermore, the |id| and |(.)| are restricted by the first argument.
 		\item
 		The Additive also needed to have an instance with pair of Additive objects, so we could utilise dup without problems.
 		\item 

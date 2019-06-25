@@ -946,7 +946,7 @@ After replacing what we have in (1) using what we've determined in (2), we can t
 \end{hscode}\resethooks
 
 \section{Numeric operations}
-	To describe numerical operations in a k category we can use the definitions above, noting that the same process can be done for the Floating type.
+	To describe numerical operations in a k category we can use the definitions above, noting that the same process can be done for Floating types.
     \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{5}{@{}>{\hspre}l<{\hspost}@{}}%
@@ -996,7 +996,7 @@ When we observe the mathematical definition for differentiation it can be seen t
     \ensuremath{\mathcal{D}\;(\Varid{u}\mathbin{+}\Varid{v})\mathrel{=}\mathcal{D}\;\Varid{u}\mathbin{+}\mathcal{D}\;\Varid{v}}\\
     \ensuremath{\mathcal{D}\;(\Varid{u}\mathbin{*}\Varid{v})\mathrel{=}\Varid{u}\mathbin{*}\mathcal{D}\;\Varid{v}\mathbin{+}\Varid{v}\mathbin{*}\mathcal{D}\;\Varid{u}}\\
     
-    To make this definition more uniform and simple we can differentiate not the expression but the operations themselves. For example the \textit{negate} and the \textit{+} can be seen as linear because they don't require the inputs from the expression, but the \textit{*} operation cannot, and has such requires an alternative definition such as: 
+    To make this definition more uniform and simple we can differentiate not the expression but the operation itself. For example the \textit{negate} and the \textit{+} can be seen as linear because they don't require the inputs from the expression, but the \textit{*} operation cannot, and has such requires an alternative definition such as: 
 
     \ensuremath{\mathcal{D}\;\Varid{mulC}\;(\Varid{a},\Varid{b})\mathrel{=}\Varid{scale}\;\Varid{b}\; \nabla \;\Varid{scale}\;\Varid{a}}
 
@@ -1062,7 +1062,7 @@ Some examples of functions:
 \ColumnHook
 \end{hscode}\resethooks
 
-With a compiler plugin referenced in the article we can convert the above to our derived instances of categories:
+With a compiler plugin referenced in the article we can convert the above expressions to our expressions instanciated earlier:
     
 \ensuremath{\Varid{sqr}\mathrel{=}\Varid{mulC}\mathbin{\circ}(\Varid{id}\; \Delta \;\Varid{id})}
 
@@ -1473,7 +1473,7 @@ To derive a generalised FAD algorithm from the generalised AD algorithm and calc
 for the instance deduction and that we can choose \ensuremath{\Varid{r}} to be the scalar field \ensuremath{\Varid{s}} knowing that \ensuremath{\Varid{s}} $\multimap$ \ensuremath{\Varid{a}} is isomorphic to \ensuremath{\Varid{a}} for the gradient calculation.
 
 %15-end
-
+\newpage
 \section{Scaling Up}
 	A practical application of differentiation often involves high-dimensional spaces (we can see this in Artificial Neural Networks). \\
 	With this in mind, we easily observe that binary products are a very unwieldy and inefficient way of encoding high-dimensional spaces.\\
@@ -1571,7 +1571,7 @@ for the instance deduction and that we can choose \ensuremath{\Varid{r}} to be t
 		\item 
 		The first thing we thought was to use the already made Category in \textit{Control.Category}, but that proved to not be enough because in the article the author indicates the object types of a Category.
         
-		In the already made Category, we could do something with Kinds to achieve this, but it would be strange to specify a Kind Additive with Data Kinds. So we decided to create a new Category, named CategoryDom, with kind (* \RAP Constraint) \RAP (* \RAP * \RAP *) \RAP Constraint, that receives a class which restricts the objects of a Category and the Category itself. Furthermore, the \ensuremath{\Varid{id}} and \ensuremath{(\mathbin{\circ})} are restricted by the first argument.
+		In the already made Category, we could do something with Kinds to achieve this, but it would be strange to specify a Kind Additive with Data Kinds. So we decided to create a new Category, named CategoryDom, with kind \ensuremath{(\mathbin{*}\rightarrow \Conid{Constraint})\rightarrow (\mathbin{*}\rightarrow \mathbin{*}\rightarrow \mathbin{*})\rightarrow \Conid{Constraint}}, that receives a class which restricts the objects of a Category and the Category itself. Furthermore, the \ensuremath{\Varid{id}} and \ensuremath{(\mathbin{\circ})} are restricted by the first argument.
 		\item
 		The Additive also needed to have an instance with pair of Additive objects, so we could utilise dup without problems.
 		\item 
