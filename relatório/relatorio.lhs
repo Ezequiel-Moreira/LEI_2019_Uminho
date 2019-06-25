@@ -962,6 +962,8 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
  
 \end{code}
 
+\newpage
+
 \section{Implementation}
 	\paragraph{} In order to implement several ideas of the article we've had to use a few language extensions.
 	\paragraph{} The majority of the \textit{pseudo-code} in the article was already valid in Haskell with the aforementioned language extensions, but there were still things we had to add to the code.
@@ -996,16 +998,12 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
 
 	\section{Future Work}
 
-	Esboço:
+	As we have noted before, we have created an implementation of the algoritmn expressed in the article.
+	However, what we have implemented is not the best algoritmn described in the article, but a less efficient version of it.
+	As such implementing the better version is crutial future work.
 
-	The work that was done to understand the article has permitted us to implement the fundamentals of the paper.
-
-	However, the implementation is still not final, with a more efficient existing in the paper.
-
-	Furthermore the article only ponders on the calculation of the first derivative.
-	A future study should be conducted to determine if it's possible to use the same ideas for second derivatives.
-
-	...
+	Furthermore we note that the concepts used in the article focus on the first derivative of a function.
+	An interresting idea for a future study is to explore if these ideas can be used to also calculate second derivatives.
 	
 	
 	\newpage
