@@ -1001,8 +1001,9 @@ for the instance deduction and that we can choose |r| to be the scalar field |s|
 	\section{Future Work}
 
 	As we have noted before, we have created an implementation of the algoritmn expressed in the article.
-	However, what we have implemented is a less efficient version of the algoritmn described in the article
-	As such implementing the better version is crutial future work.
+	However, what we have implemented is a less efficient version of the algoritmn described in the article.
+	This was done because the focus of our group is in studying the theory more then practical application, and the simplified version is easier to understand.
+	With this is mind it is advisable to implement the better version described in the paper in future work.
 
 	Furthermore we note that the concepts used in the article focus on the first derivative of a function.
 	An interesting idea for a future study is to explore if these ideas can be used to also calculate second derivatives.
