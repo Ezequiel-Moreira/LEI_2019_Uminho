@@ -446,7 +446,7 @@ Objetivo: Estudo e implementação de um algoritmo AD genérico
 \end{block}
     
 \begin{block}{Corolário 3.1}
-	Para todas as funções lineares $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
+	Para todas as funções lineares $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (f\ a,\hspace{0.5mm} f)$.
 \end{block}
 
 \end{frame}
@@ -543,7 +543,7 @@ Funtor: mapeia uma categoria noutra, preservando a estrutura
 
 \ensuremath{\Varid{id}\mathrel{=}\mathcal{\hat{D}}\;\Varid{id}\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;\Varid{id})}
 
-\ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\circ}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\circ}\Varid{f})\mathrel{=}\mathcal{D}\;(\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\circ}\Varid{f}))}
+\ensuremath{\mathcal{\hat{D}}\;\Varid{g}\mathbin{\circ}\mathcal{\hat{D}}\;\Varid{f}\mathrel{=}\mathcal{\hat{D}}\;(\Varid{g}\mathbin{\circ}\Varid{f})\mathrel{=}\mathcal{D}\;(\mathcal{D}^{+}\;(\Varid{g}\mathbin{\circ}\Varid{f}))}
 
 \end{block}
 
@@ -580,10 +580,10 @@ Para definir a composição generalizamos a condição:
 \>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{id}\mathbin{::}(\Varid{a'k'a}){}\<[E]%
+\>[5]{}\Varid{id}\mathbin{::}(\Varid{a}\mathbin{`\Varid{k}`}\Varid{a}){}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b'k'c})\rightarrow (\Varid{a'k'b})\rightarrow (\Varid{a'k'c}){}\<[E]%
+\>[5]{}(\mathbin{\circ})\mathbin{::}(\Varid{b}\mathbin{`\Varid{k}`}\Varid{c})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{b})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{c}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -619,7 +619,7 @@ Para definir a composição generalizamos a condição:
 \>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Monoidal}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}( \times )\mathbin{::}(\Varid{a}\;\text{\tt 'k'}\;\Varid{c})\rightarrow (\Varid{b}\;\text{\tt 'k'}\;\Varid{d})\rightarrow ((\Varid{a} \times \Varid{b})\;\text{\tt 'k'}\;(\Varid{c} \times \Varid{d})){}\<[E]%
+\>[5]{}( \times )\mathbin{::}(\Varid{a}\mathbin{`\Varid{k}`}\Varid{c})\rightarrow (\Varid{b}\mathbin{`\Varid{k}`}\Varid{d})\rightarrow ((\Varid{a} \times \Varid{b})\mathbin{`\Varid{k}`}(\Varid{c} \times \Varid{d})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -656,13 +656,13 @@ Para definir a composição generalizamos a condição:
 \>[B]{}\mathbf{class}\;\Conid{Monoidal}\;\Varid{k}\Rightarrow\Conid{Cartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{exl}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\>[3]{}\Varid{exl}\mathbin{::}(\Varid{a},\Varid{b})\mathbin{`\Varid{k}`}\Varid{a}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\;\text{\tt 'k'}\;\Varid{b}{}\<[E]%
+\>[3]{}\Varid{exr}\mathbin{::}(\Varid{a},\Varid{b})\mathbin{`\Varid{k}`}\Varid{b}{}\<[E]%
 \\
 \>[B]{}\hsindent{3}{}\<[3]%
-\>[3]{}\Varid{dup}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{a}){}\<[E]%
+\>[3]{}\Varid{dup}\mathbin{::}\Varid{a}\mathbin{`\Varid{k}`}(\Varid{a},\Varid{a}){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -697,20 +697,20 @@ Para definir a composição generalizamos a condição:
 \>[B]{}\mathbf{class}\;\Conid{Category}\;\Varid{k}\Rightarrow\Conid{Cocartesian}\;\Varid{k}\;\mathbf{where}{}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{inl}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\>[5]{}\Varid{inl}\mathbin{::}\Varid{a}\mathbin{`\Varid{k}`}(\Varid{a},\Varid{b}){}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{inr}\mathbin{::}\Varid{b}\;\text{\tt 'k'}\;(\Varid{a},\Varid{b}){}\<[E]%
+\>[5]{}\Varid{inr}\mathbin{::}\Varid{b}\mathbin{`\Varid{k}`}(\Varid{a},\Varid{b}){}\<[E]%
 \\
 \>[B]{}\hsindent{5}{}\<[5]%
-\>[5]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\;\text{\tt 'k'}\;\Varid{a}{}\<[E]%
+\>[5]{}\Varid{jam}\mathbin{::}(\Varid{a},\Varid{a})\mathbin{`\Varid{k}`}\Varid{a}{}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
 
 \pause
 
-\begin{block}{Dedução de\ensuremath{(\rightarrow^+ )}}
+\begin{block}{Dedução de \ensuremath{(\rightarrow^+ )}}
 \hspace*{\fill}
 \xymatrix@R=2mm{
     a \ar[rd] &  \\
@@ -754,7 +754,7 @@ Obter RAD e FAD de algoritmo AD genérico: forçar a direção da composição d
 \pause
 
 \begin{block}{Conversão da escrita de morfismos}
-\ensuremath{\Varid{f}\mathbin{::}\Varid{a}\;\text{\tt 'k'}\;\Varid{b}\Rightarrow(\mathbin{\circ}\Varid{f})\mathbin{::}(\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})} para r objeto de categoria k.
+\ensuremath{\Varid{f}\mathbin{::}\Varid{a}\mathbin{`\Varid{k}`}\Varid{b}\Rightarrow(\mathbin{\circ}\Varid{f})\mathbin{::}(\Varid{b}\mathbin{`\Varid{k}`}\Varid{r})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{r})} para r objeto de categoria k.
 \end{block}
 
 
@@ -764,7 +764,7 @@ Obter RAD e FAD de algoritmo AD genérico: forçar a direção da composição d
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\mathbf{newtype}\;Cont^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\;\text{\tt 'k'}\;\Varid{r})\rightarrow (\Varid{a}\;\text{\tt 'k'}\;\Varid{r})){}\<[E]%
+\>[B]{}\mathbf{newtype}\;Cont^{r}_{k}\;\Varid{a}\;\Varid{b}\mathrel{=}\Conid{Cont}\;((\Varid{b}\mathbin{`\Varid{k}`}\Varid{r})\rightarrow (\Varid{a}\mathbin{`\Varid{k}`}\Varid{r})){}\<[E]%
 \ColumnHook
 \end{hscode}\resethooks
 \end{block}
@@ -773,7 +773,7 @@ Obter RAD e FAD de algoritmo AD genérico: forçar a direção da composição d
 \begin{hscode}\SaveRestoreHook
 \column{B}{@{}>{\hspre}l<{\hspost}@{}}%
 \column{E}{@{}>{\hspre}l<{\hspost}@{}}%
-\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\;\text{\tt 'k'}\;\Varid{b})\rightarrow Cont^{r}_{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
+\>[B]{}\Varid{cont}\mathbin{::}\Conid{Category}\;\Varid{k}\Rightarrow(\Varid{a}\mathbin{`\Varid{k}`}\Varid{b})\rightarrow Cont^{r}_{k}\;\Varid{a}\;\Varid{b}{}\<[E]%
 \\
 \>[B]{}\Varid{cont}\;\Varid{f}\mathrel{=}\Conid{Cont}\;(\mathbin{\circ}\Varid{f}){}\<[E]%
 \ColumnHook

@@ -127,12 +127,12 @@ instance (Floating a, Additive a) => FloatingCat (->+) a where
 --    expBC = AddFun $ uncurry (**)
 
 class Scalable k a where
-    scale :: a -> k a a
+    scale :: a -> a `k` a
 
 instance (Num a, Additive a) => Scalable (->+) a where
     scale a = AddFun (\da -> a*da)
 
-newtype D k a b = D (a -> (b, k a b))
+newtype D k a b = D (a -> (b, a `k` b))
 
 linearD :: (a -> b) -> (k a b) -> D k a b
 linearD f f' = D (\a -> (f a, f'))
@@ -141,7 +141,7 @@ linearD f f' = D (\a -> (f a, f'))
 -- :k and
 -- > (* -> Constraint) -> (* -> Constraint) -> * -> Constraint
 instance CategoryDom Additive k => CategoryDom Additive (D k) where
-    id = linearD (\x->x) (id @Additive)
+    id = linearD (\x -> x) (id @Additive)
     (D g) . (D f) = D (\a -> 
         let{(b, f') = f a;
             (c, g') = g b}
@@ -209,6 +209,9 @@ constD a = linearD (const a) (AddFun (\x->zero))
 unD (D f) = f
 unAddFun (AddFun f) = f
 
+mulxy :: (Num a, Additive a) => D (->+) (a,a) a
+mulxy = mulC
+
 sqr :: (Num a, Additive a) => D (->+) a a
 sqr = mulC `cpa` (ida `split` ida)
 
@@ -224,6 +227,9 @@ cosSinProd = (cosC `split` sinC) `cpa` mulC
 
 --exp2 :: (Floating a, Additive a) => D (->+) a a
 --exp2 = expBC `cpa` ((constD 2.0) `split` ida)
+
+
+
 
 deriv :: Show b => D (->+) a b -> a -> a -> b
 deriv f a s = (unAddFun $ snd $ unD f $ a) s

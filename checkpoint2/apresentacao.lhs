@@ -187,7 +187,7 @@ bigDplus f a = (f a, bigD f a)
 \end{block}
     
 \begin{block}{Corolário 3.1}
-	Para todas as funções lineares $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (fa,\hspace{0.5mm} f)$.
+	Para todas as funções lineares $f$, $\mathcal{D}^{+} \hspace{0.5mm} f = \lambda a \to (f\ a,\hspace{0.5mm} f)$.
 \end{block}
 
 \end{frame}
@@ -310,8 +310,8 @@ Para definir a composição generalizamos a condição:
 \begin{block}{Definição da classe de categoria}
 \begin{code}
 class Category k where
-    id::(a'k'a)
-    (.)::(b'k'c)->(a'k'b)->(a'k'c)
+    id::(a `k` a)
+    (.)::(b `k` c)->(a `k` b)->(a `k` c)
 \end{code}
 \end{block}
 
@@ -331,7 +331,7 @@ instance Category bigD where
 \begin{block}{Definição da classe de categoria monoidal}
 \begin{code}
 class Category k => Monoidal k where
-    (><) :: (a 'k' c) -> (b 'k' d) -> ((a >< b) 'k' (c >< d)) 
+    (><) :: (a `k` c) -> (b `k` d) -> ((a >< b) `k` (c >< d)) 
 \end{code}
 \end{block}
 
@@ -355,9 +355,9 @@ instance Monoidal bigD where
 \begin{block}{Definição da classe de categoria cartesiana}
 \begin{code}
 class Monoidal k => Cartesian k where
-  exl :: (a,b)'k'a
-  exr :: (a,b)'k'b
-  dup :: a 'k' (a,a)
+  exl :: (a,b) `k` a
+  exr :: (a,b) `k` b
+  dup :: a `k` (a,a)
 \end{code}
 \end{block}
 
@@ -376,15 +376,15 @@ instance Cartesian D where
 \begin{block}{Definição da classe de categoria cocartesiana}
 \begin{code}
 class Category k => Cocartesian k where
-    inl :: a 'k' (a,b)
-    inr :: b 'k' (a,b)
-    jam :: (a,a) 'k' a
+    inl :: a `k` (a,b)
+    inr :: b `k` (a,b)
+    jam :: (a,a) `k` a
 \end{code}
 \end{block}
 
 \pause
 
-\begin{block}{Dedução de|(->+)|}
+\begin{block}{Dedução de |(->+)|}
 \hspace*{\fill}
 \xymatrix@@R=2mm{
     a \ar[rd] &  \\
@@ -428,7 +428,7 @@ Obter RAD e FAD de algoritmo AD genérico: forçar a direção da composição d
 \pause
 
 \begin{block}{Conversão da escrita de morfismos}
-|f :: a 'k' b => (. f) :: (b 'k' r) -> (a 'k' r)| para r objeto de categoria k.
+|f :: a `k` b => (. f) :: (b `k` r) -> (a `k` r)| para r objeto de categoria k.
 \end{block}
 
 
@@ -436,13 +436,13 @@ Obter RAD e FAD de algoritmo AD genérico: forçar a direção da composição d
 
 \begin{block}{Definição de novo tipo}
 \begin{code}
-newtype Contkr a b = Cont((b 'k' r) -> (a 'k' r))
+newtype Contkr a b = Cont((b `k` r) -> (a `k` r))
 \end{code}
 \end{block}
 
 \begin{block}{Funtor derivado dele}
 \begin{code}
-cont :: Category k => (a 'k' b) -> Contkr a b
+cont :: Category k => (a `k` b) -> Contkr a b
 cont f = Cont(. f)
 \end{code}
 \end{block}
