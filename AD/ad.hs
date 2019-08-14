@@ -1,3 +1,15 @@
+
+
+{-# LANGUAGE TypeApplications,
+             TypeOperators,
+             ConstraintKinds,
+             AllowAmbiguousTypes,
+             KindSignatures,
+             FlexibleContexts,
+             GADTs,
+             MultiParamTypeClasses,
+             FlexibleInstances #-}
+
 import qualified Control.Category as C
 import Data.Kind as K
 import Prelude hiding (id, (.), either)
